@@ -33,13 +33,13 @@ WF = r"C:\Windows\Fonts"
 
 
 def _reg():
-    """Tipografía norma APA / USS: Times New Roman en todo el documento (cuerpo y
-    títulos), con títulos en negrita. Fallback a las Times base de reportlab."""
-    fam = {"body": "Times-Roman", "bold": "Times-Bold", "it": "Times-Italic",
-           "bolditalic": "Times-BoldItalic"}
+    """Tipografía según la SUGERENCIA del MIT: fuente sans-serif (más legible). Se usa
+    Arial en todo el documento. Fallback a Helvetica (sans base de reportlab)."""
+    fam = {"body": "Helvetica", "bold": "Helvetica-Bold", "it": "Helvetica-Oblique",
+           "bolditalic": "Helvetica-BoldOblique"}
     try:
-        reg = {("Body", "times.ttf"), ("Body-Bold", "timesbd.ttf"),
-               ("Body-It", "timesi.ttf"), ("Body-BI", "timesbi.ttf")}
+        reg = {("Body", "arial.ttf"), ("Body-Bold", "arialbd.ttf"),
+               ("Body-It", "ariali.ttf"), ("Body-BI", "arialbi.ttf")}
         for name, f in reg:
             pdfmetrics.registerFont(TTFont(name, os.path.join(WF, f)))
         from reportlab.pdfbase.pdfmetrics import registerFontFamily
@@ -153,50 +153,60 @@ def fig_flow(archivo, S, nfig, leyenda, ancho=15.0):
 
 
 def construir_flow(md, S, ctx):
-    flow = []; lineas = md.split("\n"); i = 0; titulo_omitido = False; prev = "start"
+    flow = []; lineas = md.split("\n"); i = 0; titulo_omitido = False; prev = ["start"]; buf = []
+
+    def flush():
+        # une las líneas acumuladas en UN solo párrafo (markdown: párrafo = líneas
+        # consecutivas no vacías separadas por líneas en blanco)
+        if not buf:
+            return
+        texto = " ".join(x.strip() for x in buf)
+        if ctx.get("single"):
+            st = S["body_s0"] if prev[0] == "head" else S["body_s"]
+        else:
+            st = S["body0"] if prev[0] == "head" else S["body"]
+        flow.append(Paragraph(_clean(texto), st)); buf.clear(); prev[0] = "para"
+
     while i < len(lineas):
         s = lineas[i].strip()
-        if not s: i += 1; continue
+        if not s:
+            flush(); i += 1; continue
         m = re.match(r"^\[\[FIG:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
         if m:
-            ctx["nfig"] += 1; ctx["shown"].add(m.group(1).strip())
-            flow += fig_flow(m.group(1).strip(), S, ctx["nfig"], m.group(2).strip()); prev = "fig"; i += 1; continue
+            flush(); ctx["nfig"] += 1; ctx["shown"].add(m.group(1).strip())
+            flow += fig_flow(m.group(1).strip(), S, ctx["nfig"], m.group(2).strip()); prev[0] = "fig"; i += 1; continue
         m = re.match(r"^\[\[CSV:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
         if m:
-            ctx["ntab"] += 1
-            flow += tabla_csv(m.group(1).strip(), S, ctx["ntab"], m.group(2).strip()); prev = "table"; i += 1; continue
+            flush(); ctx["ntab"] += 1
+            flow += tabla_csv(m.group(1).strip(), S, ctx["ntab"], m.group(2).strip()); prev[0] = "table"; i += 1; continue
         if s.startswith("|"):
-            blk = []
+            flush(); blk = []
             while i < len(lineas) and lineas[i].strip().startswith("|"):
                 blk.append(lineas[i]); i += 1
-            ctx["ntab"] += 1; flow += tabla_md(blk, S, ctx["ntab"], ctx["tit"]); prev = "table"; continue
+            ctx["ntab"] += 1; flow += tabla_md(blk, S, ctx["ntab"], ctx["tit"]); prev[0] = "table"; continue
         if s.startswith("# ") and not titulo_omitido:
             titulo_omitido = True; i += 1; continue
         if s.startswith("### "):
-            ctx["tit"] = _clean(s[4:]); flow.append(Paragraph(ctx["tit"], S["h3"])); prev = "head"
+            flush(); ctx["tit"] = _clean(s[4:]); flow.append(Paragraph(ctx["tit"], S["h3"])); prev[0] = "head"
         elif s.startswith("## "):
-            ctx["tit"] = _clean(s[3:])
-            # MIT: resumen, abstract, notas, glosario, agradecimientos y bibliografía a espacio simple
+            flush(); ctx["tit"] = _clean(s[3:])
             ctx["single"] = bool(re.match(r"^## (Resumen|Abstract|Dedicatoria|Agradecimientos|Notaci|Glosario|9\.)", s))
             flow += ([PageBreak(), Paragraph(ctx["tit"], S["h1"])] if re.match(r"^## (\d|Anexo|Resumen|Glosario)", s)
-                     else [Paragraph(ctx["tit"], S["h2"])]); prev = "head"
+                     else [Paragraph(ctx["tit"], S["h2"])]); prev[0] = "head"
         elif s.startswith("# "):
-            flow.append(Paragraph(_clean(s[2:]), S["h1"])); prev = "head"
+            flush(); flow.append(Paragraph(_clean(s[2:]), S["h1"])); prev[0] = "head"
         elif re.match(r"^[-*] ", s):
-            flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(s[2:]), S["bullet"])); prev = "list"
+            flush(); flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(s[2:]), S["bullet"])); prev[0] = "list"
         elif re.match(r"^\d+\.\s", s):
-            flow.append(Paragraph(_clean(s), S["bullet"])); prev = "list"
+            flush(); flow.append(Paragraph(_clean(s), S["bullet"])); prev[0] = "list"
         elif s.startswith("> "):
-            flow.append(Paragraph(_clean(s[2:]), S["quote"])); prev = "quote"
+            flush(); flow.append(Paragraph(_clean(s[2:]), S["quote"])); prev[0] = "quote"
         elif set(s) <= set("-") and len(s) >= 3:
-            pass
+            flush()
         else:
-            if ctx.get("single"):
-                st = S["body_s0"] if prev == "head" else S["body_s"]
-            else:
-                st = S["body0"] if prev == "head" else S["body"]
-            flow.append(Paragraph(_clean(s), st)); prev = "para"
+            buf.append(s)
         i += 1
+    flush()
     return flow
 
 

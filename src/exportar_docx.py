@@ -26,8 +26,8 @@ import config as C
 NAVY = RGBColor(0x1B, 0x2A, 0x41)
 COPPER = RGBColor(0xC2, 0x70, 0x3D)
 GRAY = RGBColor(0x55, 0x55, 0x55)
-BODY_FONT = "Times New Roman"
-HEAD_FONT = "Times New Roman"   # APA: misma fuente en negrita para títulos
+BODY_FONT = "Arial"   # MIT sugiere fuente sans-serif (más legible)
+HEAD_FONT = "Arial"
 
 
 # ----------------------- helpers de bajo nivel -----------------------
@@ -204,36 +204,41 @@ def _tabla_csv(doc, nombre, ntab, leyenda, maxrows=14):
 
 def convertir(doc, md):
     lineas = md.split("\n"); i = 0; titulo_omitido = False; ntab = 0; nfig = 0; ultimo_tit = "Resultados"
+    buf = []
+    def flush():
+        if buf:
+            p = doc.add_paragraph(); _runs_bold(p, " ".join(x.strip() for x in buf)); buf.clear()
     while i < len(lineas):
         s = lineas[i].strip()
-        if not s: i += 1; continue
+        if not s: flush(); i += 1; continue
         mf = re.match(r"^\[\[FIG:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
         if mf:
-            nfig += 1; _fig(doc, mf.group(1).strip(), nfig, mf.group(2).strip()); i += 1; continue
+            flush(); nfig += 1; _fig(doc, mf.group(1).strip(), nfig, mf.group(2).strip()); i += 1; continue
         mc = re.match(r"^\[\[CSV:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
         if mc:
-            ntab += 1; _tabla_csv(doc, mc.group(1).strip(), ntab, mc.group(2).strip()); i += 1; continue
+            flush(); ntab += 1; _tabla_csv(doc, mc.group(1).strip(), ntab, mc.group(2).strip()); i += 1; continue
         if s.startswith("# ") and not titulo_omitido:
             titulo_omitido = True; i += 1; continue  # título ya está en la portada
         if s.startswith("|"):
-            blk = []
+            flush(); blk = []
             while i < len(lineas) and lineas[i].strip().startswith("|"):
                 blk.append(lineas[i]); i += 1
             ntab += 1; _tabla(doc, blk, ntab, ultimo_tit); continue
         if s.startswith("> "):
-            p = doc.add_paragraph(style="Intense Quote"); _runs_bold(p, s[2:]); i += 1; continue
-        if s.startswith("### "): ultimo_tit = _clean(s[4:]); doc.add_heading(ultimo_tit, level=3)
-        elif s.startswith("## "): ultimo_tit = _clean(s[3:]); doc.add_heading(ultimo_tit, level=2)
+            flush(); p = doc.add_paragraph(style="Intense Quote"); _runs_bold(p, s[2:]); i += 1; continue
+        if s.startswith("### "): flush(); ultimo_tit = _clean(s[4:]); doc.add_heading(ultimo_tit, level=3)
+        elif s.startswith("## "): flush(); ultimo_tit = _clean(s[3:]); doc.add_heading(ultimo_tit, level=2)
         elif s.startswith("# "):
-            doc.add_heading(_clean(s[2:]), level=1)
+            flush(); doc.add_heading(_clean(s[2:]), level=1)
         elif re.match(r"^[-*] ", s):
-            p = doc.add_paragraph(style="List Bullet"); _runs_bold(p, s[2:])
+            flush(); p = doc.add_paragraph(style="List Bullet"); _runs_bold(p, s[2:])
         elif re.match(r"^\d+\.\s", s):
-            p = doc.add_paragraph(style="List Number"); _runs_bold(p, re.sub(r"^\d+\.\s", "", s))
-        elif set(s) <= set("-") and len(s) >= 3: pass
+            flush(); p = doc.add_paragraph(style="List Number"); _runs_bold(p, re.sub(r"^\d+\.\s", "", s))
+        elif set(s) <= set("-") and len(s) >= 3: flush()
         else:
-            p = doc.add_paragraph(); _runs_bold(p, s)
+            buf.append(s)
         i += 1
+    flush()
 
 
 def anexo_figuras(doc):
