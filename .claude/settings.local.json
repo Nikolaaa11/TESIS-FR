@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(ls -la)",
-      "Bash(python -c \"import pandas, numpy, statsmodels, arch, linearmodels, scipy, matplotlib, seaborn; print\\('todas las librerias core OK'\\)\")"
-    ]
-  }
-}

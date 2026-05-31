@@ -22,3 +22,6 @@ web/.playwright-mcp/
 # Datos crudos pesados opcionales (se regeneran con src/ingesta.py)
 # (se dejan versionados por reproducibilidad; descomentar para excluir)
 # data/raw/*.csv
+
+# Config local de Claude Code
+.claude/
