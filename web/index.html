@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="assets/figures/precios_normalizados.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b2a41'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23c2703d' font-family='Arial' font-weight='bold'%3ECu%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script>
   window.MathJax = { tex:{inlineMath:[['\\(','\\)']], displayMath:[['$$','$$']]}, svg:{fontCache:'global'} };
@@ -32,7 +32,7 @@
 
 <nav>
   <div class="nav-in">
-    <div class="nav-brand">Cobre · Chile — Tesis USS</div>
+    <div class="nav-brand"><span class="dot">Cu</span> Tesis USS · Cobre y bolsa</div>
     <ul class="nav-links">
       <li><a href="#hallazgo">Hallazgo</a></li>
       <li><a href="#universo">Universo</a></li>
@@ -41,12 +41,24 @@
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#iliquidez">Iliquidez</a></li>
       <li><a href="#literatura">Literatura</a></li>
-      <li><a href="#figuras">Figuras</a></li>
       <li><a href="#conclusiones">Conclusiones</a></li>
-      <li><button id="themeBtn" class="icon" title="Cambiar tema" aria-label="Cambiar tema">◐</button></li>
+      <li><button id="themeBtn" class="keep" title="Cambiar tema" aria-label="Cambiar tema">◐</button></li>
+      <li><button id="menuBtn" class="keep" title="Menú" aria-label="Abrir menú">☰</button></li>
     </ul>
   </div>
 </nav>
+
+<div id="drawer" aria-hidden="true">
+  <button id="drawerClose" aria-label="Cerrar menú">✕</button>
+  <a href="#hallazgo">Hallazgo</a>
+  <a href="#universo">Universo</a>
+  <a href="#metodo">Método</a>
+  <a href="#modelos">Modelos</a>
+  <a href="#resultados">Resultados</a>
+  <a href="#iliquidez">Iliquidez</a>
+  <a href="#literatura">Literatura</a>
+  <a href="#conclusiones">Conclusiones</a>
+</div>
 
 <header class="hero">
   <div class="wrap">
@@ -56,8 +68,9 @@
     <p class="uss">Tesis para el <b>Magíster en Data Science</b> · <b>Universidad San Sebastián</b></p>
     <div class="cta">
       <a class="btn btn-primary" href="#hallazgo">Ver el hallazgo central</a>
-      <a class="btn btn-ghost" href="assets/docs/Tesis_USS.docx" download>⬇ Descargar tesis (Word)</a>
-      <a class="btn btn-ghost" href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">Código en GitHub</a>
+      <a class="btn btn-ghost" href="assets/docs/Tesis_USS.pdf" target="_blank" rel="noopener">⬇ Tesis (PDF)</a>
+      <a class="btn btn-ghost" href="assets/docs/Tesis_USS.docx" download>⬇ Word</a>
+      <a class="btn btn-ghost" href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="kpis reveal">
       <div class="kpi"><div class="n" data-count="5843">0</div><div class="l">observaciones diarias</div></div>
@@ -72,7 +85,7 @@
 <section id="hallazgo">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Hallazgo central</div>
+      <div class="sec-num">01</div><div class="eyebrow">Hallazgo central</div>
       <h2>La iliquidez retrasa, pero no elimina, la transmisión del cobre</h2>
       <p>El <b>pure-play</b> líquido (Antofagasta) incorpora el precio del cobre de forma casi instantánea. El pure-play local e ilíquido (Pucobre) lo hace con rezago: su sensibilidad al cobre <b>crece monótonamente con el horizonte temporal</b>, revelando un fenómeno de <b>descubrimiento de precios diferido</b>.</p>
     </div>
@@ -100,12 +113,12 @@
 <section id="universo">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">El problema empírico</div>
+      <div class="sec-num">02</div><div class="eyebrow">El problema empírico</div>
       <h2>Un universo diminuto, resuelto con evidencia</h2>
       <p>El universo de mineras de cobre cotizadas vinculadas a Chile es muy reducido. Se verificó la disponibilidad real de cada candidato. Codelco se excluye: es estatal y no cotiza en renta variable.</p>
     </div>
-    <div class="grid g3">
-      <div class="card dark reveal"><h3>Antofagasta plc</h3><div class="tech">Anillo A · LSE · GBp</div><p style="font-size:14px;color:#cfd6e2">Pure-play de cobre del grupo Luksic, operación 100% chilena pero <b>cross-listed en Londres</b>. Alta liquidez.</p></div>
+    <div class="grid g3 reveal stagger">
+      <div class="card dark"><h3>Antofagasta plc</h3><div class="tech">Anillo A · LSE · GBp</div><p style="font-size:14px;color:#cfd6e2">Pure-play de cobre del grupo Luksic, operación 100% chilena pero <b>cross-listed en Londres</b>. Alta liquidez.</p></div>
       <div class="card dark reveal"><h3>Pucobre</h3><div class="tech">Anillo A · Bolsa de Santiago · CLP</div><p style="font-size:14px;color:#cfd6e2">El <b>único pure-play de cobre listado directamente en Chile</b> y en pesos. Baja liquidez — clave del análisis.</p></div>
       <div class="card reveal"><h3>Anillos B y C</h3><div class="tech">Materiales + referencias internacionales</div><p style="font-size:14px;color:var(--ink-2)">CAP, SQM (materiales Chile) y SCCO, FCX, BHP, Glencore (referencias globales del cobre para validez externa).</p></div>
     </div>
@@ -129,11 +142,11 @@
 <section id="metodo">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Diseño metodológico</div>
+      <div class="sec-num">03</div><div class="eyebrow">Diseño metodológico</div>
       <h2>El modelo nace de las propiedades de los datos</h2>
       <p>Los log-precios son <b>I(1)</b> y los retornos <b>I(0)</b> (ADF, Phillips-Perron, KPSS con decisión cruzada; Zivot-Andrews con quiebre endógeno). Esta mezcla I(0)/I(1) sin I(2) determina el árbol de modelos.</p>
     </div>
-    <div class="pipe reveal">
+    <div class="pipe reveal stagger">
       <div class="step"><div class="num">1</div><h4>Ingesta</h4><p>Yahoo Finance + macro Chile (mindicador.cl): TPM, IMACEC, IPC.</p></div>
       <div class="step"><div class="num">2</div><h4>Pruebas previas</h4><p>Estacionariedad, cointegración de Johansen, selección de rezagos (AIC/BIC).</p></div>
       <div class="step"><div class="num">3</div><h4>Corto plazo</h4><p>OLS-HAC (Newey-West), VAR, IRF, FEVD, causalidad.</p></div>
@@ -165,7 +178,7 @@
 <section id="modelos">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Formalización</div>
+      <div class="sec-num">04</div><div class="eyebrow">Formalización</div>
       <h2>Los modelos, en su forma exacta</h2>
       <p>Cada técnica responde una pregunta distinta sobre el vínculo cobre→valoración: impacto contemporáneo, dinámica, equilibrio de largo plazo, asimetría, volatilidad y causalidad.</p>
     </div>
@@ -220,7 +233,7 @@
 <section id="resultados">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Resultados empíricos</div>
+      <div class="sec-num">05</div><div class="eyebrow">Resultados empíricos</div>
       <h2>Magnitud, dinámica y equilibrio</h2>
       <p class="lead">Todos los coeficientes provienen de estimaciones sobre datos reales. La sensibilidad al cobre es heterogénea y depende de la liquidez del activo.</p>
     </div>
@@ -248,7 +261,7 @@
 <section id="iliquidez">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Prueba formal de la hipótesis</div>
+      <div class="sec-num">06</div><div class="eyebrow">Prueba formal de la hipótesis</div>
       <h2>La iliquidez, medida y contrastada</h2>
       <p>La hipótesis de que la iliquidez explica la débil transmisión contemporánea se prueba con el ratio de <b>Amihud</b>, el porcentaje de días sin transacción y un test de rezagos distribuidos.</p>
     </div>
@@ -263,7 +276,7 @@
 <section id="literatura">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Marco de literatura</div>
+      <div class="sec-num">07</div><div class="eyebrow">Marco de literatura</div>
       <h2>Sobre hombros de gigantes</h2>
       <p>Cuatro pilares teóricos sustentan el diseño. Todas las referencias fueron verificadas en fuentes primarias (editor / repositorios académicos).</p>
     </div>
@@ -295,7 +308,7 @@
 <!-- FIGURAS -->
 <section id="figuras">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
+    <div class="sec-head reveal"><div class="sec-num">08</div><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
     <div class="gallery reveal" id="gallery"></div>
   </div>
 </section>
@@ -303,7 +316,7 @@
 <!-- CONCLUSIONES -->
 <section id="conclusiones">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
+    <div class="sec-head reveal"><div class="sec-num">09</div><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
     <div class="grid g2">
       <div class="card reveal"><h3>Hallazgos</h3><ol style="font-size:15px;line-height:1.9;padding-left:18px">
         <li>El cobre es un determinante <b>positivo y significativo</b> de los retornos mineros, con magnitud creciente en la liquidez del activo.</li>
@@ -321,8 +334,8 @@
 
 <footer>
   <div class="wrap">
-    <div><b>Impacto de las variables macroeconómicas globales y financieras en la valoración bursátil del sector de minería de cobre en Chile</b></div>
-    <div style="margin-top:8px">Tesis · Magíster en Data Science · Universidad San Sebastián · 2026</div>
+    <div class="ftitle">Impacto de las variables macroeconómicas globales y financieras en la valoración bursátil del sector de minería de cobre en Chile</div>
+    <div style="margin-top:10px">Tesis · Magíster en Data Science · Universidad San Sebastián · 2026</div>
     <div class="badge-row"><span class="badge">Python 3.13</span><span class="badge">statsmodels</span><span class="badge">arch</span><span class="badge">linearmodels</span><span class="badge">Chart.js</span><span class="badge">MathJax</span></div>
     <div style="margin-top:14px">Código y datos: <a href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">github.com/Nikolaaa11/TESIS-FR</a> · <a href="assets/docs/Tesis_USS.docx" download>Descargar documento (Word)</a></div>
     <p class="disclaimer">Todos los resultados provienen de datos reales descargados de fuentes públicas (Yahoo Finance, mindicador.cl). Trabajo académico con fines de investigación; no constituye recomendación de inversión. Ninguna cifra fue inventada.</p>
