@@ -20,6 +20,8 @@ function themeColors(){
 function initTheme(){
   const saved = localStorage.getItem('tesis-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
+  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    document.documentElement.setAttribute('data-theme','dark'); // respeta el SO en 1ª visita
   const btn = document.getElementById('themeBtn');
   const setIcon = ()=> btn.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '☀' : '◐';
   setIcon();
