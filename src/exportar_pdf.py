@@ -13,7 +13,7 @@ paginación · figuras y tablas numeradas con leyenda.
 """
 import os, sys, re, glob
 import pandas as pd
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, letter
 from reportlab.lib.units import cm
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT
@@ -66,28 +66,30 @@ def _clean(t):
 
 
 def estilos():
-    # Norma APA/USS: Times New Roman 12, JUSTIFICADO con guionado español (elimina
-    # los "ríos"), interlineado 1.5, sangría de primera línea 1.27 cm.
-    HY = "es_ES"
-    body = ParagraphStyle("body", fontName=BODY, fontSize=12, leading=18,
-                          alignment=TA_JUSTIFY, spaceAfter=4, firstLineIndent=1.27*cm,
-                          textColor=INK, hyphenationLang=HY, spaceShrinkage=0.06)
+    # Norma MIT (Specifications for Thesis Preparation): Times New Roman 12, ALINEADO
+    # A LA IZQUIERDA (margen derecho irregular, NO justificado), INTERLINEADO DOBLE en
+    # el cuerpo; resumen/notas/bibliografía a espacio simple.
+    body = ParagraphStyle("body", fontName=BODY, fontSize=12, leading=24,  # doble (2.0)
+                          alignment=TA_LEFT, spaceAfter=6, firstLineIndent=1.27*cm, textColor=INK)
     body0 = ParagraphStyle("body0", parent=body, firstLineIndent=0)
-    # Títulos APA: Nivel 1 centrado/negrita; Nivel 2 izq/negrita; Nivel 3 izq/negrita-cursiva
+    body_s = ParagraphStyle("body_s", parent=body, leading=14)             # espacio simple
+    body_s0 = ParagraphStyle("body_s0", parent=body_s, firstLineIndent=0)
+    # Títulos: Nivel 1 centrado/negrita; Nivel 2 izq/negrita; Nivel 3 izq/negrita-cursiva
     h1 = ParagraphStyle("h1", fontName=BOLD, fontSize=15, leading=20, textColor=NAVY,
-                        alignment=TA_CENTER, spaceBefore=22, spaceAfter=14, keepWithNext=True)
+                        alignment=TA_CENTER, spaceBefore=22, spaceAfter=16, keepWithNext=True)
     h2 = ParagraphStyle("h2", fontName=BOLD, fontSize=13, leading=17, textColor=INK,
-                        alignment=TA_LEFT, spaceBefore=14, spaceAfter=6, keepWithNext=True)
+                        alignment=TA_LEFT, spaceBefore=16, spaceAfter=8, keepWithNext=True)
     h3 = ParagraphStyle("h3", fontName=BI, fontSize=12, leading=16, textColor=INK,
-                        alignment=TA_LEFT, spaceBefore=11, spaceAfter=4, keepWithNext=True)
-    bullet = ParagraphStyle("bullet", parent=body, leftIndent=20, firstLineIndent=0, bulletIndent=8,
-                            spaceAfter=4, hyphenationLang=HY)
-    quote = ParagraphStyle("quote", parent=body, leftIndent=1.27*cm, rightIndent=0, firstLineIndent=0,
-                           fontName=BODY, textColor=INK, fontSize=11, leading=16, spaceBefore=4, spaceAfter=8,
-                           alignment=TA_LEFT, hyphenationLang=HY)
+                        alignment=TA_LEFT, spaceBefore=12, spaceAfter=5, keepWithNext=True)
+    bullet = ParagraphStyle("bullet", parent=body, leading=15, leftIndent=20, firstLineIndent=0,
+                            bulletIndent=8, spaceAfter=5)   # listas/bibliografía: espacio simple
+    quote = ParagraphStyle("quote", parent=body, leading=14, leftIndent=1.27*cm, rightIndent=0,
+                           firstLineIndent=0, fontName=BODY, textColor=INK, fontSize=11,
+                           spaceBefore=4, spaceAfter=8, alignment=TA_LEFT)
     cap = ParagraphStyle("cap", fontName=BOLD, fontSize=10, leading=13, textColor=INK, spaceBefore=10, spaceAfter=4)
     figcap = ParagraphStyle("figcap", fontName=IT, fontSize=10, leading=13, textColor=INK, alignment=TA_CENTER, spaceBefore=4, spaceAfter=13)
-    return dict(body=body, body0=body0, h1=h1, h2=h2, h3=h3, bullet=bullet, quote=quote, cap=cap, figcap=figcap)
+    return dict(body=body, body0=body0, body_s=body_s, body_s0=body_s0,
+                h1=h1, h2=h2, h3=h3, bullet=bullet, quote=quote, cap=cap, figcap=figcap)
 
 
 class TesisDoc(BaseDocTemplate):
@@ -106,7 +108,7 @@ def _tabla_de_filas(filas, S):
     cc = ParagraphStyle("cc", fontName=BODY, fontSize=8.5, leading=11, alignment=TA_CENTER)
     data = [[Paragraph(_clean(c), cH if i == 0 else cc) for c in (fila + [""] * (ncol - len(fila)))]
             for i, fila in enumerate(filas)]
-    avail = A4[0] - 3*cm - 2.5*cm
+    avail = letter[0] - 3.8*cm - 2.54*cm
     t = Table(data, colWidths=[avail/ncol]*ncol, hAlign="CENTER", repeatRows=1)
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), NAVY),
@@ -174,6 +176,8 @@ def construir_flow(md, S, ctx):
             ctx["tit"] = _clean(s[4:]); flow.append(Paragraph(ctx["tit"], S["h3"])); prev = "head"
         elif s.startswith("## "):
             ctx["tit"] = _clean(s[3:])
+            # MIT: resumen, abstract, notas, glosario, agradecimientos y bibliografía a espacio simple
+            ctx["single"] = bool(re.match(r"^## (Resumen|Abstract|Dedicatoria|Agradecimientos|Notaci|Glosario|9\.)", s))
             flow += ([PageBreak(), Paragraph(ctx["tit"], S["h1"])] if re.match(r"^## (\d|Anexo|Resumen|Glosario)", s)
                      else [Paragraph(ctx["tit"], S["h2"])]); prev = "head"
         elif s.startswith("# "):
@@ -187,7 +191,11 @@ def construir_flow(md, S, ctx):
         elif set(s) <= set("-") and len(s) >= 3:
             pass
         else:
-            flow.append(Paragraph(_clean(s), S["body0"] if prev == "head" else S["body"])); prev = "para"
+            if ctx.get("single"):
+                st = S["body_s0"] if prev == "head" else S["body_s"]
+            else:
+                st = S["body0"] if prev == "head" else S["body"]
+            flow.append(Paragraph(_clean(s), st)); prev = "para"
         i += 1
     return flow
 
@@ -227,44 +235,68 @@ def anexo_figuras(S, ctx):
 
 
 def _cover(canvas, doc):
-    canvas.saveState(); W, H = A4
-    logo = C.ROOT / "assets" / "logo_uss.png"; off = 0
+    # Portada con la ESTRUCTURA del MIT (Specifications for Thesis Preparation),
+    # adaptada a la Universidad San Sebastián: bloque centrado (título, autor,
+    # declaración de presentación, fecha) y bloque de firmas alineado a la izquierda.
+    canvas.saveState(); W, H = canvas._pagesize
+    LX = 3.8*cm  # margen izquierdo MIT
+    def ctr(txt, y, size, font=BODY, color=INK):
+        canvas.setFont(font, size); canvas.setFillColor(color); canvas.drawCentredString(W/2, y, txt)
+    def lft(txt, x, y, size, font=BODY, color=INK):
+        canvas.setFont(font, size); canvas.setFillColor(color); canvas.drawString(x, y, txt)
+
+    logo = C.ROOT / "assets" / "logo_uss.png"; top = H - 2.6*cm
     if logo.exists():
         try:
             from PIL import Image as PImg
-            iw, ih = PImg.open(str(logo)).size; w = 2.8*cm; h = w*ih/iw
-            canvas.drawImage(str(logo), W/2-w/2, H-2.4*cm-h, width=w, height=h, preserveAspectRatio=True, mask="auto")
-            off = h + 0.5*cm
-        except Exception: off = 0
-    def c(txt, y, size, font=HEAD, color=NAVY):
-        canvas.setFont(font, size); canvas.setFillColor(color); canvas.drawCentredString(W/2, y, txt)
-    c("UNIVERSIDAD SAN SEBASTIÁN", H-3.6*cm-off, 16)
-    c("Facultad de Economía y Negocios", H-4.25*cm-off, 11.5, HEAD, GRAY)
-    c("Magíster en Data Science", H-4.85*cm-off, 11.5, HEAD, GRAY)
-    canvas.setStrokeColor(LINE); canvas.setLineWidth(0.6); canvas.line(4.5*cm, H-8.2*cm, W-4.5*cm, H-8.2*cm)
-    canvas.setFont(BOLD, 18.5); canvas.setFillColor(NAVY)
-    for k, ln in enumerate(["Impacto de las variables macroeconómicas globales y",
-                            "financieras en la valoración bursátil del sector de",
-                            "minería de cobre en Chile"]):
-        canvas.drawCentredString(W/2, H-9.6*cm-k*0.82*cm, ln)
-    canvas.setFont(IT, 12); canvas.setFillColor(GRAY)
-    canvas.drawCentredString(W/2, H-12.6*cm, "Un análisis econométrico de series de tiempo y de panel, 2004–2026")
-    canvas.line(4.5*cm, H-13.4*cm, W-4.5*cm, H-13.4*cm)
-    canvas.setFont(IT, 11.5); canvas.setFillColor(INK)
-    canvas.drawCentredString(W/2, 8.7*cm, "Tesis para optar al grado de Magíster en Data Science")
-    canvas.setFont(BODY, 11.5)
-    canvas.drawCentredString(W/2, 6.9*cm, "Autor:  ___________________________")
-    canvas.drawCentredString(W/2, 6.1*cm, "Profesor guía:  ___________________________")
-    canvas.setFillColor(GRAY); canvas.drawCentredString(W/2, 3.6*cm, "Santiago de Chile"); canvas.drawCentredString(W/2, 3.05*cm, "2026")
+            iw, ih = PImg.open(str(logo)).size; w = 2.6*cm; h = w*ih/iw
+            canvas.drawImage(str(logo), W/2-w/2, top-h, width=w, height=h, preserveAspectRatio=True, mask="auto")
+            top -= h + 0.4*cm
+        except Exception: pass
+
+    # Título (centrado, negrita)
+    canvas.setFont(BOLD, 16); canvas.setFillColor(NAVY); y = top - 1.0*cm
+    for ln in ["Impacto de las variables macroeconómicas globales y financieras",
+               "en la valoración bursátil del sector de minería de cobre en Chile"]:
+        canvas.drawCentredString(W/2, y, ln); y -= 0.78*cm
+    ctr("Un análisis econométrico de series de tiempo y de panel, 2004–2026", y-0.2*cm, 11.5, IT, GRAY)
+
+    # por / Autor
+    y -= 1.6*cm; ctr("por", y, 12, IT, INK)
+    y -= 0.8*cm; ctr("[Nombre del autor o autora]", y, 12.5, BOLD, INK)
+
+    # Declaración de presentación (estilo MIT: "Submitted to ... in partial fulfillment ...")
+    y -= 1.5*cm; canvas.setFont(BODY, 11.5); canvas.setFillColor(INK)
+    for ln in ["Trabajo Final de Graduación presentado a la",
+               "Facultad de Economía y Negocios",
+               "en cumplimiento parcial de los requisitos para el grado de"]:
+        canvas.drawCentredString(W/2, y, ln); y -= 0.62*cm
+    y -= 0.12*cm; ctr("Magíster en Data Science", y, 12.5, BOLD, NAVY)
+    y -= 0.62*cm; ctr("en la", y, 11.5, BODY, INK)
+    y -= 0.62*cm; ctr("Universidad San Sebastián", y, 12.5, BOLD, NAVY)
+    y -= 0.7*cm; ctr("Santiago de Chile — [mes] de 2026", y, 11.5, BODY, INK)
+
+    # Bloque de firmas alineado a la IZQUIERDA (Authored / Certified / Accepted by)
+    y -= 1.7*cm
+    lft("Autor(a):", LX, y, 11.5, BOLD, INK)
+    lft("__________________________________________", LX+3.0*cm, y, 11.5, BODY, INK)
+    y -= 0.55*cm; lft("[Nombre del autor o autora] — Facultad de Economía y Negocios", LX+3.0*cm, y, 9.5, IT, GRAY)
+    y -= 1.2*cm
+    lft("Certificado por:", LX, y, 11.5, BOLD, INK)
+    lft("__________________________________________", LX+3.0*cm, y, 11.5, BODY, INK)
+    y -= 0.55*cm; lft("[Profesor(a) guía], Profesor(a) guía de la tesis", LX+3.0*cm, y, 9.5, IT, GRAY)
+    y -= 1.2*cm
+    lft("Aceptado por:", LX, y, 11.5, BOLD, INK)
+    lft("__________________________________________", LX+3.0*cm, y, 11.5, BODY, INK)
+    y -= 0.55*cm; lft("[Director(a) del Programa de Magíster en Data Science]", LX+3.0*cm, y, 9.5, IT, GRAY)
     canvas.restoreState()
 
 
 def _frame_page(canvas, doc):
-    canvas.saveState(); W, H = A4
-    canvas.setFont(IT, 8); canvas.setFillColor(GRAY)
-    canvas.drawString(3*cm, H-1.25*cm, "Valoración bursátil del sector de minería de cobre en Chile")
-    canvas.setStrokeColor(LINE); canvas.setLineWidth(0.4); canvas.line(3*cm, H-1.4*cm, W-2.5*cm, H-1.4*cm)
-    canvas.setFont(BODY, 9.5); canvas.setFillColor(GRAY); canvas.drawCentredString(W/2, 1.2*cm, str(doc.page))
+    canvas.saveState(); W, H = canvas._pagesize
+    canvas.setFont(BODY, 11); canvas.setFillColor(INK)
+    # Paginación MIT: numeración consecutiva (la portada es la página 1)
+    canvas.drawCentredString(W/2, 1.4*cm, str(doc.page))
     canvas.restoreState()
 
 
@@ -272,7 +304,8 @@ def construir():
     md = (C.ROOT / "docs" / "tesis.md").read_text(encoding="utf-8")
     S = estilos()
     out = C.ROOT / "docs" / "Tesis_USS.pdf"
-    doc = TesisDoc(str(out), pagesize=A4, leftMargin=3*cm, rightMargin=2.5*cm, topMargin=2.5*cm, bottomMargin=2.5*cm,
+    doc = TesisDoc(str(out), pagesize=letter, leftMargin=3.8*cm, rightMargin=2.54*cm,
+                   topMargin=2.54*cm, bottomMargin=2.54*cm,
                    title="Impacto macro-financiero en la valoración del cobre en Chile", author="Universidad San Sebastián")
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
     doc.addPageTemplates([PageTemplate(id="cover", frames=[frame], onPage=_cover),

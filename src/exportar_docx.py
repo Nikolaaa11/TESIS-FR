@@ -59,22 +59,27 @@ def _page_number(paragraph):
 
 # ----------------------- estilos del documento -----------------------
 def _estilos(doc):
+    # Norma MIT: Times New Roman 12, ALINEADO A LA IZQUIERDA (no justificado),
+    # INTERLINEADO DOBLE, tamaño carta, márgenes izq. 3.8 cm / resto 2.54 cm.
     st = doc.styles["Normal"]
-    st.font.name = BODY_FONT; st.font.size = Pt(11.5)
+    st.font.name = BODY_FONT; st.font.size = Pt(12)
     pf = st.paragraph_format
-    pf.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
-    pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY   # justificado (norma USS/APA chilena)
-    pf.space_after = Pt(5)
-    pf.first_line_indent = Cm(1.27)  # sangría de primera línea (APA)
+    pf.line_spacing_rule = WD_LINE_SPACING.DOUBLE
+    pf.alignment = WD_ALIGN_PARAGRAPH.LEFT      # MIT: margen derecho irregular
+    pf.space_after = Pt(0)
+    pf.first_line_indent = Cm(1.27)
     for i, sz in [(1, 15), (2, 13), (3, 12)]:
         h = doc.styles[f"Heading {i}"]
         h.font.name = HEAD_FONT; h.font.size = Pt(sz); h.font.color.rgb = NAVY; h.font.bold = True
-        h.paragraph_format.space_before = Pt(14 if i == 1 else 10); h.paragraph_format.space_after = Pt(6)
+        h.font.italic = (i == 3)
+        h.paragraph_format.space_before = Pt(14 if i == 1 else 10); h.paragraph_format.space_after = Pt(8)
         h.paragraph_format.keep_with_next = True
-    # márgenes
+        h.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
+    # tamaño carta y márgenes MIT
     for s in doc.sections:
-        s.top_margin = Cm(2.5); s.bottom_margin = Cm(2.5)
-        s.left_margin = Cm(3); s.right_margin = Cm(2.5)
+        s.page_width = Cm(21.59); s.page_height = Cm(27.94)   # Carta (Letter)
+        s.top_margin = Cm(2.54); s.bottom_margin = Cm(2.54)
+        s.left_margin = Cm(3.8); s.right_margin = Cm(2.54)
 
 
 def _header_footer(doc):
