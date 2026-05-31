@@ -175,17 +175,30 @@ def portada(canvas, doc):
     def c(txt, y, size, font=HEAD, color=NAVY):
         canvas.setFont(font, size); canvas.setFillColor(color)
         canvas.drawCentredString(W/2, y, txt)
-    c("UNIVERSIDAD SAN SEBASTIÁN", H-4*cm, 20)
-    c("Facultad de Economía y Negocios", H-4.8*cm, 12, HEAD, GRAY)
-    c("Magíster en Data Science", H-5.7*cm, 14, HEAD, colors.HexColor("#1d1d1f"))
+    # logo USS si existe (assets/logo_uss.png): se dibuja arriba y se desplaza el bloque
+    logo = C.ROOT / "assets" / "logo_uss.png"
+    off = 0
+    if logo.exists():
+        try:
+            from PIL import Image as PImg
+            iw, ih = PImg.open(str(logo)).size
+            w = 3.0*cm; h = w*ih/iw
+            canvas.drawImage(str(logo), W/2-w/2, H-2.0*cm-h, width=w, height=h,
+                             preserveAspectRatio=True, mask="auto")
+            off = h + 0.5*cm
+        except Exception:
+            off = 0
+    c("UNIVERSIDAD SAN SEBASTIÁN", H-4*cm-off, 20)
+    c("Facultad de Economía y Negocios", H-4.8*cm-off, 12, HEAD, GRAY)
+    c("Magíster en Data Science", H-5.7*cm-off, 14, HEAD, colors.HexColor("#1d1d1f"))
     canvas.setStrokeColor(COPPER); canvas.setLineWidth(2)
-    canvas.line(5*cm, H-7*cm, W-5*cm, H-7*cm)
+    canvas.line(5*cm, H-7*cm-off, W-5*cm, H-7*cm-off)
     # título (envuelto)
     canvas.setFont(HEAD, 17); canvas.setFillColor(NAVY)
     titulo = ["Impacto de las variables macroeconómicas",
               "globales y financieras en la valoración bursátil",
               "del sector de minería de cobre en Chile"]
-    y = H-9*cm
+    y = H-9*cm-off
     for ln in titulo:
         canvas.drawCentredString(W/2, y, ln); y -= 0.8*cm
     canvas.setFont("Body-It" if "Body" in FAM["body"] else BODY, 12); canvas.setFillColor(GRAY)

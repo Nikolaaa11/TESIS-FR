@@ -103,6 +103,28 @@ function buildCharts(){
     {label:'Cobre (HG=F)',data:s.cobre,borderColor:PAL.bronze,borderWidth:2,borderDash:[5,4],pointRadius:0,tension:.25}]},
     options:{...baseOpts('base 100'),scales:{...baseOpts().scales,x:{grid:{display:false},ticks:{color:c.ink2,maxTicksLimit:8}}}}});
 
+  // Cobre con eventos anotados
+  if(s && typeof window!=='undefined'){
+    const eventos=[
+      {x:"2008-09",txt:"Crisis financiera 2008",col:PAL.red},
+      {x:"2011-02",txt:"Pico superciclo",col:PAL.bronze},
+      {x:"2020-03",txt:"Shock COVID-19",col:PAL.blue},
+      {x:"2021-05",txt:"Boom pospandemia",col:PAL.green},
+    ];
+    const has=fch=>s.fechas.includes(fch);
+    const ann={};
+    eventos.filter(e=>has(e.x)).forEach((e,i)=>{ann["l"+i]={type:'line',xMin:e.x,xMax:e.x,
+      borderColor:e.col,borderWidth:1.6,borderDash:[4,3],
+      label:{display:true,content:e.txt,position:(i%2?'start':'end'),backgroundColor:e.col,
+        color:'#fff',font:{size:9,weight:'600'},padding:4,borderRadius:5}}});
+    mk('chCobreEventos',{type:'line',data:{labels:s.fechas,datasets:[
+      {label:'Precio del cobre (base 100)',data:s.cobre,borderColor:PAL.copper,borderWidth:2.4,pointRadius:0,tension:.25,fill:true,
+        backgroundColor:ctx=>vgrad(ctx.chart.ctx,ctx.chart.chartArea,PAL.copper,0.20)}]},
+      options:{...baseOpts('base 100'),
+        plugins:{legend:{display:false},tooltip:{backgroundColor:c.tip},annotation:{annotations:ann}},
+        scales:{...baseOpts().scales,x:{grid:{display:false},ticks:{color:c.ink2,maxTicksLimit:9}}}}});
+  }
+
   // Beta
   const b=(D.beta_cobre||[]).slice().sort((x,y)=>y.coef-x.coef);
   if(b.length){ const cols=b.map(x=>['ANTO.L','PUCOBRE.SN','CAP.SN','SQM-B.SN'].includes(x.activo)?PAL.copper:PAL.navy);

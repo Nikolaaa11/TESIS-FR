@@ -98,6 +98,14 @@ def portada(doc):
         if color: r.font.color.rgb = color
         return p
     doc.add_paragraph()
+    # logo USS si existe (assets/logo_uss.png)
+    logo = C.ROOT / "assets" / "logo_uss.png"
+    if logo.exists():
+        try:
+            pL = doc.add_paragraph(); pL.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            pL.add_run().add_picture(str(logo), width=Cm(3.2))
+        except Exception:
+            pass
     cl("UNIVERSIDAD SAN SEBASTIÁN", 18, True, NAVY, 2)
     cl("Facultad de Economía y Negocios", 12, False, GRAY, 2)
     cl("Magíster en Data Science", 13, True, None, 24)
