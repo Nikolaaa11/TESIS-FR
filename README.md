@@ -1,7 +1,13 @@
 # Tesis — Impacto de variables macro-financieras en la valoración bursátil del cobre en Chile
 
-Magíster en Data Science · Econometría financiera aplicada · Python 3.13 + Jupyter.
+Magíster en Data Science · Universidad San Sebastián · Econometría financiera aplicada · Python 3.13.
 Enfoque **explicativo / de medición de impacto** (no predictivo).
+
+### 🌐 Plataforma en vivo: **https://web-pi-pied-45.vercel.app**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nikolaaa11/TESIS-FR&root-directory=web)
+
+> Redesplegar tras cambios: `vercel deploy web --prod --yes` (o conecta el repo en Vercel con **Root Directory = `web`**).
 
 ## Hallazgo central (probado formalmente)
 
