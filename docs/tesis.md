@@ -1458,7 +1458,10 @@ grado que la liquidez modula.
 
 *Cobre, monedas-commodity y Chile:*
 - Chen, Y.-C., & Rogoff, K. (2003). Commodity currencies. *Journal of International Economics*, 60(1), 133–160. https://doi.org/10.1016/S0022-1996(02)00072-7
-- Banco Central de Chile. Working Paper N°640. *Copper, the Real Exchange Rate and Macroeconomic Fluctuations in Chile*. https://www.bcentral.cl/en/content/-/details/working-papers-n-640
+- De Gregorio, J., & Labbé, F. (2011). *Copper, the real exchange rate and macroeconomic fluctuations in Chile* (Documento de Trabajo N°640). Banco Central de Chile. https://www.bcentral.cl/en/content/-/details/working-papers-n-640
+- Sadorsky, P. (2001). Risk factors in stock returns of Canadian oil and gas companies. *Energy Economics*, 23(1), 17–28. https://doi.org/10.1016/S0140-9883(00)00072-4
+- Lesmond, D. A., Ogden, J. P., & Trzcinka, C. A. (1999). A new estimate of transaction costs. *Review of Financial Studies*, 12(5), 1113–1141. https://doi.org/10.1093/rfs/12.5.1113
+- Pástor, L., & Stambaugh, R. F. (2003). Liquidity risk and expected stock returns. *Journal of Political Economy*, 111(3), 642–685. https://doi.org/10.1086/374184
 - *Forecasting base metal prices with the Chilean exchange rate*. *Resources Policy*. https://www.sciencedirect.com/science/article/abs/pii/S0301420718303271
 
 *Series de tiempo, cointegración, ARDL/NARDL y causalidad:*

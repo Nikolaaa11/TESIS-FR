@@ -26,7 +26,7 @@ import config as C
 NAVY = RGBColor(0x1B, 0x2A, 0x41)
 COPPER = RGBColor(0xC2, 0x70, 0x3D)
 GRAY = RGBColor(0x55, 0x55, 0x55)
-BODY_FONT = "Times New Roman"
+BODY_FONT = "Palatino Linotype"
 HEAD_FONT = "Calibri"
 
 
@@ -60,13 +60,13 @@ def _page_number(paragraph):
 # ----------------------- estilos del documento -----------------------
 def _estilos(doc):
     st = doc.styles["Normal"]
-    st.font.name = BODY_FONT; st.font.size = Pt(12)
+    st.font.name = BODY_FONT; st.font.size = Pt(11.5)
     pf = st.paragraph_format
     pf.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
-    pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    pf.space_after = Pt(4)
-    pf.first_line_indent = Cm(0.8)   # sangría de primera línea (estándar de tesis)
-    for i, sz in [(1, 16), (2, 14), (3, 12)]:
+    pf.alignment = WD_ALIGN_PARAGRAPH.LEFT   # alineado a la izquierda (no justificado)
+    pf.space_after = Pt(5)
+    pf.first_line_indent = Cm(0.85)  # sangría de primera línea (estándar de tesis)
+    for i, sz in [(1, 19), (2, 14.5), (3, 12)]:
         h = doc.styles[f"Heading {i}"]
         h.font.name = HEAD_FONT; h.font.size = Pt(sz); h.font.color.rgb = NAVY; h.font.bold = True
         h.paragraph_format.space_before = Pt(14 if i == 1 else 10); h.paragraph_format.space_after = Pt(6)

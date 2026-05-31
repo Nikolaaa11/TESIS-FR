@@ -16,7 +16,7 @@ import pandas as pd
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
+from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer,
                                 Table, TableStyle, Image, PageBreak, NextPageTemplate, KeepTogether)
@@ -33,18 +33,22 @@ WF = r"C:\Windows\Fonts"
 
 
 def _reg():
-    fam = {"body": "Times-Roman", "bold": "Times-Bold", "it": "Times-Italic", "head": "Helvetica-Bold"}
+    """Tipografía de tesis: cuerpo en Palatino Linotype (serif de libro), títulos en
+    Calibri (sans moderno). Fallback a Times/Helvetica si no están disponibles."""
+    fam = {"body": "Times-Roman", "bold": "Times-Bold", "it": "Times-Italic",
+           "head": "Helvetica-Bold", "head_light": "Helvetica"}
     try:
-        for name, f in {("Body", "times.ttf"), ("Body-Bold", "timesbd.ttf"), ("Body-It", "timesi.ttf"),
-                        ("Head", "arialbd.ttf")}:
+        reg = {("Body", "pala.ttf"), ("Body-Bold", "palab.ttf"), ("Body-It", "palai.ttf"),
+               ("Head", "calibrib.ttf"), ("Head-Light", "calibril.ttf"), ("Head-Reg", "calibri.ttf")}
+        for name, f in reg:
             pdfmetrics.registerFont(TTFont(name, os.path.join(WF, f)))
         from reportlab.pdfbase.pdfmetrics import registerFontFamily
         registerFontFamily("Body", normal="Body", bold="Body-Bold", italic="Body-It", boldItalic="Body-Bold")
-        fam = {"body": "Body", "bold": "Body-Bold", "it": "Body-It", "head": "Head"}
+        fam = {"body": "Body", "bold": "Body-Bold", "it": "Body-It", "head": "Head", "head_light": "Head-Light"}
     except Exception:
         pass
     return fam
-FAM = _reg(); BODY, BOLD, IT, HEAD = FAM["body"], FAM["bold"], FAM["it"], FAM["head"]
+FAM = _reg(); BODY, BOLD, IT, HEAD, HEADL = FAM["body"], FAM["bold"], FAM["it"], FAM["head"], FAM["head_light"]
 
 
 def _clean(t):
@@ -61,16 +65,21 @@ def _clean(t):
 
 
 def estilos():
-    body = ParagraphStyle("body", fontName=BODY, fontSize=12, leading=19.5,
-                          alignment=TA_JUSTIFY, spaceAfter=3, firstLineIndent=0.9*cm, textColor=INK)
+    # Cuerpo: Palatino 11.5, ALINEADO A LA IZQUIERDA (no justificado), interlineado ~1.5
+    body = ParagraphStyle("body", fontName=BODY, fontSize=11.5, leading=18,
+                          alignment=TA_LEFT, spaceAfter=4, firstLineIndent=0.85*cm, textColor=INK)
     body0 = ParagraphStyle("body0", parent=body, firstLineIndent=0)
-    h1 = ParagraphStyle("h1", fontName=HEAD, fontSize=16, leading=20, textColor=NAVY, spaceBefore=18, spaceAfter=10, keepWithNext=True)
-    h2 = ParagraphStyle("h2", fontName=HEAD, fontSize=13, leading=17, textColor=NAVY, spaceBefore=13, spaceAfter=6, keepWithNext=True)
-    h3 = ParagraphStyle("h3", fontName=HEAD, fontSize=11.5, leading=15, textColor=colors.HexColor("#333"), spaceBefore=9, spaceAfter=4, keepWithNext=True)
-    bullet = ParagraphStyle("bullet", parent=body, leftIndent=18, firstLineIndent=0, bulletIndent=6, spaceAfter=3)
-    quote = ParagraphStyle("quote", parent=body, leftIndent=16, rightIndent=16, firstLineIndent=0, fontName=IT, textColor=GRAY, fontSize=10, leading=14, spaceBefore=4, spaceAfter=6)
-    cap = ParagraphStyle("cap", fontName=BOLD, fontSize=9.5, leading=12, textColor=NAVY, spaceBefore=8, spaceAfter=3)
-    figcap = ParagraphStyle("figcap", fontName=IT, fontSize=9, leading=12, textColor=GRAY, alignment=TA_CENTER, spaceBefore=3, spaceAfter=11)
+    h1 = ParagraphStyle("h1", fontName=HEADL, fontSize=21, leading=25, textColor=NAVY,
+                        spaceBefore=20, spaceAfter=12, keepWithNext=True)
+    h2 = ParagraphStyle("h2", fontName=HEAD, fontSize=14.5, leading=19, textColor=NAVY,
+                        spaceBefore=15, spaceAfter=7, keepWithNext=True)
+    h3 = ParagraphStyle("h3", fontName=HEAD, fontSize=12, leading=16, textColor=COPPER,
+                        spaceBefore=11, spaceAfter=4, keepWithNext=True)
+    bullet = ParagraphStyle("bullet", parent=body, leftIndent=20, firstLineIndent=0, bulletIndent=8, spaceAfter=4)
+    quote = ParagraphStyle("quote", parent=body, leftIndent=18, rightIndent=14, firstLineIndent=0,
+                           fontName=IT, textColor=GRAY, fontSize=10.5, leading=15, spaceBefore=6, spaceAfter=8)
+    cap = ParagraphStyle("cap", fontName=HEAD, fontSize=9.5, leading=12.5, textColor=NAVY, spaceBefore=10, spaceAfter=4)
+    figcap = ParagraphStyle("figcap", fontName=IT, fontSize=9.5, leading=13, textColor=GRAY, alignment=TA_CENTER, spaceBefore=4, spaceAfter=13)
     return dict(body=body, body0=body0, h1=h1, h2=h2, h3=h3, bullet=bullet, quote=quote, cap=cap, figcap=figcap)
 
 
