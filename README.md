@@ -23,9 +23,15 @@ fundamental cobre→valoración (Toda-Yamamoto: cobre causa ambas acciones).
 
 ## Documento
 
-- **`docs/Tesis_USS.docx`** — documento Word con portada Universidad San Sebastián,
-  tablas y figuras embebidas (generado por `src/exportar_docx.py`).
+- **`docs/Tesis_USS.pdf`** — PDF de ~25 páginas con formato profesional de magíster
+  (portada académica, tipografía justificada, tablas, figuras, paginación;
+  generado por `src/exportar_pdf.py` con reportlab).
+- **`docs/Tesis_USS.docx`** — versión Word editable: portada, índice (TOC),
+  encabezados numerados, tablas con estilo y figuras (generado por `src/exportar_docx.py`).
 - **`docs/tesis.md`** — fuente del documento (con todos los números reales).
+
+Regenerar: `python src/exportar_pdf.py` y `python src/exportar_docx.py`
+(cierra el .docx en Word si está abierto, o el guardado fallará por bloqueo).
 
 ## Estructura
 
