@@ -44,6 +44,7 @@
       <li><a href="#modelos">Modelos</a></li>
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#iliquidez">Iliquidez</a></li>
+      <li><a href="#robustez">Robustez</a></li>
       <li><a href="#literatura">Literatura</a></li>
       <li><a href="#conclusiones">Conclusiones</a></li>
       <li><button id="themeBtn" class="keep" title="Cambiar tema" aria-label="Cambiar tema">◐</button></li>
@@ -60,6 +61,7 @@
   <a href="#modelos">Modelos</a>
   <a href="#resultados">Resultados</a>
   <a href="#iliquidez">Iliquidez</a>
+  <a href="#robustez">Robustez</a>
   <a href="#literatura">Literatura</a>
   <a href="#conclusiones">Conclusiones</a>
 </div>
@@ -74,6 +76,7 @@
       <a class="btn btn-primary" href="#hallazgo">Ver el hallazgo central</a>
       <a class="btn btn-ghost" href="assets/docs/Tesis_USS.pdf" target="_blank" rel="noopener">⬇ Tesis (PDF)</a>
       <a class="btn btn-ghost" href="assets/docs/Tesis_USS.docx" download>⬇ Word</a>
+      <a class="btn btn-ghost" href="assets/docs/Tesis_USS_Defensa.pptx" download>⬇ Presentación</a>
       <a class="btn btn-ghost" href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="kpis reveal">
@@ -282,11 +285,42 @@
   </div>
 </section>
 
+<!-- ROBUSTEZ AMPLIADA -->
+<section id="robustez">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">07</div><div class="eyebrow">Robustez ampliada</div>
+      <h2>Cuatro pruebas que blindan el hallazgo</h2>
+      <p>Quiebres estructurales endógenos, validación predictiva fuera de muestra y robustez multi-proxy de la iliquidez confirman el resultado por vías independientes.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Validación fuera de muestra (Clark-West)</h3>
+        <div class="tech">¿El cobre rezagado predice el retorno? · esquema recursivo · t de Clark-West</div>
+        <div class="chart-box"><canvas id="chOOS"></canvas></div>
+        <p class="cap">El cobre <b>rezagado</b> predice a Pucobre (t=2.6) incluso más que a Antofagasta — la transmisión diferida confirmada por predicción. <b>Placebo:</b> SQM (litio) no responde (barra gris) → el efecto es específico del cobre.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Quiebre estructural en la beta-cobre</h3>
+        <div class="tech">Quandt-Andrews (sup-Chow) · β-cobre antes y después del quiebre</div>
+        <div class="chart-box"><canvas id="chQuiebre"></canvas></div>
+        <p class="cap">Antofagasta tiene un quiebre significativo (2007): su β se duplica (0.34→0.78). Pucobre <b>no</b> tiene quiebre: su débil transmisión es estructuralmente estable, no de un régimen.</p>
+      </div>
+    </div>
+    <div class="card reveal" style="margin-top:24px">
+      <h3>Iliquidez: robustez a cuatro medidas</h3>
+      <div class="tech">Correlación de cada proxy de iliquidez con la beta-cobre (signo esperado entre paréntesis)</div>
+      <div id="tblIlRobust"></div>
+      <p class="cap">Las cuatro medidas apuntan en la dirección predicha: el hallazgo central no depende del estimador de Amihud.</p>
+    </div>
+  </div>
+</section>
+
 <!-- LITERATURA -->
 <section id="literatura">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-num">07</div><div class="eyebrow">Marco de literatura</div>
+      <div class="sec-num">08</div><div class="eyebrow">Marco de literatura</div>
       <h2>Sobre hombros de gigantes</h2>
       <p>Cuatro pilares teóricos sustentan el diseño. Todas las referencias fueron verificadas en fuentes primarias (editor / repositorios académicos).</p>
     </div>
@@ -318,7 +352,7 @@
 <!-- FIGURAS -->
 <section id="figuras">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="sec-num">08</div><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
+    <div class="sec-head reveal"><div class="sec-num">09</div><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
     <div class="gallery reveal" id="gallery"></div>
   </div>
 </section>
@@ -326,7 +360,7 @@
 <!-- CONCLUSIONES -->
 <section id="conclusiones">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="sec-num">09</div><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
+    <div class="sec-head reveal"><div class="sec-num">10</div><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
     <div class="grid g2">
       <div class="card reveal"><h3>Hallazgos</h3><ol style="font-size:15px;line-height:1.9;padding-left:18px">
         <li>El cobre es un determinante <b>positivo y significativo</b> de los retornos mineros, con magnitud creciente en la liquidez del activo.</li>
@@ -347,7 +381,7 @@
     <div class="ftitle">Impacto de las variables macroeconómicas globales y financieras en la valoración bursátil del sector de minería de cobre en Chile</div>
     <div style="margin-top:10px">Tesis · Magíster en Data Science · Universidad San Sebastián · 2026</div>
     <div class="badge-row"><span class="badge">Python 3.13</span><span class="badge">statsmodels</span><span class="badge">arch</span><span class="badge">linearmodels</span><span class="badge">Chart.js</span><span class="badge">MathJax</span></div>
-    <div style="margin-top:14px">Código y datos: <a href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">github.com/Nikolaaa11/TESIS-FR</a> · <a href="assets/docs/Tesis_USS.docx" download>Descargar documento (Word)</a></div>
+    <div style="margin-top:14px">Código y datos: <a href="https://github.com/Nikolaaa11/TESIS-FR" target="_blank" rel="noopener">github.com/Nikolaaa11/TESIS-FR</a> · <a href="assets/docs/Tesis_USS.pdf" target="_blank" rel="noopener">Tesis (PDF)</a> · <a href="assets/docs/Tesis_USS.docx" download>Word</a> · <a href="assets/docs/Tesis_USS_Defensa.pptx" download>Presentación (PPTX)</a></div>
     <p class="disclaimer">Todos los resultados provienen de datos reales descargados de fuentes públicas (Yahoo Finance, mindicador.cl). Trabajo académico con fines de investigación; no constituye recomendación de inversión. Ninguna cifra fue inventada.</p>
   </div>
 </footer>

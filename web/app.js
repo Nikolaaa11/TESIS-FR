@@ -169,6 +169,24 @@ function buildCharts(){
     {label:'Baja de TPM',data:acts.map(a=>{const x=e.find(y=>y.activo===a&&y.evento==='baja TPM');return x?x.CAAR:0;}),backgroundColor:PAL.green,borderRadius:6}]},
     options:baseOpts('CAAR (%) ventana [-5,+5]')});
 
+  // Out-of-sample (Clark-West t por activo; placebo SQM en gris)
+  const oos=D.out_of_sample||[];
+  if(oos.length) mk('chOOS',{type:'bar',data:{labels:oos.map(x=>x.activo),datasets:[{
+      label:'Clark-West t (cobre rezagado predice)',data:oos.map(x=>x.ClarkWest_t),
+      backgroundColor:oos.map(x=>x.activo.includes('SQM')?PAL.gray:(x.CW_pvalor<0.05?PAL.green:PAL.gray)),borderRadius:6}]},
+    options:{...baseOpts('estadístico Clark-West'),plugins:{legend:{display:false},
+      tooltip:{backgroundColor:c.tip,callbacks:{label:ctx=>{const x=oos[ctx.dataIndex];return `t=${x.ClarkWest_t} (p=${x.CW_pvalor}) · R²oos=${x.R2_oos_pct}%`;}}},
+      annotation:{annotations:{cv:{type:'line',yMin:1.645,yMax:1.645,borderColor:PAL.copper,borderWidth:1.4,borderDash:[5,4],
+        label:{display:true,content:'5% (1.65)',position:'end',backgroundColor:PAL.copper,color:'#fff',font:{size:9}}}}}}}});
+
+  // Quiebre estructural (beta pre vs post)
+  const qb=D.quiebres||[];
+  if(qb.length) mk('chQuiebre',{type:'bar',data:{labels:qb.map(x=>x.activo),datasets:[
+      {label:'β-cobre antes del quiebre',data:qb.map(x=>x.beta_cobre_pre),backgroundColor:PAL.gray,borderRadius:6},
+      {label:'β-cobre después',data:qb.map(x=>x.beta_cobre_post),backgroundColor:PAL.copper,borderRadius:6}]},
+    options:{...baseOpts('β-cobre'),plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,color:c.ink2}},
+      tooltip:{backgroundColor:c.tip,callbacks:{afterBody:it=>{const x=qb[it[0].dataIndex];return `supF=${x.supF} · quiebre ${x.quiebre} · ${x.hay_quiebre}`;}}}}}});
+
   // Scatter
   const il=D.iliquidez||[],be=D.beta_cobre||[];
   const pts=il.map(x=>{const z=be.find(y=>y.activo===x.activo);return z?{x:x.pct_dias_retorno_cero,y:z.coef,t:x.activo}:null;}).filter(Boolean);
@@ -208,6 +226,8 @@ function tablas(){
   tabla('tblTY',[{h:'Activo',k:'activo'},{h:'Relación',k:'relacion'},{h:'F',k:'F'},{h:'p',k:'p_valor',f:sig},{h:'',k:'veredicto',f:pillCausa}],D.toda_yamamoto||[]);
   tabla('tblMensual',[{h:'Activo',k:'activo'},{h:'β-cobre',k:'beta_cobre'},{h:'t',k:'t_cobre'},{h:'R²',k:'R2'},{h:'IMACEC',k:'imacec'}],D.mensual||[]);
   tabla('tblDesc',[{h:'Activo',k:'serie'},{h:'Media',k:'media'},{h:'SD',k:'sd'},{h:'Asim.',k:'asimetria'},{h:'Curtosis',k:'curtosis'}],D.descriptivos||[]);
+  const nombreMedida={amihud:'Amihud',pct_ceros:'% días retorno cero',roll_spread_pct:'Spread de Roll',vol_medio_usd:'Volumen medio (USD)'};
+  tabla('tblIlRobust',[{h:'Medida de iliquidez',k:'medida',f:v=>nombreMedida[v]||v},{h:'Signo esp.',k:'signo_esperado'},{h:'Spearman ρ',k:'spearman_rho'},{h:'p',k:'p_valor'}],D.iliquidez_robustez_corr||[]);
 }
 
 /* ---------- GALLERY + LIGHTBOX ---------- */

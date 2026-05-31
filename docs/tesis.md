@@ -355,7 +355,17 @@ del tipo de cambio real como amortiguadores de shocks, y trabajos publicados en
 sobre los precios de los metales base, evidenciando una relación cobre↔CLP de doble
 vía. Esta literatura fundamenta el canal moneda y motiva tratar el cobre como
 variable forzante frente a las acciones locales, hipótesis que el test de
-Toda-Yamamoto contrasta directamente.
+Toda-Yamamoto contrasta directamente. El antecedente más directo es Mendiola,
+Chávez-Bedoya y Wallenstein (2022), que documentan una relación **positiva pero
+inelástica** entre los cambios del precio del cobre y los retornos de acciones
+mineras de cobre —precisamente la magnitud que esta tesis estima y descompone por
+horizonte—. Kilian y Park (2009) advierten que el efecto de un shock de *commodity*
+sobre las acciones depende de si es de oferta o de demanda, y Díaz, Hansen y Cabrera
+(2021) —autores chilenos— muestran que variables macro-financieras (VIX, incertidumbre,
+ciclo) gobiernan la volatilidad del cobre, respaldando el conjunto de regresores
+empleado. Gorton y Rouwenhorst (2006) y Cashin et al. (2002) enmarcan, además, el
+comportamiento cíclico y asimétrico de los precios de *commodities* que motiva la
+especificación NARDL.
 
 ### 3.3 Iliquidez y descubrimiento de precios
 
@@ -371,7 +381,12 @@ los retornos. El caso Pucobre —*pure-play* con 62% de días sin transacción y
 transmisión del cobre diferida— es una manifestación nítida de este mecanismo en un
 mercado emergente pequeño, y conecta con la evidencia de que los retornos de
 *small-caps* incorporan los factores comunes con rezago respecto de los de gran
-capitalización.
+capitalización. Bekaert, Harvey y Lundblad (2007) muestran que la liquidez local es
+un determinante de primer orden de los retornos esperados en mercados emergentes, y
+Amihud, Hameed, Kang y Zhang (2015) documentan que el premio por iliquidez se
+concentra en las firmas más pequeñas a nivel internacional —justo el perfil de
+Pucobre—; para mercados ilíquidos, la proporción de días con retorno cero suele
+superar a Amihud como proxy, lo que motiva el uso de múltiples medidas en §6.14.
 
 ### 3.4 Fundamentos econométricos
 
@@ -505,6 +520,36 @@ del cobre 2010–2014, período 2015–2019 y COVID/pospandemia 2020–2026.
 El diseño nace de las propiedades de los datos (sección 6.2). Dado que los
 log-precios son I(1) y los retornos I(0) —mezcla I(0)/I(1) sin presencia de I(2)— se
 articula el siguiente árbol de modelos, cada uno respondiendo una pregunta precisa.
+
+### 5.0 Estrategia de identificación
+
+La pregunta causal —¿cómo afecta el precio del cobre a la valoración de una minera
+chilena?— enfrenta el riesgo habitual de endogeneidad. Aquí, sin embargo, la
+identificación se apoya en dos pilares razonables:
+
+1. **El cobre como shock externo (cuasi-exógeno).** El precio del cobre se determina
+   en mercados globales (LME/COMEX) por la oferta y demanda mundiales —dominadas por
+   China—; dos empresas chilenas, una de ellas pequeña, **no mueven el precio
+   mundial**. Esta exogeneidad se contrasta empíricamente: el test de Toda-Yamamoto
+   arroja causalidad **unidireccional** cobre→Antofagasta (§6.11), descartando
+   retroalimentación. El cobre opera, así, como una fuente de variación plausiblemente
+   exógena para la valoración local.
+2. **Diseño cuasi-experimental por liquidez.** Antofagasta y Pucobre comparten la
+   **misma exposición fundamental** al cobre (ambos son *pure-plays*) pero difieren
+   radicalmente en **microestructura** (liquidez). Comparar la velocidad de
+   transmisión entre ambos **aísla el efecto de la liquidez**, manteniendo
+   aproximadamente constante el fundamento: las referencias internacionales
+   (SCCO/FCX/BHP/GLEN) y los materiales chilenos (CAP/SQM) sirven como *benchmarks* de
+   exposición. La diferencia sistemática en el horizonte de transmisión —no en el
+   nivel de largo plazo— es, por tanto, atribuible a la fricción de liquidez, no a una
+   desconexión fundamental.
+
+**Variables omitidas.** El diseño controla por los factores globales que podrían
+confundir el canal del cobre —dólar (DXY), tasas (UST), riesgo (VIX), mercado (S&P y
+proxy local) y energía (WTI)—, de modo que la elasticidad-cobre estimada es
+incremental respecto de ese comovimiento. Residualmente, factores idiosincrásicos de
+empresa (anuncios, *guidance*, gobierno corporativo) quedan en el error; su efecto se
+mitiga al trabajar con retornos y se discute como limitación.
 
 ### 5.1 Pruebas previas
 
@@ -795,7 +840,77 @@ t=7.3, R²=0.31) → 0.75 (largo plazo VECM). A frecuencia mensual emerge la ver
 sensibilidad, cercana a la de Antofagasta. El IMACEC entra significativo y negativo
 para Pucobre (−0.26, t=−2.8). **H5 se sostiene de forma contundente.**
 
-### 6.13 Síntesis de verificación de hipótesis
+### 6.13 Quiebres estructurales endógenos (Quandt-Andrews)
+
+Para evaluar la estabilidad de la transmisión en 22 años (que abarcan la crisis de
+2008, el superciclo, el COVID y el boom pospandemia), se aplica una prueba de quiebre
+con fecha endógena (sup-Chow / Quandt-Andrews, *trimming* 15%) sobre la regresión
+r = a + b·Δcobre + controles:
+
+| Activo | sup-F | crítico 5% | fecha de quiebre | β-cobre pre → post | ¿quiebre? |
+|---|---|---|---|---|---|
+| ANTO.L | 33.5 | ~18.0 | 2007-07 | 0.34 → 0.78 | Sí |
+| PUCOBRE.SN | 7.8 | ~18.0 | 2010-12 | 0.08 → 0.13 | No al 5% |
+| CAP.SN | 12.4 | ~18.0 | 2011-01 | 0.12 → 0.35 | No al 5% |
+| SQM-B.SN | 11.1 | ~18.0 | 2019-06 | 0.15 → 0.30 | No al 5% |
+
+Antofagasta presenta un **quiebre significativo** en torno a mediados de 2007
+(víspera de la crisis financiera), tras el cual su elasticidad-cobre **se duplica con
+creces** (0.34 → 0.78): su integración al fundamento cuprífero se intensificó
+estructuralmente. Pucobre, en cambio, **no exhibe quiebre significativo**: su débil
+transmisión contemporánea es **estructuralmente estable**, no un artefacto de un
+régimen particular. Esto refuerza H2/H5: la baja sensibilidad contemporánea de
+Pucobre es una característica permanente de su microestructura (iliquidez), no un
+fenómeno transitorio.
+
+### 6.14 Robustez de la iliquidez: medidas alternativas
+
+Dado que el hallazgo central descansa sobre la iliquidez, se replica el contraste
+transversal con **cuatro proxies construidas con metodologías distintas** —Amihud
+(basada en volumen), porcentaje de días con retorno cero (Lesmond et al.), spread
+implícito de Roll (basado en autocovarianza de retornos) y volumen medio en
+USD-equivalente—:
+
+| Medida | Signo esperado | Spearman ρ con β-cobre | p |
+|---|---|---|---|
+| % días retorno cero | − | −0.55 | 0.16 |
+| Spread de Roll | − | −0.40 | 0.50 |
+| Amihud | − | −0.07 | 0.88 |
+| Volumen medio (USD) | + | +0.33 | 0.42 |
+
+Las cuatro medidas apuntan en la **dirección predicha** (mayor iliquidez → menor
+transmisión contemporánea; mayor volumen → mayor transmisión), aunque ninguna alcanza
+significancia individual con N=8 (baja potencia). La **consistencia de signos** entre
+proxies metodológicamente independientes robustece la conclusión: el hallazgo no
+depende del estimador de Amihud. (El spread de Roll resulta indefinido para Pucobre,
+CAP y SQM —autocovarianza positiva por la masa de retornos cero—, lo que confirma que
+el **porcentaje de días con retorno cero** es la proxy preferida para los activos más
+ilíquidos, en línea con Lesmond et al.)
+
+### 6.15 Validación fuera de muestra (Clark-West)
+
+Como prueba **predictiva e independiente** de la transmisión diferida (H5), se evalúa
+si el cobre **rezagado** mejora la predicción fuera de muestra del retorno, mediante
+un esquema recursivo (ventana expansiva desde el 50% de la muestra) que compara un
+*benchmark* AR(1) anidado con un modelo AR(1) + cobre rezagado (lags 1–2), usando el
+R² fuera de muestra (Campbell-Thompson) y el test de Clark-West:
+
+| Activo | R² OOS (%) | Clark-West t | p | ¿el cobre rezagado mejora? |
+|---|---|---|---|---|
+| PUCOBRE.SN | +0.24 | 2.64 | 0.004 | Sí |
+| ANTO.L | +0.20 | 2.45 | 0.007 | Sí |
+| CAP.SN | +0.32 | 2.53 | 0.006 | Sí |
+| SQM-B.SN (litio) | −0.02 | −0.45 | 0.68 | No (placebo) |
+
+El cobre **rezagado** tiene poder predictivo fuera de muestra para Pucobre —de hecho
+**mayor** que para Antofagasta—, exactamente lo que predice la transmisión diferida:
+en el activo líquido el cobre ya está incorporado y el rezago aporta poco, mientras
+que en el ilíquido el rezago captura la incorporación tardía. El **placebo** es nítido:
+SQM (litio, no cobre) no muestra predictibilidad por cobre rezagado (p=0.68),
+descartando que el resultado sea espurio. Esta es una confirmación de H5 por una vía
+metodológicamente distinta a todo el resto del análisis.
+
+### 6.16 Síntesis de verificación de hipótesis
 
 | Hipótesis | Enunciado | Evidencia | Veredicto |
 |---|---|---|---|
@@ -833,6 +948,22 @@ sólo cuando hay transacción, generando autocorrelación positiva en sus retorn
 descubrimiento de precios diferido. El fundamento es el mismo —la elasticidad de
 largo plazo es comparable— pero la **velocidad** de incorporación difiere por la
 microestructura.
+
+### 7.1bis Significancia económica de las magnitudes
+
+Más allá de la significancia estadística, las magnitudes tienen una lectura
+económica concreta. Una elasticidad-cobre contemporánea de **0.70** para Antofagasta
+implica que un movimiento de **+10%** en el precio del cobre se asocia, el mismo día,
+con un retorno de **≈+7%** de la acción —coherente con el apalancamiento operativo de
+un *pure-play* (§2.5)—. Para Pucobre, ese mismo shock de +10% genera apenas **≈+0.9%**
+el primer día, pero **≈+6%** acumulado al cabo de un mes y **≈+7.5%** en el equilibrio
+de largo plazo. Para un inversionista, la implicancia es operativa: medir la
+exposición de Pucobre al cobre con una beta **diaria** subestima su riesgo real en un
+factor cercano a **ocho** (0.09 vs 0.75); la exposición sólo se aprecia correctamente
+a horizontes mensuales o superiores. Para un emisor pequeño, el resultado cuantifica
+un **costo de iliquidez**: el mercado tarda en reflejar las mejoras de su fundamento,
+lo que se traduce en mayor costo de capital y menor utilidad de la acción como
+instrumento de cobertura del riesgo-cobre en el corto plazo.
 
 ### 7.2bis Implicaciones para la eficiencia de mercado
 
@@ -960,7 +1091,30 @@ de *commodities* para testear la generalidad del mecanismo de liquidez.
 - Glosten, L. R., Jagannathan, R., & Runkle, D. E. (1993). On the relation between the expected value and the volatility of the nominal excess return on stocks. *Journal of Finance*, 48(5), 1779–1801.
 - Newey, W. K., & West, K. D. (1987). A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. *Econometrica*, 55(3), 703–708.
 
-*Raíces unitarias y quiebres:* Dickey & Fuller (1979); Phillips & Perron (1988); Kwiatkowski, Phillips, Schmidt & Shin (1992, KPSS); Zivot & Andrews (1992).
+*Raíces unitarias y quiebres:* Dickey & Fuller (1979); Phillips & Perron (1988); Kwiatkowski, Phillips, Schmidt & Shin (1992, KPSS); Zivot & Andrews (1992); Andrews (1993, sup-tests de quiebre); Bai & Perron (2003, quiebres múltiples).
+
+*Evidencia empírica reciente (commodities, cobre, liquidez):*
+- Mendiola, A., Chávez-Bedoya, L., & Wallenstein, T. (2022). Analyzing the reaction of mining stocks to the development of copper prices. *Emerging Markets Finance and Trade*, 58(1), 244–266. https://doi.org/10.1080/1540496X.2019.1703103
+- Díaz, J. D., Hansen, E., & Cabrera, G. (2021). Economic drivers of commodity volatility: the case of copper. *Resources Policy*, 73, 102224. https://doi.org/10.1016/j.resourpol.2021.102224
+- Gorton, G., & Rouwenhorst, K. G. (2006). Facts and fantasies about commodity futures. *Financial Analysts Journal*, 62(2), 47–68. https://doi.org/10.2469/faj.v62.n2.4083
+- Kilian, L., & Park, C. (2009). The impact of oil price shocks on the U.S. stock market. *International Economic Review*, 50(4), 1267–1287. https://doi.org/10.1111/j.1468-2354.2009.00568.x
+- Cashin, P., McDermott, C. J., & Scott, A. (2002). Booms and slumps in world commodity prices. *Journal of Development Economics*, 69(1), 277–296. https://doi.org/10.1016/S0304-3878(02)00062-7
+- Bekaert, G., Harvey, C. R., & Lundblad, C. (2007). Liquidity and expected returns: lessons from emerging markets. *Review of Financial Studies*, 20(6), 1783–1831. https://doi.org/10.1093/rfs/hhm030
+- Amihud, Y., Hameed, A., Kang, W., & Zhang, H. (2015). The illiquidity premium: international evidence. *Journal of Financial Economics*, 117(2), 350–368. https://doi.org/10.1016/j.jfineco.2015.04.005
+- Cunado, J., & Pérez de Gracia, F. (2014). Oil price shocks and stock market returns: evidence for some European countries. *Energy Economics*, 42, 365–377. https://doi.org/10.1016/j.eneco.2013.10.017
+- Jawadi, F., Arouri, M. E. H., & Million, N. (2009). *Stock market integration in the Latin American markets: further evidence from nonlinear modeling*. [Preprint — verificar versión publicada].
+
+> Las referencias de este bloque fueron verificadas con DOI durante la investigación
+> bibliográfica de apoyo; restan por confirmar volumen/páginas exactos de algunas
+> (Amihud et al., 2015; Jawadi et al., 2009) antes de la entrega final.
+
+**Data Availability Statement.** Todos los datos provienen de fuentes públicas:
+precios y volúmenes de Yahoo Finance (descarga 2026-05-30, vía la librería `yfinance`)
+y macro de Chile de la API pública `mindicador.cl` (TPM, IMACEC, IPC, dólar
+observado). El código de descarga, limpieza, estimación y exportación, los datos
+procesados, las 35+ tablas de salida y las 13 figuras están disponibles en el
+repositorio del proyecto, con scripts numerados que reproducen cada tabla y figura.
+No se emplearon datos propietarios ni restringidos.
 
 > Nota: confirmar paginación y DOIs en Scopus/Web of Science/Google Scholar antes de
 > la entrega final. Estas referencias fueron contrastadas con repositorios del

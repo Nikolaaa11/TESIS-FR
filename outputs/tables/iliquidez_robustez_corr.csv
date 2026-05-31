@@ -1,0 +1,5 @@
+﻿medida,signo_esperado,spearman_rho,p_valor,n
+amihud,-,-0.071,0.879,7
+pct_ceros,-,-0.548,0.16,8
+roll_spread_pct,-,-0.4,0.5046,5
+vol_medio_usd,+,0.333,0.4198,8

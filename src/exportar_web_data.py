@@ -77,6 +77,15 @@ def main():
     # rezagos distribuidos
     data["rezagos"] = ilt.to_dict("records")
 
+    # nuevos analisis de rigor (si existen)
+    def _opt(nombre):
+        p = C.TAB / nombre
+        return pd.read_csv(p).to_dict("records") if p.exists() else []
+    data["quiebres"] = _opt("quiebres_estructurales.csv")
+    data["iliquidez_robustez"] = _opt("iliquidez_robustez.csv")
+    data["iliquidez_robustez_corr"] = _opt("iliquidez_robustez_corr.csv")
+    data["out_of_sample"] = _opt("out_of_sample.csv")
+
     # Universo
     data["universo"] = t("universo_verificacion.csv")[["ticker", "desc", "ok", "n", "inicio", "fin", "moneda"]].to_dict("records")
 
