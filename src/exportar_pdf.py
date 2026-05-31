@@ -54,14 +54,29 @@ HEAD = BOLD; HEADL = BOLD  # APA usa la misma fuente (Times) en negrita para tí
 
 def _clean(t):
     t = "" if t is None else str(t)
+    # 1) proteger code spans `...`: contienen tickers de Yahoo (^IRX, ^IPSA), rutas y
+    #    nombres snake_case que NO deben transformarse como notación matemática.
+    codes = []
+    def _stash(m):
+        codes.append(m.group(1)); return f"\x00{len(codes)-1}\x00"
+    t = re.sub(r"`([^`]+)`", _stash, t)
+    # 2) markdown básico (negrita / cursiva / fórmulas inline / enlaces)
     t = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", t)
-    t = re.sub(r"`(.+?)`", r"\1", t)
     t = re.sub(r"\$\$(.+?)\$\$", r"\1", t); t = re.sub(r"\\\((.+?)\\\)", r"\1", t)
     t = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<i>\1</i>", t)
     t = re.sub(r"\[(.+?)\]\((.+?)\)", r"\1", t)
+    # 3) subíndices/superíndices -> etiquetas nativas de reportlab (look más académico).
+    #    Forma con llaves (inequívoca) primero; luego formas simples seguras.
+    t = re.sub(r"\^\{([^}]+)\}", r"<super>\1</super>", t)
+    t = re.sub(r"_\{([^}]+)\}", r"<sub>\1</sub>", t)
+    t = re.sub(r"\^([0-9]+|[a-z])\b", r"<super>\1</super>", t)              # ^t, ^2 (no toca tickers ^IRX)
+    t = re.sub(r"(?<=[0-9A-Za-z\)\]Ͱ-Ͽ])_([A-Za-z0-9]+)", r"<sub>\1</sub>", t)
+    # 4) escape de & y restauración de etiquetas + code spans
     t = t.replace("&", "&amp;")
-    for tag in ("b", "i"):
+    for tag in ("b", "i", "sub", "super"):
         t = t.replace(f"&lt;{tag}&gt;", f"<{tag}>").replace(f"&lt;/{tag}&gt;", f"</{tag}>")
+    for i, c in enumerate(codes):
+        t = t.replace(f"\x00{i}\x00", c)
     return t
 
 
@@ -213,7 +228,10 @@ def construir_flow(md, S, ctx):
             flow.append(Paragraph(pref + _clean(txt), S["bullet"])); prev[0] = "list"
             i = j; continue
         elif s.startswith("> "):
-            flush(); flow.append(Paragraph(_clean(s[2:]), S["quote"])); prev[0] = "quote"
+            flush(); qt = s[2:]; j = i + 1
+            while j < len(lineas) and lineas[j].strip().startswith("> "):
+                qt += " " + lineas[j].strip()[2:]; j += 1
+            flow.append(Paragraph(_clean(qt), S["quote"])); prev[0] = "quote"; i = j; continue
         elif set(s) <= set("-") and len(s) >= 3:
             flush()
         else:

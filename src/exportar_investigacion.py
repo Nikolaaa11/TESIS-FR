@@ -53,14 +53,23 @@ F = _reg()
 
 def _clean(t):
     t = "" if t is None else str(t)
+    codes = []
+    def _stash(m):
+        codes.append(m.group(1)); return f"\x00{len(codes)-1}\x00"
+    t = re.sub(r"`([^`]+)`", _stash, t)
     t = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", t)
-    t = re.sub(r"`(.+?)`", r"\1", t)
     t = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<i>\1</i>", t)
     t = re.sub(r"\[(.+?)\]\((.+?)\)", r'<font color="#0066CC">\1</font>', t)
+    t = re.sub(r"\^\{([^}]+)\}", r"<super>\1</super>", t)
+    t = re.sub(r"_\{([^}]+)\}", r"<sub>\1</sub>", t)
+    t = re.sub(r"\^([0-9]+|[a-z])\b", r"<super>\1</super>", t)
+    t = re.sub(r"(?<=[0-9A-Za-z\)\]Ͱ-Ͽ])_([A-Za-z0-9]+)", r"<sub>\1</sub>", t)
     t = t.replace("&", "&amp;")
-    for tag in ("b", "i", "font", "/font"):
+    for tag in ("b", "i", "sub", "super", "font", "/font"):
         t = t.replace(f"&lt;{tag}&gt;", f"<{tag}>")
     t = t.replace('&lt;font color="#0066CC"&gt;', '<font color="#0066CC">').replace("&lt;/font&gt;", "</font>")
+    for i, c in enumerate(codes):
+        t = t.replace(f"\x00{i}\x00", c)
     return t
 
 
@@ -124,7 +133,11 @@ def parse_md(md, S, skip_h1=True):
                 else:
                     break
             flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(txt), S["bullet"])); i = j; continue
-        elif s.startswith("> "): flush(); flow.append(Paragraph(_clean(s[2:]), S["quote"]))
+        elif s.startswith("> "):
+            flush(); qt = s[2:]; j = i + 1
+            while j < len(lineas) and lineas[j].strip().startswith("> "):
+                qt += " " + lineas[j].strip()[2:]; j += 1
+            flow.append(Paragraph(_clean(qt), S["quote"])); i = j; continue
         elif set(s) <= set("-") and len(s) >= 3: flush()
         else: buf.append(s)
         i += 1
@@ -251,7 +264,11 @@ def _word(S):
                     else:
                         break
                 runs(doc.add_paragraph(style="List Bullet"), txt); i = j; continue
-            elif s.startswith("> "): flush(); runs(doc.add_paragraph(style="Intense Quote"), s[2:])
+            elif s.startswith("> "):
+                flush(); qt = s[2:]; j = i + 1
+                while j < len(lineas) and lineas[j].strip().startswith("> "):
+                    qt += " " + lineas[j].strip()[2:]; j += 1
+                runs(doc.add_paragraph(style="Intense Quote"), qt); i = j; continue
             elif set(s) <= set("-") and len(s) >= 3: flush()
             else: buf.append(s)
             i += 1

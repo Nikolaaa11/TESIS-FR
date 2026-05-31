@@ -144,12 +144,50 @@ def _clean(t):
     return t
 
 
+_MATH = re.compile(r"\^\{([^}]+)\}|_\{([^}]+)\}|\^([0-9]+|[a-z])(?![A-Za-z])|(?<=[\w\)\]])_([A-Za-z0-9]+)")
+
+
+def _run(par, text, bold, italic, script, codes):
+    if not text:
+        return
+    for i, c in enumerate(codes):
+        text = text.replace(f"\x00{i}\x00", c)
+    if not text:
+        return
+    r = par.add_run(text); r.bold = bold; r.italic = italic
+    if script == "sub": r.font.subscript = True
+    elif script == "super": r.font.superscript = True
+
+
+def _emit_math(par, text, bold, italic, codes):
+    pos = 0
+    for m in _MATH.finditer(text):
+        if m.start() > pos:
+            _run(par, text[pos:m.start()], bold, italic, None, codes)
+        sup = m.group(1) or m.group(3); sub = m.group(2) or m.group(4)
+        if sup is not None: _run(par, sup, bold, italic, "super", codes)
+        else: _run(par, sub, bold, italic, "sub", codes)
+        pos = m.end()
+    _run(par, text[pos:], bold, italic, None, codes)
+
+
 def _runs_bold(par, texto):
-    for p in re.split(r"(\*\*.+?\*\*)", texto):
-        if p.startswith("**") and p.endswith("**"):
-            par.add_run(_clean(p)).bold = True
-        else:
-            par.add_run(_clean(p))
+    # protege code spans (tickers ^IRX, rutas, snake_case) y aplica negrita/cursiva +
+    # subíndices/superíndices como runs nativos de Word.
+    codes = []
+    def _stash(m):
+        codes.append(m.group(1)); return f"\x00{len(codes)-1}\x00"
+    texto = re.sub(r"`([^`]+)`", _stash, texto)
+    texto = re.sub(r"\$\$(.+?)\$\$", r"\1", texto); texto = re.sub(r"\\\((.+?)\\\)", r"\1", texto)
+    texto = re.sub(r"\[(.+?)\]\((.+?)\)", r"\1", texto)
+    for part in re.split(r"(\*\*.+?\*\*)", texto):
+        bold = part.startswith("**") and part.endswith("**")
+        inner = part[2:-2] if bold else part
+        for seg in re.split(r"(\*[^*]+?\*)", inner):
+            if len(seg) >= 2 and seg.startswith("*") and seg.endswith("*"):
+                _emit_math(par, seg[1:-1], bold, True, codes)
+            else:
+                _emit_math(par, seg, bold, False, codes)
 
 
 def _tabla(doc, lineas, ntab=0, titulo=""):
@@ -225,7 +263,10 @@ def convertir(doc, md):
                 blk.append(lineas[i]); i += 1
             ntab += 1; _tabla(doc, blk, ntab, ultimo_tit); continue
         if s.startswith("> "):
-            flush(); p = doc.add_paragraph(style="Intense Quote"); _runs_bold(p, s[2:]); i += 1; continue
+            flush(); qt = s[2:]; j = i + 1
+            while j < len(lineas) and lineas[j].strip().startswith("> "):
+                qt += " " + lineas[j].strip()[2:]; j += 1
+            p = doc.add_paragraph(style="Intense Quote"); _runs_bold(p, qt); i = j; continue
         if s.startswith("### "): flush(); ultimo_tit = _clean(s[4:]); doc.add_heading(ultimo_tit, level=3)
         elif s.startswith("## "): flush(); ultimo_tit = _clean(s[3:]); doc.add_heading(ultimo_tit, level=2)
         elif s.startswith("# "):

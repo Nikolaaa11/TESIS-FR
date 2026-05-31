@@ -115,7 +115,9 @@ section{padding:104px 0;border-top:1px solid var(--line);position:relative}
 .dl-ic.doc{background:linear-gradient(135deg,#2563eb,#1e40af)}
 .dl-ic.ppt{background:linear-gradient(135deg,#ea580c,#c2410c)}
 .dl-ic.git{background:linear-gradient(135deg,#334155,#0f172a);font-size:22px}
-.dl-go{flex:none;font-size:13px;font-weight:600;color:var(--accent,#b45309);letter-spacing:.01em}
+.dl-go{flex:none;font-size:13px;font-weight:600;color:var(--copper);letter-spacing:.01em;transition:transform .2s ease}
+.dl-card:hover .dl-go{transform:translateX(3px)}
+.dl-meta{display:inline-block;margin-top:3px;font-size:11px;font-weight:600;color:var(--ink-3);letter-spacing:.02em}
 .chart-box{position:relative;height:340px}.chart-box.tall{height:430px}
 .cap{font-size:13px;color:var(--ink-2);margin-top:16px;line-height:1.6}.cap b{color:var(--ink)}
 
