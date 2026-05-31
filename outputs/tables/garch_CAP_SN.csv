@@ -1,0 +1,4 @@
+﻿activo,modelo,AIC,BIC,loglik,alpha,beta,gamma_asimetria,persistencia
+CAP.SN,"GARCH(1,1)",25006.3,25039.6,-12498.1,0.138,0.8565,,0.9945
+CAP.SN,"GJR-GARCH(1,1)",24987.9,25028.0,-12488.0,0.1094,0.8503,0.0732,
+CAP.SN,"EGARCH(1,1)",25003.0,25043.0,-12495.5,0.2777,0.9638,-0.0448,

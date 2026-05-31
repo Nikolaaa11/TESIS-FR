@@ -1,0 +1,14 @@
+# Stack econometrico tesis cobre-Chile (Python 3.13)
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+statsmodels>=0.14
+arch>=8.0
+linearmodels>=7.0
+yfinance
+requests
+openpyxl
+# Nota: pandas_datareader NO se usa (incompatible con pandas actual);
+# FRED y BCCh se consumen por API/CSV directo via requests.

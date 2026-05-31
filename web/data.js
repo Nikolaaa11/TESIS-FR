@@ -1,0 +1,1053 @@
+window.TESIS_DATA = {
+  "beta_cobre": [
+    {
+      "activo": "ANTO.L",
+      "coef": 0.702,
+      "t": 15.2355,
+      "p": 0.0,
+      "R2": 0.4226
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "coef": 0.0843,
+      "t": 4.3456,
+      "p": 0.0,
+      "R2": 0.0435
+    },
+    {
+      "activo": "CAP.SN",
+      "coef": 0.1521,
+      "t": 5.7165,
+      "p": 0.0,
+      "R2": 0.2477
+    },
+    {
+      "activo": "SQM-B.SN",
+      "coef": 0.1088,
+      "t": 4.1383,
+      "p": 0.0,
+      "R2": 0.2512
+    },
+    {
+      "activo": "SCCO",
+      "coef": 0.4888,
+      "t": 9.4834,
+      "p": 0.0,
+      "R2": 0.5789
+    },
+    {
+      "activo": "FCX",
+      "coef": 0.6267,
+      "t": 10.1608,
+      "p": 0.0,
+      "R2": 0.523
+    },
+    {
+      "activo": "BHP",
+      "coef": 0.3156,
+      "t": 10.5601,
+      "p": 0.0,
+      "R2": 0.6046
+    },
+    {
+      "activo": "GLEN.L",
+      "coef": 0.5839,
+      "t": 9.7048,
+      "p": 0.0,
+      "R2": 0.2918
+    }
+  ],
+  "horizonte": {
+    "labels": [
+      "Diario (día 0)",
+      "Acumulado 0–5d",
+      "Mensual",
+      "Largo plazo (VECM)"
+    ],
+    "pucobre": [
+      0.085,
+      0.415,
+      0.599,
+      0.753
+    ],
+    "anto": [
+      0.701,
+      0.862,
+      0.712,
+      0.86
+    ]
+  },
+  "var": [
+    {
+      "activo": "ANTO.L",
+      "p": 10,
+      "n": 5828,
+      "irf_dia0": 0.0,
+      "irf_dia1": 0.0907,
+      "irf_acum5": 0.091,
+      "fevd_cobre_h1": 28.68,
+      "fevd_cobre_h20": 27.79,
+      "granger_cobre_p": 0.0084
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "p": 10,
+      "n": 5828,
+      "irf_dia0": 0.0,
+      "irf_dia1": 0.0427,
+      "irf_acum5": 0.1957,
+      "fevd_cobre_h1": 2.03,
+      "fevd_cobre_h20": 4.32,
+      "granger_cobre_p": 0.0
+    }
+  ],
+  "vecm": [
+    {
+      "activo": "ANTO.L",
+      "n": 5829,
+      "k_ar_diff": 10,
+      "LP_cobre": 0.8603,
+      "LP_usdclp": 6.6292,
+      "LP_dxy": -11.8041,
+      "alpha_activo": -0.0008
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "n": 5829,
+      "k_ar_diff": 10,
+      "LP_cobre": 0.7535,
+      "LP_usdclp": 4.819,
+      "LP_dxy": -7.9578,
+      "alpha_activo": -0.0004
+    }
+  ],
+  "garch": [
+    {
+      "activo": "ANTO.L",
+      "modelo": "GARCH(1,1)",
+      "AIC": 26675.4,
+      "BIC": 26708.8,
+      "loglik": -13332.7,
+      "alpha": 0.052,
+      "beta": 0.9392,
+      "gamma_asimetria": null,
+      "persistencia": 0.9912
+    },
+    {
+      "activo": "ANTO.L",
+      "modelo": "GJR-GARCH(1,1)",
+      "AIC": 26661.1,
+      "BIC": 26701.2,
+      "loglik": -13324.6,
+      "alpha": 0.0316,
+      "beta": 0.94,
+      "gamma_asimetria": 0.038,
+      "persistencia": null
+    },
+    {
+      "activo": "ANTO.L",
+      "modelo": "EGARCH(1,1)",
+      "AIC": 26665.7,
+      "BIC": 26705.7,
+      "loglik": -13326.8,
+      "alpha": 0.1132,
+      "beta": 0.9892,
+      "gamma_asimetria": -0.0308,
+      "persistencia": null
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "modelo": "GARCH(1,1)",
+      "AIC": 11785.5,
+      "BIC": 11818.9,
+      "loglik": -5887.8,
+      "alpha": 0.3092,
+      "beta": 0.2955,
+      "gamma_asimetria": null,
+      "persistencia": 0.6047
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "modelo": "GJR-GARCH(1,1)",
+      "AIC": 6641.6,
+      "BIC": 6681.7,
+      "loglik": -3314.8,
+      "alpha": 1.0,
+      "beta": 0.5,
+      "gamma_asimetria": -1.0,
+      "persistencia": null
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "modelo": "EGARCH(1,1)",
+      "AIC": 14621.0,
+      "BIC": 14661.1,
+      "loglik": -7304.5,
+      "alpha": 71.8553,
+      "beta": 1.0,
+      "gamma_asimetria": -50.8645,
+      "persistencia": null
+    },
+    {
+      "activo": "CAP.SN",
+      "modelo": "GARCH(1,1)",
+      "AIC": 25006.3,
+      "BIC": 25039.6,
+      "loglik": -12498.1,
+      "alpha": 0.138,
+      "beta": 0.8565,
+      "gamma_asimetria": null,
+      "persistencia": 0.9945
+    },
+    {
+      "activo": "CAP.SN",
+      "modelo": "GJR-GARCH(1,1)",
+      "AIC": 24987.9,
+      "BIC": 25028.0,
+      "loglik": -12488.0,
+      "alpha": 0.1094,
+      "beta": 0.8503,
+      "gamma_asimetria": 0.0732,
+      "persistencia": null
+    },
+    {
+      "activo": "CAP.SN",
+      "modelo": "EGARCH(1,1)",
+      "AIC": 25003.0,
+      "BIC": 25043.0,
+      "loglik": -12495.5,
+      "alpha": 0.2777,
+      "beta": 0.9638,
+      "gamma_asimetria": -0.0448,
+      "persistencia": null
+    },
+    {
+      "activo": "SQM-B.SN",
+      "modelo": "GARCH(1,1)",
+      "AIC": 24440.7,
+      "BIC": 24474.0,
+      "loglik": -12215.3,
+      "alpha": 0.0537,
+      "beta": 0.9455,
+      "gamma_asimetria": null,
+      "persistencia": 0.9992
+    },
+    {
+      "activo": "SQM-B.SN",
+      "modelo": "GJR-GARCH(1,1)",
+      "AIC": 24438.6,
+      "BIC": 24478.7,
+      "loglik": -12213.3,
+      "alpha": 0.049,
+      "beta": 0.9408,
+      "gamma_asimetria": 0.0197,
+      "persistencia": null
+    },
+    {
+      "activo": "SQM-B.SN",
+      "modelo": "EGARCH(1,1)",
+      "AIC": 24411.0,
+      "BIC": 24451.0,
+      "loglik": -12199.5,
+      "alpha": 0.1213,
+      "beta": 0.9931,
+      "gamma_asimetria": -0.0171,
+      "persistencia": null
+    }
+  ],
+  "estacionariedad": [
+    {
+      "serie": "lprice_ANTO.L",
+      "tipo": "nivel",
+      "ADF_p": 0.7769,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_PUCOBRE.SN",
+      "tipo": "nivel",
+      "ADF_p": 0.9851,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_CAP.SN",
+      "tipo": "nivel",
+      "ADF_p": 0.0169,
+      "KPSS_p": 0.0004,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "lprice_SQM-B.SN",
+      "tipo": "nivel",
+      "ADF_p": 0.3411,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_SCCO",
+      "tipo": "nivel",
+      "ADF_p": 0.79,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_FCX",
+      "tipo": "nivel",
+      "ADF_p": 0.3588,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_BHP",
+      "tipo": "nivel",
+      "ADF_p": 0.4037,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "lprice_GLEN.L",
+      "tipo": "nivel",
+      "ADF_p": 0.2911,
+      "KPSS_p": 0.0002,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_cobre_comex",
+      "tipo": "nivel",
+      "ADF_p": 0.1044,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_usdclp",
+      "tipo": "nivel",
+      "ADF_p": 0.713,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_dxy",
+      "tipo": "nivel",
+      "ADF_p": 0.5218,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_sp500",
+      "tipo": "nivel",
+      "ADF_p": 0.9906,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_ipsa",
+      "tipo": "nivel",
+      "ADF_p": 0.1377,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "l_wti",
+      "tipo": "nivel",
+      "ADF_p": 0.0035,
+      "KPSS_p": 0.0135,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ust10y",
+      "tipo": "nivel",
+      "ADF_p": 0.3849,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "ust5y",
+      "tipo": "nivel",
+      "ADF_p": 0.5974,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "ust13w",
+      "tipo": "nivel",
+      "ADF_p": 0.7308,
+      "KPSS_p": 0.0001,
+      "conclusion": "I(1)"
+    },
+    {
+      "serie": "ret_ANTO.L",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.6618,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_PUCOBRE.SN",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.1436,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_CAP.SN",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.123,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_SQM-B.SN",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.4606,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_SCCO",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.7413,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_FCX",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.7082,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_BHP",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.6384,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "ret_GLEN.L",
+      "tipo": "retorno",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.2881,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_cobre_comex",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.4659,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_usdclp",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.4424,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_dxy",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.815,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_sp500",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.2323,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_ipsa",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.2529,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "dl_wti",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.8206,
+      "conclusion": "I(0)"
+    },
+    {
+      "serie": "d_ust10y",
+      "tipo": "diferencia",
+      "ADF_p": 0.0,
+      "KPSS_p": 0.285,
+      "conclusion": "I(0)"
+    }
+  ],
+  "iliquidez": [
+    {
+      "activo": "ANTO.L",
+      "ILLIQ_medio": 0.0002,
+      "ILLIQ_mediano": 0.0,
+      "pct_dias_retorno_cero": 5.48,
+      "vol_medio_USD_equiv": 2048639369.0
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "ILLIQ_medio": 0.0075,
+      "ILLIQ_mediano": 0.0001,
+      "pct_dias_retorno_cero": 62.11,
+      "vol_medio_USD_equiv": 23990838.0
+    },
+    {
+      "activo": "CAP.SN",
+      "ILLIQ_medio": 0.0016,
+      "ILLIQ_mediano": 0.0,
+      "pct_dias_retorno_cero": 7.78,
+      "vol_medio_USD_equiv": 835410527.0
+    },
+    {
+      "activo": "SQM-B.SN",
+      "ILLIQ_medio": 0.0001,
+      "ILLIQ_mediano": 0.0,
+      "pct_dias_retorno_cero": 5.44,
+      "vol_medio_USD_equiv": 4197696871.0
+    },
+    {
+      "activo": "SCCO",
+      "ILLIQ_medio": 0.0332,
+      "ILLIQ_mediano": 0.0004,
+      "pct_dias_retorno_cero": 1.29,
+      "vol_medio_USD_equiv": 49155668.0
+    },
+    {
+      "activo": "FCX",
+      "ILLIQ_medio": 0.0007,
+      "ILLIQ_mediano": 0.0001,
+      "pct_dias_retorno_cero": 0.96,
+      "vol_medio_USD_equiv": 388956776.0
+    },
+    {
+      "activo": "BHP",
+      "ILLIQ_medio": 0.0098,
+      "ILLIQ_mediano": 0.0002,
+      "pct_dias_retorno_cero": 0.98,
+      "vol_medio_USD_equiv": 84203669.0
+    },
+    {
+      "activo": "GLEN.L",
+      "ILLIQ_medio": 0.0,
+      "ILLIQ_mediano": 0.0,
+      "pct_dias_retorno_cero": 0.18,
+      "vol_medio_USD_equiv": 12765858230.0
+    }
+  ],
+  "descriptivos": [
+    {
+      "serie": "ANTO.L",
+      "n": 5843,
+      "media": 0.0509,
+      "sd": 2.6517,
+      "min": -19.2233,
+      "max": 20.0724,
+      "asimetria": 0.0913,
+      "curtosis": 4.1493,
+      "JarqueBera": 4199.5866,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "PUCOBRE.SN",
+      "n": 5843,
+      "media": 0.0533,
+      "sd": 1.4426,
+      "min": -18.0137,
+      "max": 23.6921,
+      "asimetria": 1.5049,
+      "curtosis": 35.5028,
+      "JarqueBera": 309072.165,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "CAP.SN",
+      "n": 5843,
+      "media": 0.0439,
+      "sd": 2.4651,
+      "min": -32.1731,
+      "max": 19.5902,
+      "asimetria": -0.1299,
+      "curtosis": 10.6503,
+      "JarqueBera": 27631.6874,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "SQM-B.SN",
+      "n": 5843,
+      "media": 0.0674,
+      "sd": 2.3245,
+      "min": -18.6962,
+      "max": 19.9127,
+      "asimetria": -0.191,
+      "curtosis": 6.6716,
+      "JarqueBera": 10871.9737,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "SCCO",
+      "n": 5843,
+      "media": 0.0745,
+      "sd": 2.6273,
+      "min": -22.5575,
+      "max": 25.5706,
+      "asimetria": 0.0318,
+      "curtosis": 6.8263,
+      "JarqueBera": 11345.7817,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "FCX",
+      "n": 5843,
+      "media": 0.0287,
+      "sd": 3.2047,
+      "min": -22.7311,
+      "max": 25.9935,
+      "asimetria": -0.2519,
+      "curtosis": 6.1493,
+      "JarqueBera": 9268.0387,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "BHP",
+      "n": 5843,
+      "media": 0.0459,
+      "sd": 2.2726,
+      "min": -18.8133,
+      "max": 16.821,
+      "asimetria": -0.2865,
+      "curtosis": 6.4152,
+      "JarqueBera": 10099.5128,
+      "JB_pvalor": 0.0
+    },
+    {
+      "serie": "GLEN.L",
+      "n": 3917,
+      "media": 0.0019,
+      "sd": 2.5405,
+      "min": -34.8393,
+      "max": 19.1055,
+      "asimetria": -0.7371,
+      "curtosis": 14.6108,
+      "JarqueBera": 35195.643,
+      "JB_pvalor": 0.0
+    }
+  ],
+  "nardl": [
+    {
+      "activo": "ANTO.L",
+      "n": 5912,
+      "F_bounds": 4.497,
+      "veredicto": "cointegra (5%)",
+      "LP_cobre_pos": -0.9346,
+      "LP_cobre_neg": -0.8956,
+      "asim_Wald": 8.446,
+      "asim_p": 0.0037
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "n": 5912,
+      "F_bounds": 1.827,
+      "veredicto": "no cointegra (5%)",
+      "LP_cobre_pos": -2.5938,
+      "LP_cobre_neg": -2.6409,
+      "asim_Wald": 1.115,
+      "asim_p": 0.2911
+    },
+    {
+      "activo": "CAP.SN",
+      "n": 5912,
+      "F_bounds": 3.096,
+      "veredicto": "no cointegra (5%)",
+      "LP_cobre_pos": -0.932,
+      "LP_cobre_neg": -0.9952,
+      "asim_Wald": 2.071,
+      "asim_p": 0.1501
+    },
+    {
+      "activo": "SQM-B.SN",
+      "n": 5912,
+      "F_bounds": 2.026,
+      "veredicto": "no cointegra (5%)",
+      "LP_cobre_pos": -0.7108,
+      "LP_cobre_neg": -0.6553,
+      "asim_Wald": 1.459,
+      "asim_p": 0.2271
+    }
+  ],
+  "event_study": [
+    {
+      "activo": "ANTO.L",
+      "evento": "alza TPM",
+      "n": 32,
+      "CAAR": -1.0428,
+      "t": -0.83,
+      "p": 0.4117
+    },
+    {
+      "activo": "ANTO.L",
+      "evento": "baja TPM",
+      "n": 39,
+      "CAAR": 0.2238,
+      "t": 0.2,
+      "p": 0.8415
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "evento": "alza TPM",
+      "n": 32,
+      "CAAR": -0.118,
+      "t": -0.18,
+      "p": 0.8583
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "evento": "baja TPM",
+      "n": 39,
+      "CAAR": 0.942,
+      "t": 0.79,
+      "p": 0.4328
+    },
+    {
+      "activo": "CAP.SN",
+      "evento": "alza TPM",
+      "n": 32,
+      "CAAR": -1.8974,
+      "t": -0.91,
+      "p": 0.3688
+    },
+    {
+      "activo": "CAP.SN",
+      "evento": "baja TPM",
+      "n": 39,
+      "CAAR": -0.0112,
+      "t": -0.01,
+      "p": 0.9926
+    },
+    {
+      "activo": "SQM-B.SN",
+      "evento": "alza TPM",
+      "n": 32,
+      "CAAR": 1.4279,
+      "t": 0.85,
+      "p": 0.3994
+    },
+    {
+      "activo": "SQM-B.SN",
+      "evento": "baja TPM",
+      "n": 39,
+      "CAAR": -0.2301,
+      "t": -0.19,
+      "p": 0.847
+    }
+  ],
+  "toda_yamamoto": [
+    {
+      "activo": "ANTO.L",
+      "relacion": "cobre->activo",
+      "p": 12,
+      "F": 1.806,
+      "p_valor": 0.0416,
+      "veredicto": "CAUSA"
+    },
+    {
+      "activo": "ANTO.L",
+      "relacion": "activo->cobre",
+      "p": 12,
+      "F": 1.516,
+      "p_valor": 0.1104,
+      "veredicto": "no causa"
+    },
+    {
+      "activo": "ANTO.L",
+      "relacion": "usdclp->activo",
+      "p": 12,
+      "F": 7.033,
+      "p_valor": 0.0,
+      "veredicto": "CAUSA"
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "relacion": "cobre->activo",
+      "p": 12,
+      "F": 4.646,
+      "p_valor": 0.0,
+      "veredicto": "CAUSA"
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "relacion": "activo->cobre",
+      "p": 12,
+      "F": 2.026,
+      "p_valor": 0.0186,
+      "veredicto": "CAUSA"
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "relacion": "usdclp->activo",
+      "p": 12,
+      "F": 1.181,
+      "p_valor": 0.2902,
+      "veredicto": "no causa"
+    }
+  ],
+  "mensual": [
+    {
+      "activo": "ANTO.L",
+      "n": 263,
+      "R2": 0.39,
+      "beta_cobre": 0.7123,
+      "t_cobre": 5.22,
+      "imacec": -0.1636,
+      "t_imacec": -1.65,
+      "d_tpm": 0.0529,
+      "t_tpm": 0.05
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "n": 263,
+      "R2": 0.312,
+      "beta_cobre": 0.5993,
+      "t_cobre": 7.34,
+      "imacec": -0.2617,
+      "t_imacec": -2.77,
+      "d_tpm": 1.4089,
+      "t_tpm": 1.02
+    },
+    {
+      "activo": "CAP.SN",
+      "n": 263,
+      "R2": 0.281,
+      "beta_cobre": 0.6978,
+      "t_cobre": 4.76,
+      "imacec": -0.0305,
+      "t_imacec": -0.18,
+      "d_tpm": -0.6005,
+      "t_tpm": -0.35
+    },
+    {
+      "activo": "SQM-B.SN",
+      "n": 263,
+      "R2": 0.065,
+      "beta_cobre": 0.2654,
+      "t_cobre": 2.27,
+      "imacec": 0.0602,
+      "t_imacec": 0.44,
+      "d_tpm": 2.0133,
+      "t_tpm": 1.0
+    }
+  ],
+  "panel": [
+    {
+      "var": "dl_cobre_comex",
+      "Pooled": 0.2047,
+      "Pooled_p": 0.0732,
+      "FE": 0.2046,
+      "FE_p": 0.0734,
+      "RE": 0.2047,
+      "RE_p": 0.0732
+    },
+    {
+      "var": "dl_usdclp",
+      "Pooled": -0.0002,
+      "Pooled_p": 0.735,
+      "FE": -0.0002,
+      "FE_p": 0.7344,
+      "RE": -0.0002,
+      "RE_p": 0.735
+    },
+    {
+      "var": "dl_dxy",
+      "Pooled": -0.1885,
+      "Pooled_p": 0.0002,
+      "FE": -0.189,
+      "FE_p": 0.0002,
+      "RE": -0.1885,
+      "RE_p": 0.0002
+    },
+    {
+      "var": "dl_sp500",
+      "Pooled": 0.1183,
+      "Pooled_p": 0.2114,
+      "FE": 0.1181,
+      "FE_p": 0.2125,
+      "RE": 0.1183,
+      "RE_p": 0.2114
+    },
+    {
+      "var": "dl_ipsa",
+      "Pooled": 0.7875,
+      "Pooled_p": 0.0002,
+      "FE": 0.787,
+      "FE_p": 0.0002,
+      "RE": 0.7875,
+      "RE_p": 0.0002
+    },
+    {
+      "var": "d_ust10y",
+      "Pooled": 1.9106,
+      "Pooled_p": 0.0039,
+      "FE": 1.917,
+      "FE_p": 0.0037,
+      "RE": 1.9106,
+      "RE_p": 0.0039
+    }
+  ],
+  "rezagos": [
+    {
+      "activo": "ANTO.L",
+      "beta_dia0": 0.8164,
+      "beta_acum_0a5": 0.8619,
+      "fraccion_dia0": 0.947,
+      "n": 5920
+    },
+    {
+      "activo": "PUCOBRE.SN",
+      "beta_dia0": 0.1213,
+      "beta_acum_0a5": 0.4153,
+      "fraccion_dia0": 0.292,
+      "n": 5920
+    }
+  ],
+  "universo": [
+    {
+      "ticker": "ANTO.L",
+      "desc": "Antofagasta plc (LSE) - cobre pure-play",
+      "ok": true,
+      "n": 6720,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "GBp"
+    },
+    {
+      "ticker": "PUCV.SN",
+      "desc": "Pucobre / Punta del Cobre (Santiago) - cobre",
+      "ok": false,
+      "n": 0,
+      "inicio": null,
+      "fin": null,
+      "moneda": null
+    },
+    {
+      "ticker": "PUCOBRE.SN",
+      "desc": "Pucobre alt ticker",
+      "ok": true,
+      "n": 6673,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "CAP.SN",
+      "desc": "CAP S.A. (Santiago) - hierro/acero/mineria",
+      "ok": true,
+      "n": 6673,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "SQM-B.SN",
+      "desc": "SQM serie B (Santiago) - litio/potasio",
+      "ok": true,
+      "n": 6673,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "SQM-A.SN",
+      "desc": "SQM serie A (Santiago)",
+      "ok": true,
+      "n": 6673,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "SCCO",
+      "desc": "Southern Copper (NYSE) - cobre",
+      "ok": true,
+      "n": 6641,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    },
+    {
+      "ticker": "FCX",
+      "desc": "Freeport-McMoRan (NYSE) - cobre",
+      "ok": true,
+      "n": 6641,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    },
+    {
+      "ticker": "GLEN.L",
+      "desc": "Glencore (LSE) - diversificada/cobre",
+      "ok": true,
+      "n": 3793,
+      "inicio": "2011-05-19",
+      "fin": "2026-05-29",
+      "moneda": "GBp"
+    },
+    {
+      "ticker": "BHP",
+      "desc": "BHP (NYSE) - diversificada/cobre",
+      "ok": true,
+      "n": 6641,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    },
+    {
+      "ticker": "^IPSA",
+      "desc": "Indice IPSA (Bolsa de Santiago)",
+      "ok": true,
+      "n": 4347,
+      "inicio": "2002-01-02",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "HG=F",
+      "desc": "Futuro cobre COMEX",
+      "ok": true,
+      "n": 6465,
+      "inicio": "2000-08-30",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    },
+    {
+      "ticker": "CLP=X",
+      "desc": "USD/CLP",
+      "ok": true,
+      "n": 5830,
+      "inicio": "2003-12-01",
+      "fin": "2026-05-29",
+      "moneda": "CLP"
+    },
+    {
+      "ticker": "DX-Y.NYB",
+      "desc": "Indice dolar DXY",
+      "ok": true,
+      "n": 6670,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    },
+    {
+      "ticker": "^VIX",
+      "desc": "VIX",
+      "ok": true,
+      "n": 6642,
+      "inicio": "2000-01-03",
+      "fin": "2026-05-29",
+      "moneda": "USD"
+    }
+  ]
+};

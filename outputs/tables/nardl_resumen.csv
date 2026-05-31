@@ -1,0 +1,5 @@
+﻿activo,n,F_bounds,veredicto,LP_cobre_pos,LP_cobre_neg,asim_Wald,asim_p
+ANTO.L,5912,4.497,cointegra (5%),-0.9346,-0.8956,8.446,0.0037
+PUCOBRE.SN,5912,1.827,no cointegra (5%),-2.5938,-2.6409,1.115,0.2911
+CAP.SN,5912,3.096,no cointegra (5%),-0.932,-0.9952,2.071,0.1501
+SQM-B.SN,5912,2.026,no cointegra (5%),-0.7108,-0.6553,1.459,0.2271

@@ -1,0 +1,7 @@
+﻿activo,relacion,p,F,p_valor,veredicto
+ANTO.L,cobre->activo,12,1.806,0.0416,CAUSA
+ANTO.L,activo->cobre,12,1.516,0.1104,no causa
+ANTO.L,usdclp->activo,12,7.033,0.0,CAUSA
+PUCOBRE.SN,cobre->activo,12,4.646,0.0,CAUSA
+PUCOBRE.SN,activo->cobre,12,2.026,0.0186,CAUSA
+PUCOBRE.SN,usdclp->activo,12,1.181,0.2902,no causa

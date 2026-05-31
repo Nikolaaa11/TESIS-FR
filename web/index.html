@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impacto macro-financiero en la valoración del cobre en Chile · Tesis USS</title>
+<meta name="description" content="Tesis de Magíster en Data Science (Universidad San Sebastián): econometría del impacto del cobre y factores macro-financieros sobre la valoración bursátil minera en Chile.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b2a41'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23c2703d' font-family='Arial' font-weight='bold'%3ECu%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="nav-brand">Cobre · Chile — Tesis USS</div>
+    <ul class="nav-links">
+      <li><a href="#hallazgo">Hallazgo</a></li>
+      <li><a href="#universo">Universo</a></li>
+      <li><a href="#metodo">Método</a></li>
+      <li><a href="#resultados">Resultados</a></li>
+      <li><a href="#iliquidez">Iliquidez</a></li>
+      <li><a href="#figuras">Figuras</a></li>
+      <li><a href="#conclusiones">Conclusiones</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Econometría financiera · Series de tiempo y panel</div>
+    <h1>El cobre, la bolsa y la liquidez</h1>
+    <p class="sub">Cuantificación del impacto de las variables macroeconómicas globales y financieras sobre la valoración bursátil del sector de minería de cobre en Chile, 2004–2026.</p>
+    <p class="uss">Tesis para el <b>Magíster en Data Science</b> · <b>Universidad San Sebastián</b></p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#hallazgo">Ver el hallazgo central</a>
+      <a class="btn btn-ghost" href="#metodo">Metodología</a>
+    </div>
+    <div class="kpis reveal">
+      <div class="kpi"><div class="n" id="kpi-n">5.843</div><div class="l">observaciones diarias</div></div>
+      <div class="kpi"><div class="n">2004–2026</div><div class="l">período de estudio</div></div>
+      <div class="kpi"><div class="n">8</div><div class="l">activos · 9 técnicas</div></div>
+      <div class="kpi"><div class="n">0</div><div class="l">datos inventados</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- HALLAZGO CENTRAL -->
+<section id="hallazgo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Hallazgo central</div>
+      <h2>La iliquidez retrasa, pero no elimina, la transmisión del cobre</h2>
+      <p>El <b>pure-play</b> líquido (Antofagasta) incorpora el precio del cobre de forma casi instantánea. El pure-play local e ilíquido (Pucobre) lo hace con rezago: su sensibilidad al cobre <b>crece monótonamente con el horizonte temporal</b>, revelando un fenómeno de <b>descubrimiento de precios diferido</b>.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Elasticidad-cobre por horizonte temporal</h3>
+        <div class="tech">β del retorno ante un +1% del cobre · OLS-HAC, rezagos distribuidos, ARDL mensual y VECM</div>
+        <div class="chart-box tall"><canvas id="chHorizonte"></canvas></div>
+        <p class="cap">En <b>Pucobre</b> la β salta de <b>0.085</b> (diaria) a <b>0.75</b> (largo plazo). En <b>Antofagasta</b> es alta en todos los horizontes: el cobre ya está incorporado el mismo día.</p>
+      </div>
+      <div class="card reveal">
+        <h3>¿Cuánto del impacto llega el mismo día?</h3>
+        <div class="tech">Descomposición por rezagos distribuidos (lags 0–5) · fracción contemporánea</div>
+        <div class="chart-box"><canvas id="chRezagos"></canvas></div>
+        <p class="cap">Antofagasta absorbe el <b>95%</b> del shock de cobre en el día 0; Pucobre solo el <b>29%</b> — el 71% restante se difiere a las jornadas siguientes por su escasa transacción.</p>
+      </div>
+    </div>
+    <div class="finding reveal" style="margin-top:22px">
+      <div class="big">Pucobre no transa en el <em>62%</em> de las jornadas. Su vínculo fundamental con el cobre existe (elasticidad de largo plazo ≈ 0.75) pero se materializa <em>lentamente</em> — una huella directa de la (in)eficiencia informacional de un small-cap emergente.</div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSO -->
+<section id="universo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">El problema empírico</div>
+      <h2>Un universo diminuto, resuelto con evidencia</h2>
+      <p>El universo de mineras de cobre cotizadas vinculadas a Chile es muy reducido. Se verificó la disponibilidad real de cada candidato (no se asumió su existencia). Codelco se excluye: es estatal y no cotiza en renta variable.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card dark reveal">
+        <h3>Antofagasta plc</h3>
+        <div class="tech">Anillo A · LSE · GBp</div>
+        <p style="font-size:14px;color:#cfd6e2">Pure-play de cobre del grupo Luksic, operación 100% chilena pero <b>cross-listed en Londres</b>. Alta liquidez.</p>
+      </div>
+      <div class="card dark reveal">
+        <h3>Pucobre</h3>
+        <div class="tech">Anillo A · Bolsa de Santiago · CLP</div>
+        <p style="font-size:14px;color:#cfd6e2">El <b>único pure-play de cobre listado directamente en Chile</b> y en pesos. Baja liquidez — clave del análisis.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Anillos B y C</h3>
+        <div class="tech">Materiales + referencias internacionales</div>
+        <p style="font-size:14px;color:var(--ink-2)">CAP, SQM (materiales Chile) y SCCO, FCX, BHP, Glencore (referencias globales del cobre para validez externa).</p>
+      </div>
+    </div>
+    <div class="card reveal" style="margin-top:22px">
+      <h3>Verificación del universo (descarga real)</h3>
+      <div class="tech">Yahoo Finance · prueba de existencia y cobertura de cada ticker</div>
+      <div id="tblUniverso"></div>
+    </div>
+  </div>
+</section>
+
+<!-- METODO -->
+<section id="metodo">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Diseño metodológico</div>
+      <h2>El modelo nace de las propiedades de los datos</h2>
+      <p>Los log-precios son <b>I(1)</b> y los retornos <b>I(0)</b> (ADF, Phillips-Perron, KPSS con decisión cruzada; Zivot-Andrews con quiebre endógeno). Esta mezcla I(0)/I(1) sin I(2) determina el árbol de modelos: cointegración para el largo plazo, GARCH para la varianza condicional, HAC para la inferencia robusta.</p>
+    </div>
+    <div class="pipe reveal">
+      <div class="step"><div class="num">1</div><h4>Ingesta</h4><p>Yahoo Finance + macro Chile (mindicador.cl): TPM, IMACEC, IPC.</p></div>
+      <div class="step"><div class="num">2</div><h4>Pruebas previas</h4><p>Estacionariedad, cointegración de Johansen, selección de rezagos (AIC/BIC).</p></div>
+      <div class="step"><div class="num">3</div><h4>Corto plazo</h4><p>OLS con errores HAC (Newey-West), VAR, IRF, FEVD, causalidad.</p></div>
+      <div class="step"><div class="num">4</div><h4>Largo plazo</h4><p>VECM, ARDL/NARDL bounds, Toda-Yamamoto.</p></div>
+      <div class="step"><div class="num">5</div><h4>Riesgo</h4><p>GARCH / EGARCH / GJR-GARCH, panel FE/RE, estudio de eventos.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:22px">
+      <div class="card reveal">
+        <h3>Orden de integración</h3>
+        <div class="tech">ADF · Phillips-Perron · KPSS — decisión por mayoría</div>
+        <div id="tblEstac"></div>
+        <p class="cap">Niveles <b>I(1)</b>, retornos <b>I(0)</b>: setup canónico para distinguir equilibrio de largo plazo de impacto de corto plazo.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Validación de supuestos</h3>
+        <div class="tech">Batería de diagnóstico sobre los residuos</div>
+        <ul style="list-style:none;font-size:14px;line-height:2.1">
+          <li>✓ <b>Breusch-Godfrey / Ljung-Box</b> → autocorrelación ⇒ errores HAC</li>
+          <li>✓ <b>ARCH-LM</b> significativo en todos ⇒ modelado GARCH</li>
+          <li>✓ <b>Breusch-Pagan / White</b> → heterocedasticidad</li>
+          <li>✓ <b>VIF</b> ≈ 3.5 ⇒ sin multicolinealidad severa</li>
+          <li>✓ <b>Jarque-Bera</b> → colas pesadas ⇒ distribución t-Student</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="resultados">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Resultados empíricos</div>
+      <h2>Magnitud, dinámica y equilibrio</h2>
+      <p class="lead">Todos los coeficientes provienen de estimaciones sobre datos reales. La sensibilidad al cobre es heterogénea y depende de la liquidez del activo.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Beta-cobre contemporánea por activo</h3>
+        <div class="tech">Impacto de +1% en el cobre sobre el retorno diario · OLS-HAC</div>
+        <div class="chart-box"><canvas id="chBeta"></canvas></div>
+        <p class="cap">Antofagasta (0.70) lidera entre las chilenas; Pucobre (0.09) es la excepción ilíquida. Las referencias globales (FCX, SCCO, BHP) confirman la magnitud.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Descomposición de varianza (FEVD)</h3>
+        <div class="tech">% de la varianza del retorno explicado por shocks de cobre · VAR / Cholesky</div>
+        <div class="chart-box"><canvas id="chFevd"></canvas></div>
+        <p class="cap">El cobre explica ~<b>28%</b> de la varianza de Antofagasta vs ~<b>2–4%</b> de Pucobre. La causalidad de Granger es significativa en ambos (Toda-Yamamoto robusto a integración).</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:22px">
+      <div class="card reveal">
+        <h3>Elasticidades de largo plazo (VECM)</h3>
+        <div class="tech">Vector de cointegración (Johansen, rango r=1)</div>
+        <div class="chart-box"><canvas id="chVecm"></canvas></div>
+        <p class="cap">En equilibrio, +1% de cobre se asocia a +0.75–0.86% en el precio de la acción. La velocidad de ajuste (α) es negativa pero pequeña ⇒ corrección lenta.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Volatilidad: persistencia y apalancamiento</h3>
+        <div class="tech">Familia GARCH(1,1) con distribución t-Student</div>
+        <div class="chart-box"><canvas id="chGarch"></canvas></div>
+        <p class="cap">Persistencia (α+β) ≈ <b>0.99</b>: shocks de volatilidad muy duraderos. El efecto apalancamiento (GJR/EGARCH) confirma que las caídas elevan más la volatilidad futura.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:22px">
+      <div class="card reveal">
+        <h3>Asimetría del cobre (NARDL)</h3>
+        <div class="tech">Sumas parciales positivas/negativas · test de Wald de simetría</div>
+        <div class="chart-box"><canvas id="chNardl"></canvas></div>
+        <p class="cap">Solo <b>Antofagasta</b> muestra asimetría de largo plazo significativa (Wald p=0.004) y cointegración no lineal: reacciona distinto a alzas vs caídas del cobre.</p>
+      </div>
+      <div class="card reveal">
+        <h3>Estudio de eventos — anuncios de TPM</h3>
+        <div class="tech">Retornos anormales acumulados (CAAR), modelo de mercado, ventana [-5,+5]</div>
+        <div class="chart-box"><canvas id="chEvent"></canvas></div>
+        <p class="cap">Los CAAR tienen el signo económico correcto pero <b>no son significativos</b>: los cambios de TPM están anticipados y la valoración minera responde a factores globales, no domésticos.</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:22px">
+      <h3>Causalidad de Toda-Yamamoto y modelo mensual</h3>
+      <div class="tech">Causalidad robusta a cointegración · macro nacional en su frecuencia natural</div>
+      <div class="grid g2">
+        <div id="tblTY"></div>
+        <div id="tblMensual"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ILIQUIDEZ -->
+<section id="iliquidez">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Prueba formal de la hipótesis</div>
+      <h2>La iliquidez, medida y contrastada</h2>
+      <p>La hipótesis de que la iliquidez explica la débil transmisión contemporánea se prueba con el ratio de <b>Amihud</b>, el porcentaje de días sin transacción y un test de rezagos distribuidos.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Iliquidez vs transmisión del cobre</h3>
+        <div class="tech">% días de retorno cero (proxy de thin trading) vs β-cobre · 8 activos</div>
+        <div class="chart-box"><canvas id="chScatter"></canvas></div>
+        <p class="cap">Relación negativa (Spearman ρ≈−0.55): a mayor iliquidez, menor transmisión contemporánea. Pucobre es el punto extremo (62% de días sin transar).</p>
+      </div>
+      <div class="card reveal">
+        <h3>Estadística descriptiva de los retornos</h3>
+        <div class="tech">Momentos y normalidad (Jarque-Bera)</div>
+        <div id="tblDesc"></div>
+        <p class="cap">Curtosis extrema en Pucobre (35.5): saltos esporádicos sobre días de baja transacción, firma estadística de la iliquidez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIGURAS -->
+<section id="figuras">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Anexo visual</div>
+      <h2>Figuras del análisis</h2>
+      <p>Series, funciones de autocorrelación, impulso-respuesta y volatilidad condicional generadas con Matplotlib sobre los datos reales.</p>
+    </div>
+    <div class="gallery reveal" id="gallery"></div>
+  </div>
+</section>
+
+<!-- CONCLUSIONES -->
+<section id="conclusiones">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Conclusiones</div>
+      <h2>Qué aprendimos</h2>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Hallazgos</h3>
+        <ol style="font-size:15px;line-height:1.9;padding-left:18px">
+          <li>El cobre es un determinante <b>positivo y significativo</b> de los retornos mineros, con magnitud creciente en la liquidez del activo.</li>
+          <li>La <b>disociación corto/largo plazo</b> en Pucobre: transmisión contemporánea casi nula pero vínculo de largo plazo pleno y causalidad con rezago.</li>
+          <li>Volatilidad persistente y asimétrica; el dólar (DXY) y las tasas globales complementan el canal del cobre.</li>
+          <li>La política monetaria doméstica (TPM) pesa poco frente a los factores globales.</li>
+        </ol>
+      </div>
+      <div class="card reveal">
+        <h3>Limitaciones y líneas futuras</h3>
+        <ul style="font-size:15px;line-height:1.9;color:var(--ink-2);padding-left:18px">
+          <li>EMBI Chile y tasas BCU/BTU pendientes de credenciales del Banco Central.</li>
+          <li>GARCH inestable en Pucobre por iliquidez (recomendado: modelos con saltos).</li>
+          <li>Proxy de mercado local en USD (ETF MSCI Chile) por inconsistencia del IPSA de Yahoo.</li>
+          <li>Futuro: medida de Amihud intradía, NARDL dinámico, estudio de eventos con sorpresa de TPM.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>Impacto de las variables macroeconómicas globales y financieras en la valoración bursátil del sector de minería de cobre en Chile</b></div>
+    <div style="margin-top:8px">Tesis · Magíster en Data Science · Universidad San Sebastián · 2026</div>
+    <div class="badge-row">
+      <span class="badge">Python 3.13</span><span class="badge">statsmodels</span><span class="badge">arch</span><span class="badge">linearmodels</span><span class="badge">Chart.js</span>
+    </div>
+    <div style="margin-top:14px">Código y datos: <a id="repoLink" href="https://github.com/Nikolaaa11/TESIS-FR">github.com/Nikolaaa11/TESIS-FR</a></div>
+    <p class="disclaimer">Todos los resultados provienen de datos reales descargados de fuentes públicas (Yahoo Finance, mindicador.cl). Trabajo académico con fines de investigación; no constituye recomendación de inversión. Ninguna cifra fue inventada.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

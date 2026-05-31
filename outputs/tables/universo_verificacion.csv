@@ -1,0 +1,16 @@
+﻿ticker,desc,ok,n,inicio,fin,moneda,nota
+ANTO.L,Antofagasta plc (LSE) - cobre pure-play,True,6720,2000-01-03,2026-05-29,GBp,
+PUCV.SN,Pucobre / Punta del Cobre (Santiago) - cobre,False,0,,,,sin datos
+PUCOBRE.SN,Pucobre alt ticker,True,6673,2000-01-03,2026-05-29,CLP,
+CAP.SN,CAP S.A. (Santiago) - hierro/acero/mineria,True,6673,2000-01-03,2026-05-29,CLP,
+SQM-B.SN,SQM serie B (Santiago) - litio/potasio,True,6673,2000-01-03,2026-05-29,CLP,
+SQM-A.SN,SQM serie A (Santiago),True,6673,2000-01-03,2026-05-29,CLP,
+SCCO,Southern Copper (NYSE) - cobre,True,6641,2000-01-03,2026-05-29,USD,
+FCX,Freeport-McMoRan (NYSE) - cobre,True,6641,2000-01-03,2026-05-29,USD,
+GLEN.L,Glencore (LSE) - diversificada/cobre,True,3793,2011-05-19,2026-05-29,GBp,
+BHP,BHP (NYSE) - diversificada/cobre,True,6641,2000-01-03,2026-05-29,USD,
+^IPSA,Indice IPSA (Bolsa de Santiago),True,4347,2002-01-02,2026-05-29,CLP,
+HG=F,Futuro cobre COMEX,True,6465,2000-08-30,2026-05-29,USD,
+CLP=X,USD/CLP,True,5830,2003-12-01,2026-05-29,CLP,
+DX-Y.NYB,Indice dolar DXY,True,6670,2000-01-03,2026-05-29,USD,
+^VIX,VIX,True,6642,2000-01-03,2026-05-29,USD,

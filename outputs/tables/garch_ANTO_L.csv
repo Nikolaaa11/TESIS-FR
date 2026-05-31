@@ -1,0 +1,4 @@
+﻿activo,modelo,AIC,BIC,loglik,alpha,beta,gamma_asimetria,persistencia
+ANTO.L,"GARCH(1,1)",26675.4,26708.8,-13332.7,0.052,0.9392,,0.9912
+ANTO.L,"GJR-GARCH(1,1)",26661.1,26701.2,-13324.6,0.0316,0.94,0.038,
+ANTO.L,"EGARCH(1,1)",26665.7,26705.7,-13326.8,0.1132,0.9892,-0.0308,

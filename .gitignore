@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Capturas temporales de verificación
+hero.jpeg
+charts.jpeg
+web/.playwright-mcp/
+.playwright-mcp/
+
+# Vercel
+.vercel/
+
+# Datos crudos pesados opcionales (se regeneran con src/ingesta.py)
+# (se dejan versionados por reproducibilidad; descomentar para excluir)
+# data/raw/*.csv

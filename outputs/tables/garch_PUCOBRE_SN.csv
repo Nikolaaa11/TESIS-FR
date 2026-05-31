@@ -1,0 +1,4 @@
+﻿activo,modelo,AIC,BIC,loglik,alpha,beta,gamma_asimetria,persistencia
+PUCOBRE.SN,"GARCH(1,1)",11785.5,11818.9,-5887.8,0.3092,0.2955,,0.6047
+PUCOBRE.SN,"GJR-GARCH(1,1)",6641.6,6681.7,-3314.8,1.0,0.5,-1.0,
+PUCOBRE.SN,"EGARCH(1,1)",14621.0,14661.1,-7304.5,71.8553,1.0,-50.8645,

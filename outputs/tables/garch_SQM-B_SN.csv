@@ -1,0 +1,4 @@
+﻿activo,modelo,AIC,BIC,loglik,alpha,beta,gamma_asimetria,persistencia
+SQM-B.SN,"GARCH(1,1)",24440.7,24474.0,-12215.3,0.0537,0.9455,,0.9992
+SQM-B.SN,"GJR-GARCH(1,1)",24438.6,24478.7,-12213.3,0.049,0.9408,0.0197,
+SQM-B.SN,"EGARCH(1,1)",24411.0,24451.0,-12199.5,0.1213,0.9931,-0.0171,
