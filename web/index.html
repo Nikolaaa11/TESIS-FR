@@ -27,6 +27,7 @@
       <li><a href="#modelos">Modelos</a></li>
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#iliquidez">Iliquidez</a></li>
+      <li><a href="#literatura">Literatura</a></li>
       <li><a href="#figuras">Figuras</a></li>
       <li><a href="#conclusiones">Conclusiones</a></li>
       <li><button id="themeBtn" class="icon" title="Cambiar tema" aria-label="Cambiar tema">◐</button></li>
@@ -241,6 +242,39 @@
     <div class="grid g2">
       <div class="card reveal"><h3>Iliquidez vs transmisión del cobre</h3><div class="tech">% días de retorno cero vs β-cobre · 8 activos</div><div class="chart-box"><canvas id="chScatter"></canvas></div><p class="cap">Relación negativa (Spearman ρ≈−0.55): a mayor iliquidez, menor transmisión contemporánea. Pucobre es el punto extremo.</p></div>
       <div class="card reveal"><h3>Estadística descriptiva de los retornos</h3><div class="tech">Momentos y normalidad (Jarque-Bera)</div><div id="tblDesc"></div><p class="cap">Curtosis extrema en Pucobre (35.5): saltos esporádicos sobre días de baja transacción.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- LITERATURA -->
+<section id="literatura">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Marco de literatura</div>
+      <h2>Sobre hombros de gigantes</h2>
+      <p>Cuatro pilares teóricos sustentan el diseño. Todas las referencias fueron verificadas en fuentes primarias (editor / repositorios académicos).</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal"><h3>Factores macro y retornos (APT)</h3><div class="tech">Ross (1976) · Chen, Roll &amp; Ross (1986)</div>
+        <p style="font-size:14px;color:var(--ink-2)">Las innovaciones en producción, inflación, prima por riesgo y estructura temporal son factores de riesgo valorados. Justifica la especificación multifactorial de los retornos.</p></div>
+      <div class="card reveal"><h3>Monedas-commodity y Chile</h3><div class="tech">Chen &amp; Rogoff (2003) · Banco Central de Chile (WP 640)</div>
+        <p style="font-size:14px;color:var(--ink-2)">El precio mundial del cobre es driver robusto del tipo de cambio real chileno; el peso es una <i>commodity currency</i>. Fundamenta el canal moneda.</p></div>
+      <div class="card reveal"><h3>Iliquidez y descubrimiento de precios</h3><div class="tech">Amihud (2002)</div>
+        <p style="font-size:14px;color:var(--ink-2)">La iliquidez —medida por \(|r|/\text{volumen}\)— afecta más a las empresas pequeñas y ralentiza la incorporación de información. El caso Pucobre es su manifestación nítida.</p></div>
+      <div class="card reveal"><h3>Econometría de series y volatilidad</h3><div class="tech">Engle-Granger · Johansen · Pesaran-Shin-Smith · Shin-Yu-Greenwood-Nimmo · Toda-Yamamoto · Bollerslev · Nelson · GJR · Newey-West</div>
+        <p style="font-size:14px;color:var(--ink-2)">Cointegración y corrección de error, bounds testing, NARDL asimétrico, causalidad robusta a integración y familia GARCH con efecto apalancamiento.</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:22px">
+      <h3>Referencias seleccionadas</h3>
+      <div class="tech">Enlaces a DOI / repositorio del editor</div>
+      <ul style="font-size:13.5px;line-height:1.9;color:var(--ink-2);list-style:none">
+        <li>Chen, Roll &amp; Ross (1986). Economic forces and the stock market. <i>Journal of Business</i>, 59(3). <a href="https://www.jstor.org/stable/2352710" target="_blank" rel="noopener">jstor</a></li>
+        <li>Amihud (2002). Illiquidity and stock returns. <i>Journal of Financial Markets</i>, 5(1). <a href="https://doi.org/10.1016/S1386-4181(01)00024-6" target="_blank" rel="noopener">doi</a></li>
+        <li>Chen &amp; Rogoff (2003). Commodity currencies. <i>Journal of International Economics</i>, 60(1). <a href="https://doi.org/10.1016/S0022-1996(02)00072-7" target="_blank" rel="noopener">doi</a></li>
+        <li>Pesaran, Shin &amp; Smith (2001). Bounds testing. <i>Journal of Applied Econometrics</i>, 16(3). <a href="https://doi.org/10.1002/jae.616" target="_blank" rel="noopener">doi</a></li>
+        <li>Banco Central de Chile, WP N°640. Copper, the Real Exchange Rate and Macroeconomic Fluctuations in Chile. <a href="https://www.bcentral.cl/en/content/-/details/working-papers-n-640" target="_blank" rel="noopener">bcentral.cl</a></li>
+      </ul>
+      <p class="cap">Lista completa (cointegración, GARCH, raíces unitarias) en el documento de la tesis. Verificar formato APA final antes de la entrega.</p>
     </div>
   </div>
 </section>

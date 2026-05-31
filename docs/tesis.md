@@ -88,30 +88,84 @@ selección de variables:
    moverse inversamente al dólar.
 5. **Canal de riesgo/sentimiento** — VIX y mercado (S&P 500, mercado local).
 
-El **Arbitrage Pricing Theory (APT)** y los modelos de factores macroeconómicos
-sobre retornos accionarios *[POR VERIFICAR: Chen, Roll & Ross, 1986; Fama, p. ej.
-Fama & French]* dan sustento a una especificación multifactorial lineal para los
-retornos. La distinción entre **niveles** (precios I(1)) y **cambios** (retornos
-I(0)) motiva separar el análisis de equilibrio de largo plazo (cointegración) del
-de impacto de corto plazo.
+El **Arbitrage Pricing Theory (APT)** (Ross, 1976) y los modelos de factores
+macroeconómicos sobre retornos accionarios (Chen, Roll y Ross, 1986) dan sustento a
+una especificación multifactorial lineal para los retornos. La distinción entre
+**niveles** (precios I(1)) y **cambios** (retornos I(0)) motiva separar el análisis
+de equilibrio de largo plazo (cointegración) del de impacto de corto plazo.
 
 ---
 
 ## 3. Revisión de literatura
 
-*[SECCIÓN A COMPLETAR CON FUENTES REALES — no se incluyen citas inventadas.]*
+> Las referencias de esta sección fueron verificadas en fuentes primarias (editor /
+> repositorios académicos). Se recomienda una revisión final del formato APA y de la
+> paginación exacta antes de la entrega. Los enlaces se listan en el Capítulo 9.
 
-Líneas a cubrir y verificar en Scopus/WoS/Scholar:
-- Factores macro y retornos accionarios: APT y evidencia internacional
-  *[Chen, Roll & Ross, 1986 — verificar]*.
-- Precios de commodities y mercados accionarios de economías exportadoras.
-- Transmisión cobre → peso chileno → bolsa local *[buscar evidencia específica
-  Chile: trabajos de CMF, Banco Central, journals chilenos — POR CONSULTAR]*.
-- Iliquidez, microestructura y descubrimiento de precios en mercados emergentes.
-- Metodología: Engle & Granger (1987); Johansen (1991); Pesaran, Shin & Smith
-  (2001) ARDL; Shin, Yu & Greenberg (2014) NARDL; Toda & Yamamoto (1995);
-  Bollerslev (1986) GARCH; Nelson (1991) EGARCH; Glosten, Jagannathan & Runkle
-  (1993) GJR; Newey & West (1987) *[TODAS POR VERIFICAR EN FORMATO APA]*.
+### 3.1 Factores macroeconómicos y retornos accionarios (APT)
+
+La base teórica que vincula variables macro con retornos accionarios es el
+*Arbitrage Pricing Theory* (Ross, 1976) y su contrastación empírica seminal en
+**Chen, Roll y Ross (1986)**, quienes muestran que innovaciones en la producción
+industrial, la inflación (esperada y no esperada), la prima por riesgo (spread de
+bonos) y la pendiente de la estructura temporal son **factores de riesgo
+sistemáticamente valorados** en el mercado accionario estadounidense. Esta
+literatura justifica la especificación multifactorial de los retornos empleada en
+el Capítulo 6 (canales de demanda, descuento, riesgo y moneda) y la inclusión de
+tasas (UST, TPM), dólar (DXY) y riesgo (VIX) como regresores.
+
+### 3.2 Commodities, "monedas-commodity" y economías cupríferas
+
+**Chen y Rogoff (2003)** acuñan el concepto de *commodity currency*: para
+economías exportadoras de materias primas, el precio mundial de su canasta
+exportadora es un determinante robusto del tipo de cambio real. El caso chileno es
+arquetípico —el cobre representa cerca de la mitad de las exportaciones— y existe
+evidencia específica: el **Working Paper N°640 del Banco Central de Chile**
+(*Copper, the Real Exchange Rate and Macroeconomic Fluctuations in Chile*) analiza
+el rol del cobre y el tipo de cambio real como amortiguadores de shocks, y trabajos
+en *Resources Policy* documentan que **el tipo de cambio chileno tiene poder
+predictivo sobre los precios de metales base** (relación cobre↔CLP de doble vía).
+Esta literatura fundamenta el canal moneda (USD/CLP, DXY) y motiva tratar el cobre
+como variable exógena/forzante frente a las acciones locales (coherente con la
+causalidad unidireccional hallada por Toda-Yamamoto en §6.12).
+
+### 3.3 Iliquidez y descubrimiento de precios
+
+El hallazgo central de esta tesis dialoga directamente con **Amihud (2002)**, quien
+propone el ratio de iliquidez \(\text{ILLIQ}=|r|/\text{volumen}\$\) y muestra que la
+iliquidez (i) está positivamente asociada a los retornos esperados (prima de
+liquidez) y (ii) **afecta con mayor fuerza a las empresas pequeñas**. La literatura
+de microestructura asocia la baja liquidez con un **descubrimiento de precios
+lento**: la información tarda más en incorporarse a los precios. El caso Pucobre
+—pure-play con 62% de días sin transacción y transmisión del cobre diferida en el
+tiempo (§6.13–6.14)— es una manifestación nítida de este mecanismo en un mercado
+emergente pequeño.
+
+### 3.4 Fundamentos econométricos
+
+- **Cointegración y corrección de error:** Engle y Granger (1987) introducen la
+  cointegración y el ECM; Johansen (1991) generaliza al enfoque de máxima
+  verosimilitud multivariante (test de la traza y del máximo autovalor) usado aquí.
+- **Bounds testing y asimetría:** Pesaran, Shin y Smith (2001) proponen el ARDL
+  *bounds test*, válido con regresores I(0)/I(1) sin requerir pre-test de orden;
+  Shin, Yu y Greenberg (2014) lo extienden al **NARDL** para asimetrías de corto y
+  largo plazo (sumas parciales positivas/negativas), clave para el cobre.
+- **Causalidad robusta a integración:** Toda y Yamamoto (1995) proponen el VAR
+  aumentado en niveles para inferir causalidad sin sesgo por raíces unitarias.
+- **Volatilidad condicional:** Bollerslev (1986) (GARCH), Nelson (1991) (EGARCH) y
+  Glosten, Jagannathan y Runkle (1993) (GJR-GARCH) modelan persistencia y el
+  **efecto apalancamiento** documentado en §6.6.
+- **Inferencia robusta:** Newey y West (1987) para errores HAC; pruebas de raíz
+  unitaria de Dickey-Fuller aumentada, Phillips-Perron, KPSS (Kwiatkowski et al.,
+  1992) y Zivot-Andrews (1992) para quiebres endógenos.
+
+### 3.5 Vacío que aborda la tesis
+
+La literatura chilena se ha concentrado en el canal **cobre→tipo de cambio→macro**.
+Es escasa la evidencia que cuantifique el canal **cobre→valoración bursátil de las
+mineras chilenas** distinguiendo horizonte temporal y rol de la liquidez del
+activo. Esta tesis aporta en ese punto, integrando APT, cointegración, volatilidad
+y microestructura sobre el reducido universo de *pure-plays* cupríferos.
 
 ---
 
@@ -494,11 +548,36 @@ saltos para Pucobre; Toda-Yamamoto para causalidad con series integradas.
 
 ## 9. Referencias y anexos
 
-**Referencias** — *pendientes de verificación en formato APA (no inventadas).*
-Base metodológica a citar: Engle & Granger (1987); Johansen (1991); Pesaran, Shin
-& Smith (2001); Shin, Yu & Greenberg (2014); Toda & Yamamoto (1995); Bollerslev
-(1986); Nelson (1991); Glosten, Jagannathan & Runkle (1993); Newey & West (1987);
-Chen, Roll & Ross (1986). *[VERIFICAR cada una.]*
+**Referencias** — verificadas en fuentes primarias (revisar formato APA final).
+
+*Teoría de factores y mercados:*
+- Ross, S. A. (1976). The arbitrage theory of capital asset pricing. *Journal of Economic Theory*, 13(3), 341–360.
+- Chen, N.-F., Roll, R., & Ross, S. A. (1986). Economic forces and the stock market. *Journal of Business*, 59(3), 383–403. https://www.jstor.org/stable/2352710
+- Amihud, Y. (2002). Illiquidity and stock returns: cross-section and time-series effects. *Journal of Financial Markets*, 5(1), 31–56. https://doi.org/10.1016/S1386-4181(01)00024-6
+
+*Cobre, monedas-commodity y Chile:*
+- Chen, Y.-C., & Rogoff, K. (2003). Commodity currencies. *Journal of International Economics*, 60(1), 133–160. https://doi.org/10.1016/S0022-1996(02)00072-7
+- Banco Central de Chile. Working Paper N°640. *Copper, the Real Exchange Rate and Macroeconomic Fluctuations in Chile*. https://www.bcentral.cl/en/content/-/details/working-papers-n-640
+- *Forecasting base metal prices with the Chilean exchange rate*. *Resources Policy*. https://www.sciencedirect.com/science/article/abs/pii/S0301420718303271
+
+*Cointegración, ARDL/NARDL y causalidad:*
+- Engle, R. F., & Granger, C. W. J. (1987). Co-integration and error correction. *Econometrica*, 55(2), 251–276.
+- Johansen, S. (1991). Estimation and hypothesis testing of cointegration vectors in Gaussian VAR models. *Econometrica*, 59(6), 1551–1580.
+- Pesaran, M. H., Shin, Y., & Smith, R. J. (2001). Bounds testing approaches to the analysis of level relationships. *Journal of Applied Econometrics*, 16(3), 289–326. https://doi.org/10.1002/jae.616
+- Shin, Y., Yu, B., & Greenwood-Nimmo, M. (2014). Modelling asymmetric cointegration and dynamic multipliers in a NARDL framework. En *Festschrift in Honor of Peter Schmidt* (pp. 281–314). Springer.
+- Toda, H. Y., & Yamamoto, T. (1995). Statistical inference in vector autoregressions with possibly integrated processes. *Journal of Econometrics*, 66(1–2), 225–250.
+
+*Volatilidad y errores robustos:*
+- Bollerslev, T. (1986). Generalized autoregressive conditional heteroskedasticity. *Journal of Econometrics*, 31(3), 307–327.
+- Nelson, D. B. (1991). Conditional heteroskedasticity in asset returns: a new approach. *Econometrica*, 59(2), 347–370.
+- Glosten, L. R., Jagannathan, R., & Runkle, D. E. (1993). On the relation between the expected value and the volatility of the nominal excess return on stocks. *Journal of Finance*, 48(5), 1779–1801.
+- Newey, W. K., & West, K. D. (1987). A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. *Econometrica*, 55(3), 703–708.
+
+*Raíces unitarias y quiebres:* Dickey & Fuller (1979); Phillips & Perron (1988); Kwiatkowski, Phillips, Schmidt & Shin (1992, KPSS); Zivot & Andrews (1992).
+
+> Nota: confirmar paginación y DOIs en Scopus/Web of Science/Google Scholar antes de
+> la entrega final. Estas referencias fueron contrastadas con repositorios del
+> editor; el formato APA definitivo es responsabilidad del autor.
 
 **Anexos (reproducibilidad).**
 - Código: `src/` (verificación de universo, ingesta, preparación, EDA, modelos).
