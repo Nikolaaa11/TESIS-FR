@@ -12,3 +12,4 @@ requests
 openpyxl
 # Nota: pandas_datareader NO se usa (incompatible con pandas actual);
 # FRED y BCCh se consumen por API/CSV directo via requests.
+reportlab
