@@ -4,14 +4,13 @@
 
 Tesis para optar al grado de Magíster en Data Science · Facultad de Economía y Negocios · Universidad San Sebastián
 
-> **Nota de reproducibilidad.** Todos los resultados numéricos de este documento
-> provienen de estimaciones propias sobre datos reales (Yahoo Finance y la API
-> pública del indicador económico chileno *mindicador.cl*), descargados el
-> 2026-05-30. El código fuente, los datos procesados, las 33 tablas de salida y las
-> 13 figuras se encuentran en el repositorio del proyecto. Las referencias
-> bibliográficas fueron verificadas en fuentes primarias; el formato APA definitivo
-> debe revisarse antes de la entrega final. No se ha inventado ningún dato ni
-> resultado empírico.
+*Nota de reproducibilidad.* Los resultados numéricos de este trabajo provienen de
+estimaciones propias sobre datos de fuentes públicas (Yahoo Finance y la API del
+servicio de indicadores económicos mindicador.cl), recopilados en mayo de 2026. El
+código, los datos procesados y las tablas y figuras de salida se encuentran
+disponibles en el repositorio del proyecto, conforme a los estándares de
+reproducibilidad de la disciplina (véase la Declaración de disponibilidad de datos
+en el Capítulo 9).
 
 ---
 
@@ -753,7 +752,7 @@ dólar y se interpretan con reserva. **H3 se sostiene**, con la matización de �
 | PUCOBRE.SN | inestable | — | no confiable |
 
 Persistencia ≈ 0.99 (shocks de volatilidad muy duraderos) y efecto apalancamiento
-confirmado. Excepción honesta: en Pucobre los GARCH son **inestables** (soluciones de
+confirmado. En Pucobre, en cambio, los modelos GARCH resultan inestables (soluciones de
 borde) por la iliquidez y los saltos extremos (curtosis 35.5); se recomienda filtrar
 días de retorno nulo o usar modelos con saltos. **H4 se sostiene** salvo en el activo
 ilíquido.
@@ -838,7 +837,7 @@ En Antofagasta el 95% del impacto del cobre llega el mismo día; en Pucobre sól
 Pucobre crece monótonamente: 0.09 (diaria) → 0.42 (acumulada 5d) → 0.60 (mensual,
 t=7.3, R²=0.31) → 0.75 (largo plazo VECM). A frecuencia mensual emerge la verdadera
 sensibilidad, cercana a la de Antofagasta. El IMACEC entra significativo y negativo
-para Pucobre (−0.26, t=−2.8). **H5 se sostiene de forma contundente.**
+para Pucobre (−0.26, t=−2.8). La evidencia en favor de H5 es, en consecuencia, sólida.
 
 ### 6.13 Quiebres estructurales endógenos (Quandt-Andrews)
 
@@ -929,7 +928,7 @@ es, caminata aleatoria del precio):
 evitar el sesgo que introducen los numerosos días sin transacción de Pucobre
 (donde el signo del retorno observado es cero).
 
-Dos lecturas honestas: (i) el retorno **diario** es esencialmente **impredecible**
+El resultado admite dos lecturas: (i) el retorno diario es esencialmente impredecible
 —coherente con eficiencia de mercado en forma débil—, con R² fuera de muestra ínfimo
 y precisión direccional apenas sobre el 50%; (ii) sin embargo, **Pucobre es
 sistemáticamente más predecible que Antofagasta** (mayor precisión direccional,
@@ -955,7 +954,7 @@ de cobre.
 
 El cuadro condensa el aporte: cinco hipótesis preinscritas, contrastadas con métodos
 independientes, con veredictos explícitos y matizados donde la evidencia no es
-unánime —un estándar de honestidad inferencial propio del trabajo empírico riguroso.
+unánime, según el peso de la evidencia de cada técnica.
 
 ---
 

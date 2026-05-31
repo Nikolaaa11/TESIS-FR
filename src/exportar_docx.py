@@ -63,7 +63,8 @@ def _estilos(doc):
     pf = st.paragraph_format
     pf.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
     pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    pf.space_after = Pt(6)
+    pf.space_after = Pt(4)
+    pf.first_line_indent = Cm(0.8)   # sangría de primera línea (estándar de tesis)
     for i, sz in [(1, 16), (2, 14), (3, 12)]:
         h = doc.styles[f"Heading {i}"]
         h.font.name = HEAD_FONT; h.font.size = Pt(sz); h.font.color.rgb = NAVY; h.font.bold = True
@@ -145,12 +146,18 @@ def _runs_bold(par, texto):
             par.add_run(_clean(p))
 
 
-def _tabla(doc, lineas):
+def _tabla(doc, lineas, ntab=0, titulo=""):
     filas = []
     for l in lineas:
         if re.match(r"^\s*\|[\s:\-\|]+\|\s*$", l): continue
         filas.append([c.strip() for c in l.strip().strip("|").split("|")])
     if not filas: return
+    if ntab:
+        tit = re.sub(r"^\d+(\.\d+)*\.?\s+", "", titulo).strip()
+        cap = doc.add_paragraph(); cap.paragraph_format.first_line_indent = Cm(0)
+        cap.paragraph_format.space_before = Pt(6); cap.paragraph_format.space_after = Pt(3)
+        r = cap.add_run(f"Tabla {ntab}. {_clean(tit)}")
+        r.bold = True; r.font.size = Pt(9.5); r.font.name = HEAD_FONT; r.font.color.rgb = NAVY
     ncol = max(len(f) for f in filas)
     t = doc.add_table(rows=0, cols=ncol); t.style = "Light Grid Accent 1"
     t.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -167,7 +174,7 @@ def _tabla(doc, lineas):
 
 
 def convertir(doc, md):
-    lineas = md.split("\n"); i = 0; titulo_omitido = False
+    lineas = md.split("\n"); i = 0; titulo_omitido = False; ntab = 0; ultimo_tit = "Resultados"
     while i < len(lineas):
         s = lineas[i].strip()
         if not s: i += 1; continue
@@ -177,11 +184,11 @@ def convertir(doc, md):
             blk = []
             while i < len(lineas) and lineas[i].strip().startswith("|"):
                 blk.append(lineas[i]); i += 1
-            _tabla(doc, blk); continue
+            ntab += 1; _tabla(doc, blk, ntab, ultimo_tit); continue
         if s.startswith("> "):
             p = doc.add_paragraph(style="Intense Quote"); _runs_bold(p, s[2:]); i += 1; continue
-        if s.startswith("### "): doc.add_heading(_clean(s[4:]), level=3)
-        elif s.startswith("## "): doc.add_heading(_clean(s[3:]), level=2)
+        if s.startswith("### "): ultimo_tit = _clean(s[4:]); doc.add_heading(ultimo_tit, level=3)
+        elif s.startswith("## "): ultimo_tit = _clean(s[3:]); doc.add_heading(ultimo_tit, level=2)
         elif s.startswith("# "):
             doc.add_heading(_clean(s[2:]), level=1)
         elif re.match(r"^[-*] ", s):
