@@ -80,6 +80,45 @@ def main():
     # Universo
     data["universo"] = t("universo_verificacion.csv")[["ticker", "desc", "ok", "n", "inicio", "fin", "moneda"]].to_dict("records")
 
+    # --- Series temporales: precios normalizados base 100 (mensual) ---
+    import numpy as np
+    niv = pd.read_csv(C.PROCESSED / "niveles.csv", index_col=0, parse_dates=True)
+    base = np.exp(niv[["lprice_ANTO.L", "lprice_PUCOBRE.SN", "l_cobre_comex"]]).dropna()
+    bm = base.resample("ME").last().dropna()
+    bm = bm / bm.iloc[0] * 100
+    data["series"] = {
+        "fechas": [d.strftime("%Y-%m") for d in bm.index],
+        "anto": [round(x, 1) for x in bm["lprice_ANTO.L"]],
+        "pucobre": [round(x, 1) for x in bm["lprice_PUCOBRE.SN"]],
+        "cobre": [round(x, 1) for x in bm["l_cobre_comex"]],
+    }
+
+    # --- Matriz de correlaciones ---
+    corr = pd.read_csv(C.TAB / "correlaciones_retornos.csv", index_col=0)
+    etq = [c.replace("ret_", "").replace("dl_", "Δ").replace("_comex", "")
+           for c in corr.columns]
+    data["correlacion"] = {"labels": etq,
+                           "matriz": [[round(v, 2) for v in fila] for fila in corr.values]}
+
+    # --- IRF (respuesta del activo a shock de cobre, 20 días) via VAR ---
+    try:
+        from statsmodels.tsa.api import VAR
+        ret = pd.read_csv(C.PROCESSED / "retornos.csv", index_col=0, parse_dates=True)
+        facs = ["dl_cobre_comex", "dl_usdclp", "dl_dxy", "dl_sp500"]
+        irf_out = {}
+        for tk in ["ANTO.L", "PUCOBRE.SN"]:
+            orden = facs + [f"ret_{tk}"]
+            df = ret[orden].dropna()
+            res = VAR(df).fit(6)
+            irf = res.irf(20)
+            ia, ic = orden.index(f"ret_{tk}"), orden.index("dl_cobre_comex")
+            vals = irf.irfs[:, ia, ic]
+            irf_out[tk] = [round(float(v), 4) for v in vals]
+        data["irf"] = {"dias": list(range(21)), "anto": irf_out["ANTO.L"],
+                       "pucobre": irf_out["PUCOBRE.SN"]}
+    except Exception as e:
+        print("IRF export fallo:", e)
+
     import math
 
     def clean(o):

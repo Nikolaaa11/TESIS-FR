@@ -25,3 +25,6 @@ web/.playwright-mcp/
 
 # Config local de Claude Code
 .claude/
+modelos*.jpeg
+dark.jpeg
+hero2.jpeg
