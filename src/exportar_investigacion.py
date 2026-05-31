@@ -13,7 +13,7 @@ import pandas as pd
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer,
                                 Table, TableStyle, PageBreak, KeepTogether)
@@ -65,8 +65,8 @@ def _clean(t):
 
 
 def estilos():
-    body = ParagraphStyle("b", fontName=F["r"], fontSize=10.5, leading=16, alignment=TA_LEFT,
-                          spaceAfter=9, textColor=INK)
+    body = ParagraphStyle("b", fontName=F["r"], fontSize=10.5, leading=16, alignment=TA_JUSTIFY,
+                          spaceAfter=9, textColor=INK, hyphenationLang="es_ES", spaceShrinkage=0.05)
     h1 = ParagraphStyle("h1", fontName=F["sb"], fontSize=23, leading=27, textColor=NAVY, spaceBefore=6, spaceAfter=14)
     h2 = ParagraphStyle("h2", fontName=F["sb"], fontSize=15, leading=20, textColor=INK, spaceBefore=16, spaceAfter=7)
     h3 = ParagraphStyle("h3", fontName=F["sb"], fontSize=12, leading=16, textColor=COPPER, spaceBefore=12, spaceAfter=5)
@@ -115,7 +115,15 @@ def parse_md(md, S, skip_h1=True):
             flow.append(Paragraph(_clean(s[2:]), S["h2"]))
         elif s.startswith("### "): flush(); flow.append(Paragraph(_clean(s[4:]), S["h3"]))
         elif s.startswith("## "): flush(); flow.append(Paragraph(_clean(s[3:]), S["h2"]))
-        elif re.match(r"^[-*] ", s): flush(); flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(s[2:]), S["bullet"]))
+        elif re.match(r"^[-*] ", s):
+            flush(); txt = s[2:]; j = i + 1
+            while j < len(lineas):
+                raw = lineas[j]
+                if raw.strip() and (raw[:1] in (" ", "\t")) and not re.match(r"^\s*([-*]|\d+\.)\s", raw):
+                    txt += " " + raw.strip(); j += 1
+                else:
+                    break
+            flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(txt), S["bullet"])); i = j; continue
         elif s.startswith("> "): flush(); flow.append(Paragraph(_clean(s[2:]), S["quote"]))
         elif set(s) <= set("-") and len(s) >= 3: flush()
         else: buf.append(s)
@@ -184,9 +192,17 @@ def _word(S):
     from docx import Document
     from docx.shared import Pt, RGBColor, Cm
     from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
     doc = Document()
+    # guionado automático para que el texto justificado no deje "ríos"
+    try:
+        sett = doc.settings.element
+        ah = OxmlElement("w:autoHyphenation"); ah.set(qn("w:val"), "true"); sett.append(ah)
+    except Exception: pass
     st = doc.styles["Normal"]; st.font.name = "Segoe UI"; st.font.size = Pt(10.5)
     st.paragraph_format.space_after = Pt(8); st.paragraph_format.line_spacing = 1.25
+    st.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     NAVYw = RGBColor(0x1B, 0x2A, 0x41); COPPERw = RGBColor(0xC2, 0x70, 0x3D); SUBw = RGBColor(0x6E, 0x6E, 0x73)
     for i, sz, col in [(1, 22, NAVYw), (2, 15, RGBColor(0x1D, 0x1D, 0x1F)), (3, 12, COPPERw)]:
         h = doc.styles[f"Heading {i}"]; h.font.name = "Segoe UI Semibold"; h.font.size = Pt(sz)
@@ -226,7 +242,15 @@ def _word(S):
                 doc.add_heading(re.sub(r"`", "", s[2:]), level=2)
             elif s.startswith("### "): flush(); doc.add_heading(s[4:], level=3)
             elif s.startswith("## "): flush(); doc.add_heading(s[3:], level=2)
-            elif re.match(r"^[-*] ", s): flush(); runs(doc.add_paragraph(style="List Bullet"), s[2:])
+            elif re.match(r"^[-*] ", s):
+                flush(); txt = s[2:]; j = i + 1
+                while j < len(lineas):
+                    raw = lineas[j]
+                    if raw.strip() and (raw[:1] in (" ", "\t")) and not re.match(r"^\s*([-*]|\d+\.)\s", raw):
+                        txt += " " + raw.strip(); j += 1
+                    else:
+                        break
+                runs(doc.add_paragraph(style="List Bullet"), txt); i = j; continue
             elif s.startswith("> "): flush(); runs(doc.add_paragraph(style="Intense Quote"), s[2:])
             elif set(s) <= set("-") and len(s) >= 3: flush()
             else: buf.append(s)

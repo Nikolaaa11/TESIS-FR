@@ -65,7 +65,7 @@ def _estilos(doc):
     st.font.name = BODY_FONT; st.font.size = Pt(12)
     pf = st.paragraph_format
     pf.line_spacing_rule = WD_LINE_SPACING.DOUBLE
-    pf.alignment = WD_ALIGN_PARAGRAPH.LEFT      # MIT: margen derecho irregular
+    pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY   # justificado (con guionado automático)
     pf.space_after = Pt(0)
     pf.first_line_indent = Cm(1.27)
     for i, sz in [(1, 15), (2, 13), (3, 12)]:
@@ -230,10 +230,19 @@ def convertir(doc, md):
         elif s.startswith("## "): flush(); ultimo_tit = _clean(s[3:]); doc.add_heading(ultimo_tit, level=2)
         elif s.startswith("# "):
             flush(); doc.add_heading(_clean(s[2:]), level=1)
-        elif re.match(r"^[-*] ", s):
-            flush(); p = doc.add_paragraph(style="List Bullet"); _runs_bold(p, s[2:])
-        elif re.match(r"^\d+\.\s", s):
-            flush(); p = doc.add_paragraph(style="List Number"); _runs_bold(p, re.sub(r"^\d+\.\s", "", s))
+        elif re.match(r"^[-*] ", s) or re.match(r"^\d+\.\s", s):
+            flush()
+            es_vinheta = bool(re.match(r"^[-*] ", s))
+            txt = s[2:] if es_vinheta else re.sub(r"^\d+\.\s", "", s)
+            j = i + 1
+            while j < len(lineas):
+                raw = lineas[j]
+                if raw.strip() and (raw[:1] in (" ", "\t")) and not re.match(r"^\s*([-*]|\d+\.)\s", raw):
+                    txt += " " + raw.strip(); j += 1
+                else:
+                    break
+            p = doc.add_paragraph(style="List Bullet" if es_vinheta else "List Number"); _runs_bold(p, txt)
+            i = j; continue
         elif set(s) <= set("-") and len(s) >= 3: flush()
         else:
             buf.append(s)

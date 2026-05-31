@@ -69,8 +69,10 @@ def estilos():
     # Norma MIT (Specifications for Thesis Preparation): Times New Roman 12, ALINEADO
     # A LA IZQUIERDA (margen derecho irregular, NO justificado), INTERLINEADO DOBLE en
     # el cuerpo; resumen/notas/bibliografía a espacio simple.
+    HY = "es_ES"
     body = ParagraphStyle("body", fontName=BODY, fontSize=12, leading=24,  # doble (2.0)
-                          alignment=TA_LEFT, spaceAfter=6, firstLineIndent=1.27*cm, textColor=INK)
+                          alignment=TA_JUSTIFY, spaceAfter=6, firstLineIndent=1.27*cm, textColor=INK,
+                          hyphenationLang=HY, spaceShrinkage=0.05)
     body0 = ParagraphStyle("body0", parent=body, firstLineIndent=0)
     body_s = ParagraphStyle("body_s", parent=body, leading=14)             # espacio simple
     body_s0 = ParagraphStyle("body_s0", parent=body_s, firstLineIndent=0)
@@ -85,7 +87,7 @@ def estilos():
                             bulletIndent=8, spaceAfter=5)   # listas/bibliografía: espacio simple
     quote = ParagraphStyle("quote", parent=body, leading=14, leftIndent=1.27*cm, rightIndent=0,
                            firstLineIndent=0, fontName=BODY, textColor=INK, fontSize=11,
-                           spaceBefore=4, spaceAfter=8, alignment=TA_LEFT)
+                           spaceBefore=4, spaceAfter=8, alignment=TA_JUSTIFY)
     cap = ParagraphStyle("cap", fontName=BOLD, fontSize=10, leading=13, textColor=INK, spaceBefore=10, spaceAfter=4)
     figcap = ParagraphStyle("figcap", fontName=IT, fontSize=10, leading=13, textColor=INK, alignment=TA_CENTER, spaceBefore=4, spaceAfter=13)
     return dict(body=body, body0=body0, body_s=body_s, body_s0=body_s0,
@@ -195,10 +197,21 @@ def construir_flow(md, S, ctx):
                      else [Paragraph(ctx["tit"], S["h2"])]); prev[0] = "head"
         elif s.startswith("# "):
             flush(); flow.append(Paragraph(_clean(s[2:]), S["h1"])); prev[0] = "head"
-        elif re.match(r"^[-*] ", s):
-            flush(); flow.append(Paragraph("•&nbsp;&nbsp;" + _clean(s[2:]), S["bullet"])); prev[0] = "list"
-        elif re.match(r"^\d+\.\s", s):
-            flush(); flow.append(Paragraph(_clean(s), S["bullet"])); prev[0] = "list"
+        elif re.match(r"^[-*] ", s) or re.match(r"^\d+\.\s", s):
+            flush()
+            es_vinheta = bool(re.match(r"^[-*] ", s))
+            txt = s[2:] if es_vinheta else s
+            # absorbe líneas de continuación (sangradas) en el mismo ítem de lista
+            j = i + 1
+            while j < len(lineas):
+                raw = lineas[j]
+                if raw.strip() and (raw[:1] in (" ", "\t")) and not re.match(r"^\s*([-*]|\d+\.)\s", raw):
+                    txt += " " + raw.strip(); j += 1
+                else:
+                    break
+            pref = "•&nbsp;&nbsp;" if es_vinheta else ""
+            flow.append(Paragraph(pref + _clean(txt), S["bullet"])); prev[0] = "list"
+            i = j; continue
         elif s.startswith("> "):
             flush(); flow.append(Paragraph(_clean(s[2:]), S["quote"])); prev[0] = "quote"
         elif set(s) <= set("-") and len(s) >= 3:
