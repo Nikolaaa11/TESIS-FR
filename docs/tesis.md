@@ -14,6 +14,21 @@ en el Capítulo 9).
 
 ---
 
+## Dedicatoria
+
+A quienes acompañaron este proceso.
+
+## Agradecimientos
+
+Expreso mi gratitud al profesor guía por su orientación y rigor a lo largo del
+desarrollo de esta tesis, y al cuerpo académico del Magíster en Data Science de la
+Universidad San Sebastián por la formación recibida. Agradezco asimismo a las
+instituciones que ponen a disposición pública los datos que hicieron posible este
+trabajo —en particular los proveedores de información de mercado y el servicio de
+indicadores económicos nacionales—, cuya apertura es condición de la investigación
+reproducible. Finalmente, agradezco a mi familia y a quienes me acompañaron durante
+este proceso por su apoyo constante.
+
 ## Resumen
 
 Esta tesis cuantifica el impacto de las variables macroeconómicas globales y
@@ -117,6 +132,30 @@ Amihud illiquidity; price discovery; financial econometrics.
 
 ---
 
+## Glosario de términos
+
+- **Cointegración.** Propiedad por la cual dos o más series no estacionarias comparten
+  una tendencia estocástica común, de modo que existe una combinación lineal de ellas
+  que sí es estacionaria; representa una relación de equilibrio de largo plazo.
+- **Commodity currency (moneda-commodity).** Moneda de una economía exportadora de
+  materias primas cuyo valor está estrechamente ligado al precio mundial de su canasta
+  exportadora; el peso chileno es un ejemplo arquetípico por su vínculo con el cobre.
+- **Cross-listing.** Cotización de una empresa en una bolsa distinta de la de su país
+  de operación; Antofagasta opera en Chile pero cotiza en Londres.
+- **Descubrimiento de precios (price discovery).** Proceso mediante el cual la
+  información disponible se incorpora a los precios de mercado; en activos ilíquidos
+  este proceso es más lento.
+- **Efecto apalancamiento (leverage effect).** Tendencia de la volatilidad a aumentar
+  más tras caídas de precio que tras alzas de igual magnitud.
+- **Elasticidad-cobre.** Variación porcentual del precio (o retorno) de una acción ante
+  una variación de 1% en el precio del cobre.
+- **Iliquidez.** Dificultad para transar un activo sin afectar su precio; aquí se mide,
+  entre otras, con el ratio de Amihud y el porcentaje de días sin transacción.
+- **Pure-play.** Empresa cuyo negocio se concentra en una sola actividad; un pure-play
+  de cobre obtiene la mayor parte de sus ingresos de ese metal.
+- **Velocidad de ajuste.** Proporción del desequilibrio respecto de la relación de
+  largo plazo que se corrige por período en un modelo de corrección de error.
+
 ## 1. Introducción
 
 ### 1.1 Contextualización
@@ -210,7 +249,33 @@ cobre→valoración para los *pure-plays* chilenos; (iii) documenta y **prueba
 formalmente** un mecanismo de descubrimiento de precios diferido por iliquidez,
 triangulado por seis técnicas; (iv) entrega un *pipeline* totalmente reproducible.
 
-### 1.7 Estructura
+### 1.7 Relevancia y alcance
+
+La relevancia del estudio opera en tres planos. En el **académico**, contribuye a una
+literatura escasa sobre la transmisión del precio del cobre a la valoración de las
+mineras chilenas y, más ampliamente, al estudio del descubrimiento de precios en
+mercados emergentes pequeños; el contraste entre un activo líquido y otro ilíquido con
+idéntica exposición fundamental constituye un cuasi-experimento poco frecuente. En el
+**práctico**, las elasticidades por horizonte y la evidencia sobre el rezago de
+incorporación son directamente útiles para la valoración, la gestión de riesgo y el
+diseño de coberturas de quienes invierten en el sector. En el de **política pública**,
+los resultados informan el debate sobre la profundidad y liquidez del mercado de
+capitales chileno, al cuantificar un costo concreto de la baja liquidez del segmento
+local.
+
+El **alcance** se delimita con claridad para no prometer más de lo que el diseño
+permite. El trabajo es de naturaleza explicativa y de medición de impacto: busca
+cuantificar relaciones, signos, magnitudes y dinámicas, no producir pronósticos de
+mercado; el ejercicio predictivo que se incluye cumple un rol de validación
+complementaria y de aplicación, no de objetivo central. El universo se restringe a las
+mineras de cobre cotizadas vinculadas a Chile, con referencias internacionales sólo a
+efectos de validez externa; no se abordan otros metales ni otros mercados salvo como
+comparación. La frecuencia primaria es diaria, complementada con análisis mensual para
+la macro nacional. Por último, las conclusiones sobre el papel de la liquidez se
+sostienen sobre el contraste de dos *pure-plays*; su generalización a otros contextos,
+aunque plausible a la luz de la teoría, queda planteada como pregunta empírica abierta.
+
+### 1.8 Estructura
 
 El Capítulo 2 desarrolla el marco teórico; el 3 revisa la literatura; el 4 describe
 los datos; el 5 detalla la metodología y las especificaciones; el 6 presenta los
@@ -223,12 +288,25 @@ resultados; el 7 los discute; el 8 concluye. Cierran las referencias y los anexo
 ### 2.1 Valoración de activos y factores macroeconómicos
 
 El valor fundamental de una acción es el valor presente de sus flujos de caja
-esperados descontados a una tasa ajustada por riesgo. Para una empresa minera de
-cobre, los **flujos** dependen directamente del precio del metal (ingreso) y de sus
-costos (energía, insumos, salarios, tipo de cambio), mientras que la **tasa de
-descuento** depende de la tasa libre de riesgo global y de las primas de riesgo. De
-esta estructura se desprenden cinco canales económicos que organizan la selección de
-variables independientes:
+esperados descontados a una tasa ajustada por riesgo. En su forma canónica, el modelo
+de descuento de dividendos expresa el precio como P_0 = Σ_{t≥1} E[D_t]/(1+k)^t, donde
+D_t es el flujo distribuible en t y k la tasa de descuento. Para una empresa cuyos
+ingresos dependen del precio de una materia prima, conviene descomponer el flujo
+operativo como una función del precio del *commodity* y de la estructura de costos:
+si q denota la producción, P el precio del cobre y c el costo de caja unitario, el
+margen operativo es proporcional a q·(P − c). Una variación del precio del cobre se
+propaga entonces al valor por dos vías: directamente, a través del numerador (flujos),
+e indirectamente, a través del denominador, en la medida en que las condiciones
+financieras globales que mueven al cobre (dólar, tasas, apetito por riesgo) también
+desplazan la tasa de descuento. Esta doble vía justifica un modelo multifactorial en
+el que el cobre comparte protagonismo con un conjunto acotado de factores macro-
+financieros.
+
+Para una empresa minera de cobre, los **flujos** dependen directamente del precio del
+metal (ingreso) y de sus costos (energía, insumos, salarios, tipo de cambio), mientras
+que la **tasa de descuento** depende de la tasa libre de riesgo global y de las primas
+de riesgo. De esta estructura se desprenden cinco canales económicos que organizan la
+selección de variables independientes:
 
 1. **Canal de demanda/ingreso.** El precio del cobre (LME/COMEX) y la demanda global
    —actividad industrial, China— determinan los ingresos esperados. Es el canal
@@ -420,9 +498,60 @@ chilenas distinguiendo horizonte temporal y liquidez del activo. Esta tesis apor
 en ese punto, integrando APT, cointegración, volatilidad y microestructura sobre el
 reducido universo de *pure-plays* cupríferos.
 
+Conviene situar con precisión la contribución frente a los trabajos reseñados. La
+literatura de factores macro (Chen, Roll y Ross, 1986) establece *qué* variables
+valora el mercado, pero no aborda la *velocidad* de incorporación ni el papel de la
+liquidez; la de monedas-commodity (Chen y Rogoff, 2003) y la chilena del Banco
+Central documentan el eslabón cobre→tipo de cambio, deteniéndose un paso antes de la
+valoración accionaria; y los estudios sectoriales internacionales (Mendiola et al.,
+2022; Kilian y Park, 2009) cuantifican la reacción de las mineras al *commodity* pero
+sin el contraste de microestructura que aquí se explota. Por su parte, la literatura
+de iliquidez (Amihud, 2002; Bekaert et al., 2007) provee el marco conceptual y la
+métrica, pero rara vez se aplica a un experimento natural tan nítido como el que ofrece
+el par Antofagasta–Pucobre: dos *pure-plays* con idéntica exposición fundamental al
+cobre y liquidez radicalmente distinta. La originalidad de esta tesis reside,
+precisamente, en cruzar esas tradiciones —factores macro, cointegración, volatilidad y
+microestructura— para descomponer la transmisión cobre→valoración por horizonte y
+atribuir la pendiente de esa curva a la liquidez, en un mercado emergente y sobre un
+sector de importancia sistémica para el país.
+
 ---
 
 ## 4. Datos
+
+### 4.0 El sector del cobre en Chile: contexto institucional
+
+Chile es el primer productor mundial de cobre de mina, con una participación cercana
+a un cuarto de la oferta global, y el metal concentra del orden de la mitad de su
+canasta exportadora. Esta especialización confiere al cobre un papel macroeconómico
+de primer orden: influye en la balanza comercial, en los ingresos fiscales —por la
+vía de Codelco y de los tributos a la gran minería privada— y en la trayectoria del
+tipo de cambio real. La institucionalidad del sector combina una empresa estatal de
+gran escala (Codelco), que no cotiza en renta variable y sólo accede a los mercados
+mediante emisión de deuda, con un conjunto de productores privados de tamaño y
+estructura de propiedad heterogéneos. Esta configuración explica por qué el universo
+de mineras de cobre accesibles para un inversionista bursátil es reducido y por qué
+su estudio exige resolver primero, de forma empírica, qué emisores existen y con qué
+profundidad de mercado.
+
+La **Bolsa de Santiago**, principal plaza accionaria del país, se caracteriza por una
+capitalización moderada en términos internacionales y por una **liquidez muy
+heterogénea** entre emisores: unos pocos títulos de gran capitalización concentran el
+grueso del volumen, mientras que numerosas acciones de menor tamaño transan de forma
+intermitente. Esta dualidad de liquidez es central para esta tesis, pues el contraste
+entre un *pure-play* de cobre cotizado en una plaza profunda (Antofagasta, en Londres)
+y otro cotizado localmente con baja profundidad (Pucobre) provee la variación que
+permite identificar el efecto de la microestructura sobre la transmisión de precios.
+
+El período 2004–2026 cubre, además, un conjunto excepcionalmente rico de regímenes
+para el precio del cobre: el superciclo de las materias primas (2004–2011),
+impulsado por la urbanización e industrialización de China; el colapso abrupto de la
+crisis financiera global (2008–2009); la corrección de mediados de la década pasada;
+el desplome y la recuperación en torno a la pandemia (2020); y el repunte vinculado a
+la transición energética y la electromovilidad (2021 en adelante). Esta sucesión de
+auges y caídas ofrece un laboratorio natural para examinar la estabilidad de la
+relación cobre–valoración y para justificar el análisis de quiebres estructurales y
+de submuestras.
 
 ### 4.1 Universo de empresas (resuelto empíricamente)
 
@@ -442,6 +571,10 @@ Codelco se excluye del análisis accionario (estatal, no cotiza en renta variabl
 sólo emite deuda). Hallazgo relevante: **Pucobre es el único *pure-play* de cobre
 listado directamente en la Bolsa de Santiago y en pesos**, lo que habilita el
 contraste con Antofagasta (*cross-listed*, GBp, alta liquidez) que vertebra la tesis.
+La Tabla siguiente documenta la verificación empírica de disponibilidad de cada
+candidato (número de observaciones, rango de fechas y moneda).
+
+[[CSV: universo_verificacion.csv | Verificación empírica de disponibilidad de los candidatos del universo en Yahoo Finance: ticker, descripción, disponibilidad, observaciones, rango de fechas y moneda.]]
 
 #### 4.1.1 Perfiles institucionales
 
@@ -489,9 +622,26 @@ Se construyen log-precios ln(P_t) (niveles, para análisis de cointegración),
 log-retornos diarios r_t = 100·Δln(P_t) (variable principal, I(0)), variaciones log
 de los factores de precio y primeras diferencias de las tasas en nivel. El manejo de
 datos faltantes emplea *forward-fill* acotado (máximo 3–5 días) sólo para series de
-nivel; los retornos no se rellenan. La alineación de calendarios entre las plazas de
-Londres, Santiago y Nueva York reduce la muestra efectiva común en las regresiones
-multifactor a n ≈ 4.475 observaciones diarias.
+nivel; los retornos no se rellenan, para no introducir autocorrelación espuria. La
+alineación de calendarios entre las plazas de Londres, Santiago y Nueva York reduce la
+muestra efectiva común en las regresiones multifactor a n ≈ 4.475 observaciones
+diarias.
+
+Tres decisiones de tratamiento merecen explicitarse por su efecto sobre los
+resultados. Primero, la elección de **log-retornos** (en lugar de retornos simples)
+garantiza aditividad temporal y mejora las propiedades distribucionales, además de ser
+el estándar en la literatura de series financieras. Segundo, se optó por **no
+winsorizar** la variable dependiente en la especificación principal: los valores
+extremos de Pucobre no son errores de medición sino la manifestación genuina de su
+*thin trading*, de modo que recortarlos eliminaría precisamente el fenómeno de
+interés; su efecto sobre la inferencia se controla mediante errores robustos (HAC) y
+distribuciones de colas pesadas (t-Student) en los modelos de volatilidad. Tercero, la
+sustitución del índice IPSA —cuya serie pública resultó incompleta— por el ETF iShares
+MSCI Chile (ECH) como aproximación del mercado local introduce un componente
+cambiario, dado que ECH se denomina en dólares; este solapamiento parcial con el factor
+USD/CLP se monitorea mediante el factor de inflación de varianza, que se mantiene en
+niveles moderados (máximo ≈3.5), descartando colinealidad severa. Cada una de estas
+decisiones se documenta en el diccionario de datos del repositorio.
 
 ### 4.4 Período de estudio
 
@@ -650,20 +800,35 @@ Breusch-Pagan, White y ARCH-LM (heterocedasticidad y efectos ARCH); VIF
 Hausman (FE vs RE). Cada problema detectado motiva la corrección correspondiente
 (HAC para autocorrelación, GARCH para ARCH, t-Student para colas).
 
+### 5.12 Consideraciones de potencia y tamaño muestral
+
+El diseño reconoce dos restricciones de potencia y las gestiona de forma explícita.
+En la dimensión transversal, el universo de mineras de cobre vinculadas a Chile es
+muy pequeño (dos *pure-plays* y dos comparables sectoriales), por lo que los enfoques
+de panel —con N=4 entidades— ofrecen baja potencia y una inferencia *cluster* poco
+fiable; en consecuencia, el panel se reporta únicamente como verificación sectorial y
+la inferencia primaria descansa en las series de tiempo por activo, donde el número de
+observaciones diarias es holgado (del orden de varios miles). En la dimensión de
+series de tiempo, en cambio, el tamaño muestral es amplio, lo que confiere potencia a
+las pruebas de raíz unitaria, cointegración y causalidad, pero también las hace
+sensibles a la detección de relaciones de magnitud económica modesta; por ello se
+privilegia la interpretación de las **magnitudes** y de los **intervalos** por sobre
+la mera significancia estadística. Finalmente, allí donde la potencia es intrínseca-
+mente limitada —subperíodos cortos posteriores a un quiebre, o el escaso número de
+eventos de política monetaria— se evita sobreinterpretar coeficientes individuales y
+se prefiere la lectura conjunta de la evidencia.
+
 ---
 
 ## 6. Resultados
 
 ### 6.1 Estadística descriptiva
 
-Log-retornos diarios (%), 2004–2026:
+La Tabla siguiente reporta los momentos de los log-retornos diarios (en %) de los
+ocho activos del universo durante 2004–2026, junto con el estadístico de Jarque-Bera
+de normalidad.
 
-| Activo | media | sd | asimetría | curtosis | Jarque-Bera |
-|---|---|---|---|---|---|
-| ANTO.L | 0.051 | 2.65 | 0.09 | 4.15 | rechaza normalidad |
-| PUCOBRE.SN | 0.053 | 1.44 | 1.50 | 35.5 | rechaza normalidad |
-| CAP.SN | 0.044 | 2.47 | −0.13 | 10.7 | rechaza normalidad |
-| SQM-B.SN | 0.067 | 2.32 | −0.19 | 6.67 | rechaza normalidad |
+[[CSV: descriptivos_retornos.csv | Estadística descriptiva de los log-retornos diarios (%) de los ocho activos, 2004–2026. JB: estadístico de Jarque-Bera; JB_p: su p-valor.]]
 
 Todas las series presentan exceso de curtosis (colas pesadas) y no-normalidad
 (Jarque-Bera, p<0.001), justificando la distribución t-Student en los GARCH. Pucobre
@@ -680,39 +845,77 @@ anticipa el resultado central: la posición de Pucobre como atípico de baja
 correlación contemporánea pese a ser un *pure-play*, lo que sólo se explica por la
 fricción de liquidez y se resuelve al ampliar el horizonte.
 
+El examen activo por activo refuerza esta lectura. Antofagasta exhibe la volatilidad
+diaria más alta del núcleo (desviación estándar ≈2.65%), con colas moderadas
+(curtosis ≈4.1), propias de un *blue chip* líquido y muy seguido por el mercado. Las
+referencias internacionales (Freeport, Southern, BHP, Glencore) presentan perfiles
+comparables, con desviaciones estándar entre 2.3% y 3.2% y curtosis entre 6 y 15.
+Pucobre, por el contrario, combina una volatilidad diaria menor en apariencia (≈1.44%)
+con una curtosis extraordinariamente elevada (≈35) y asimetría positiva pronunciada;
+esta combinación es la firma estadística de un activo que permanece inmóvil la mayor
+parte del tiempo y reacciona con saltos abruptos cuando finalmente transa, en lugar de
+incorporar la información de manera continua. CAP y SQM ocupan posiciones intermedias,
+coherentes con su condición de empresas de materiales de mayor tamaño y liquidez que
+Pucobre pero ajenas al cobre puro. Esta heterogeneidad de momentos anticipa por qué un
+mismo factor —el precio del cobre— se transmite de forma tan distinta entre activos.
+
+[[FIG: heatmap_correlaciones.png | Matriz de correlaciones de los retornos diarios de los activos y los factores. La columna del cobre (ΔHG=F) ordena a los activos por su comovimiento contemporáneo con el metal.]]
+
 ### 6.2 Estacionariedad y cointegración
 
-- **ADF/PP/KPSS** (decisión cruzada): log-precios I(1), retornos y diferencias I(0).
-  Confirmado por Zivot-Andrews (no se rechaza raíz unitaria ni con quiebre endógeno:
-  ANTO p≈0.62, PUCOBRE p≈0.99).
-- **Engle-Granger bivariado** (activo~cobre): cointegración débil/ausente (sólo el
-  cobre no basta).
-- **Johansen multivariante** [ln P, ln cobre, ln USDCLP, ln DXY]: **rango r = 1**
-  para ANTO y PUCOBRE → existe exactamente una relación de equilibrio de largo plazo.
+Las propiedades de integración se evaluaron con tres pruebas complementarias —Dickey-
+Fuller aumentada (ADF) y Phillips-Perron (H0: raíz unitaria) y KPSS (H0:
+estacionariedad)—, con una regla de decisión por mayoría. La Tabla siguiente resume
+los resultados sobre los log-precios (niveles) y los log-retornos (diferencias) de los
+activos del núcleo y de los principales factores.
+
+[[CSV: estacionariedad.csv | Pruebas de raíz unitaria (ADF, Phillips-Perron, KPSS) y conclusión sobre el orden de integración de niveles y retornos.]]
+
+La evidencia es nítida: los log-precios son **I(1)** y los retornos **I(0)**, sin
+presencia de procesos I(2). El resultado se confirma con la prueba de Zivot-Andrews,
+que no rechaza la raíz unitaria ni siquiera permitiendo un quiebre endógeno de
+nivel/tendencia (ANTO p≈0.62; Pucobre p≈0.99), descartando que el comportamiento I(1)
+sea un artefacto de un quiebre estructural. El test bivariado de Engle-Granger
+(activo~cobre) no detecta cointegración robusta —el cobre por sí solo no basta—, pero
+el procedimiento multivariante de **Johansen** sobre el vector [ln P, ln cobre,
+ln USDCLP, ln DXY] arroja un **rango de cointegración r = 1** tanto para Antofagasta
+como para Pucobre: existe exactamente una relación de equilibrio de largo plazo que
+vincula el precio de la acción con el cobre y la moneda.
 
 ### 6.3 Impacto contemporáneo (HAC)
 
-Elasticidad-cobre (efecto de +1% en el cobre sobre el retorno diario, %):
+El primer bloque de evidencia mide el impacto contemporáneo de los factores sobre el
+retorno diario mediante regresión por mínimos cuadrados con errores estándar HAC de
+Newey-West. El coeficiente del cobre es la elasticidad-cobre contemporánea, que mide
+el efecto de un alza de 1% en el precio del cobre sobre el retorno diario del activo.
+La Tabla siguiente reporta los coeficientes completos (cobre, tipo de cambio, dólar,
+mercado, tasas y volatilidad) para los ocho activos.
 
-| Activo | β-cobre | t | R² |
-|---|---|---|---|
-| ANTO.L | 0.70 | 15.4 | 0.42 |
-| PUCOBRE.SN | 0.09 | 4.4 | 0.04 |
-| CAP.SN | 0.15 | 5.7 | 0.25 |
-| SQM-B.SN | 0.11 | 4.2 | 0.25 |
-| SCCO | 0.49 | 9.6 | 0.58 |
-| FCX | 0.63 | 10.3 | 0.53 |
-| BHP | 0.32 | 10.7 | 0.60 |
-| GLEN.L | 0.58 | 9.8 | 0.29 |
+[[CSV: hac_coeficientes.csv | Coeficientes de la regresión de retornos con errores HAC (Newey-West): variable dependiente = retorno diario; se reportan coeficiente, error estándar HAC, t y p-valor por activo y factor.]]
 
-Para Antofagasta también son significativos el DXY (signo negativo: dólar arriba →
-acción abajo), el mercado (S&P y proxy local) y el cambio en la UST10Y. Para Pucobre,
-sólo el mercado local y —débilmente— el cobre son significativos, con un R² de
-apenas 0.04: su retorno es mayoritariamente idiosincrásico/ilíquido en el día a día.
-Los diagnósticos muestran efectos ARCH significativos en todos los activos (justifica
-GARCH), autocorrelación (justifica HAC) y no-normalidad; VIF máximo ≈ 3.5 (sin
-colinealidad severa). **H1 se sostiene** (cobre positivo y significativo en todos);
-**H2 se sostiene con fuerza** (0.70 en el líquido vs 0.09 en el ilíquido).
+La elasticidad-cobre presenta un gradiente claro: 0.70 en Antofagasta (t=15.4) y
+0.49–0.63 en las referencias internacionales del cobre, frente a apenas 0.09 en
+Pucobre (t=4.4). Para Antofagasta resultan además significativos el dólar (DXY, signo
+negativo: una apreciación del dólar deprime al activo), el mercado —global y local— y
+el cambio en la tasa larga estadounidense. Para Pucobre, en cambio, sólo el mercado
+local y, débilmente, el cobre son significativos, con un coeficiente de determinación
+de apenas 0.04: su retorno diario es mayoritariamente idiosincrásico, dominado por su
+microestructura. La Figura siguiente ilustra cómo, en niveles, los precios de los
+*pure-plays* siguen y amplifican el ciclo del cobre.
+
+[[FIG: precios_normalizados.png | Evolución de los precios normalizados (base 100) de Antofagasta y Pucobre frente al precio del cobre, 2004–2026. Los pure-plays amplifican el ciclo del metal por apalancamiento operativo.]]
+
+La batería de diagnósticos sobre los residuos justifica las decisiones de
+especificación: hay efectos ARCH significativos en todos los activos (que motivan el
+modelado GARCH de la varianza), autocorrelación residual (que motiva los errores HAC)
+y no-normalidad de colas pesadas; el factor de inflación de varianza máximo es ≈3.5,
+descartando multicolinealidad severa. La Tabla siguiente reporta el detalle.
+
+[[CSV: hac_diagnosticos.csv | Diagnósticos de los residuos de la regresión HAC por activo: R², rezagos HAC, Breusch-Godfrey, Breusch-Pagan, ARCH-LM, Jarque-Bera, Ljung-Box y VIF máximo.]]
+
+En conjunto, H1 se sostiene —el cobre es positivo y significativo en los ocho
+activos— y H2 se sostiene con fuerza: la sensibilidad contemporánea es de 0.70 en el
+*pure-play* líquido frente a 0.09 en el ilíquido.
 
 ### 6.4 Dinámica (VAR, IRF, FEVD, Granger)
 
@@ -724,7 +927,14 @@ colinealidad severa). **H1 se sostiene** (cobre positivo y significativo en todo
 Clave: en Pucobre la respuesta acumulada a 5 días (0.196) es ~4× la del primer día
 (0.043), y la FEVD del cobre crece de 2% a 4.3% entre 1 y 20 días. El cobre **causa**
 los retornos de Pucobre (Granger p<0.001), pero el efecto se **difiere** en lugar de
-impactar contemporáneamente — consistente con descubrimiento de precios lento.
+impactar contemporáneamente — consistente con descubrimiento de precios lento. Las
+funciones impulso-respuesta de ambos activos ilustran el contraste: la de Antofagasta
+se concentra en el primer día, mientras que la de Pucobre se acumula durante las
+jornadas siguientes.
+
+[[FIG: irf_ANTO_L.png | Función impulso-respuesta del retorno de Antofagasta ante un shock de una desviación estándar en el cobre (identificación de Cholesky). Respuesta concentrada en el impacto contemporáneo.]]
+
+[[FIG: irf_PUCOBRE_SN.png | Función impulso-respuesta del retorno de Pucobre ante el mismo shock. La respuesta se acumula en los días posteriores, evidencia de transmisión diferida.]]
 
 ### 6.5 Largo plazo (VECM)
 
@@ -742,6 +952,19 @@ negativa (corrige desequilibrios) pero muy pequeña, indicando ajuste lento. *Ca
 los coeficientes grandes de USDCLP/DXY reflejan colinealidad entre ambas medidas del
 dólar y se interpretan con reserva. **H3 se sostiene**, con la matización de §6.7.
 
+La magnitud de la velocidad de ajuste merece una lectura cuantitativa. Un coeficiente
+α del orden de −0.0008 diario implica que sólo una fracción ínfima del desequilibrio
+respecto del valor de equilibrio se corrige cada jornada; en términos de vida media
+—el tiempo que tarda en disiparse la mitad de una desviación— ello equivale a varios
+cientos de días hábiles. Esta lentitud del ajuste es, en sí misma, coherente con el
+relato central: la relación de equilibrio existe y es económicamente significativa,
+pero el regreso al equilibrio tras una perturbación es gradual, especialmente en el
+activo ilíquido, donde la corrección sólo puede operar en las jornadas en que hay
+transacción. El contraste entre una elasticidad de largo plazo robusta y una velocidad
+de ajuste pequeña es, por tanto, la contrapartida —en el dominio de los niveles— del
+fenómeno que las regresiones de retornos capturan en el dominio de los cambios: el
+vínculo fundamental es fuerte, pero su materialización en el precio es lenta.
+
 ### 6.6 Volatilidad (GARCH)
 
 | Activo | mejor modelo (AIC) | persistencia (α+β) | efecto apalancamiento |
@@ -755,7 +978,12 @@ Persistencia ≈ 0.99 (shocks de volatilidad muy duraderos) y efecto apalancamie
 confirmado. En Pucobre, en cambio, los modelos GARCH resultan inestables (soluciones de
 borde) por la iliquidez y los saltos extremos (curtosis 35.5); se recomienda filtrar
 días de retorno nulo o usar modelos con saltos. **H4 se sostiene** salvo en el activo
-ilíquido.
+ilíquido. La Tabla y la Figura siguientes resumen la comparación entre
+especificaciones y la trayectoria de la volatilidad condicional de Antofagasta.
+
+[[CSV: garch_resumen.csv | Comparación de modelos GARCH(1,1), GJR-GARCH(1,1) y EGARCH(1,1) por activo: AIC, BIC, log-verosimilitud, parámetros α, β, asimetría γ y persistencia.]]
+
+[[FIG: vol_condicional_ANTO_L.png | Volatilidad condicional diaria estimada (GJR-GARCH) de Antofagasta, 2004–2026. Se aprecian conglomerados de volatilidad en 2008 y 2020.]]
 
 ### 6.7 Robustez
 
@@ -796,6 +1024,15 @@ cobre. Los demás no rechazan simetría, coherente con su vínculo más débil.
 Impacto promedio del sector (FE≈RE≈Pooled; Hausman no rechaza RE): β-cobre ≈ 0.205
 (p=0.073, marginal con *cluster* en 4 entidades); el mercado local domina
 (β≈0.79, p<0.001); DXY ≈ −0.19 (p<0.001); UST10Y +1.9 (p<0.01). R² within ≈ 0.23.
+La práctica coincidencia entre los estimadores Pooled, de efectos fijos y de efectos
+aleatorios indica que los efectos específicos de empresa aportan poco en una
+especificación con factores comunes que varían en el tiempo, lo que es esperable al
+trabajar con retornos diarios de media casi nula. El predominio del factor de mercado
+local sobre el cobre en el promedio sectorial refleja la composición del panel —dos de
+sus cuatro integrantes (CAP, SQM) no son cobre puro— y, sobre todo, el peso de Pucobre,
+cuyo comovimiento diario está dominado por el mercado local más que por el metal. En
+suma, el panel confirma cualitativamente el canal del cobre, pero su baja potencia
+(N=4) aconseja tratarlo como evidencia de apoyo, no como inferencia primaria.
 
 ### 6.10 Canal de política monetaria (TPM) y estudio de eventos
 
@@ -804,7 +1041,18 @@ El cambio diario de la TPM entra con signo negativo en todos los activos
 eventos sobre 51 alzas y 41 bajas de TPM arroja CAAR con el signo económico correcto
 (alza → anormal negativo: ANTO −1.04%, CAP −1.90%; baja → positivo) pero **ninguno
 significativo** (p>0.37): los cambios de TPM están anticipados y la valoración minera
-responde a factores globales más que a la política monetaria doméstica.
+responde a factores globales más que a la política monetaria doméstica. Este resultado
+admite una interpretación coherente con la eficiencia de mercado: las decisiones de
+política monetaria del Banco Central de Chile son, en su mayoría, anticipadas por los
+participantes —la senda de la tasa se comunica y se proyecta—, de modo que el anuncio
+en sí aporta poca sorpresa y, por tanto, escaso retorno anormal. A ello se suma que
+los ingresos de las mineras de cobre se denominan en dólares y dependen del precio
+mundial del metal, por lo que su valoración es relativamente insensible al costo del
+financiamiento local. La consecuencia metodológica es clara: para capturar el efecto
+de la política monetaria sobre estos activos sería necesario aislar el componente de
+**sorpresa** (la diferencia entre la tasa efectiva y la esperada por el mercado), lo
+que requiere datos de expectativas no disponibles en este estudio y queda planteado
+como extensión futura.
 
 ### 6.11 Causalidad de Toda-Yamamoto
 
@@ -823,9 +1071,18 @@ artefacto del modelo aumentado de 13 rezagos.
 **(a) Magnitud.** Pucobre presenta **62% de días con retorno cero** (no transa en la
 mayoría de las jornadas), frente a 5.5% (ANTO), 1.3% (SCCO) o 0.18% (Glencore); su
 volumen medio (~US$24 M equiv.) es dos órdenes de magnitud menor que el de
-Antofagasta (~US$2.000 M). **(b) Transversal.** La correlación de Spearman entre
-iliquidez (% días cero) y β-cobre contemporánea es negativa (ρ≈−0.55), en la
-dirección predicha (no significativa con N=8). **(c) Rezagos distribuidos:**
+Antofagasta (~US$2.000 M). La Tabla siguiente reporta las medidas de iliquidez por
+activo.
+
+[[CSV: iliquidez_amihud.csv | Medidas de iliquidez por activo: ratio de Amihud (medio y mediano), porcentaje de días con retorno cero y volumen medio en USD equivalente.]]
+
+**(b) Transversal.** La correlación de Spearman entre iliquidez (% días cero) y
+β-cobre contemporánea es negativa (ρ≈−0.55), en la dirección predicha (no
+significativa con N=8). La Figura siguiente muestra esta relación.
+
+[[FIG: iliquidez_vs_beta.png | Iliquidez (porcentaje de días con retorno cero) frente a la elasticidad-cobre contemporánea de los ocho activos. Pucobre es el punto extremo de baja transmisión y alta iliquidez.]]
+
+**(c) Rezagos distribuidos:**
 
 | Activo | β día 0 | β acumulado 0–5 | fracción día 0 |
 |---|---|---|---|
@@ -981,6 +1238,27 @@ descubrimiento de precios diferido. El fundamento es el mismo —la elasticidad 
 largo plazo es comparable— pero la **velocidad** de incorporación difiere por la
 microestructura.
 
+El mecanismo puede precisarse en el lenguaje de la microestructura de mercado. En un
+título de alta profundidad, el flujo continuo de órdenes y la presencia de
+arbitrajistas aseguran que cualquier novedad sobre el precio del cobre —disponible en
+tiempo real en los mercados de futuros— se traduzca casi instantáneamente en el precio
+de la acción, pues existen agentes dispuestos a operar ante la menor discrepancia entre
+el valor fundamental y el precio observado. En un título de baja profundidad, en
+cambio, pueden transcurrir jornadas sin transacciones; durante esos intervalos el
+precio permanece "congelado" en su último valor, desconectado de la evolución del
+fundamento. Cuando finalmente se cruza una operación, el precio salta para reflejar de
+una vez toda la información acumulada, lo que produce simultáneamente la curtosis
+extrema observada en los retornos de Pucobre y la autocorrelación positiva que el
+modelo predictivo explota fuera de muestra. Este patrón —precios que se ajustan a
+saltos discretos en lugar de hacerlo de forma continua— es la manifestación empírica
+del descubrimiento de precios lento, y explica por qué la elasticidad-cobre medida
+crece de forma monótona a medida que se amplía la ventana temporal: al agregar varios
+días o un mes, los saltos rezagados se acumulan y la sensibilidad converge a la que
+exhibe el activo líquido. La distinción crucial, y el aporte conceptual de la tesis,
+es que esta brecha es de **velocidad de incorporación**, no de **exposición
+fundamental**: ambos *pure-plays* están igualmente ligados al cobre en el largo plazo;
+sólo difieren en la rapidez con que el mercado lo reconoce.
+
 ### 7.1bis Significancia económica de las magnitudes
 
 Más allá de la significancia estadística, las magnitudes tienen una lectura
@@ -1016,20 +1294,47 @@ ilíquidos.
 
 Las elasticidades-cobre de las referencias internacionales (SCCO 0.49, FCX 0.63,
 Glencore 0.58) y de Antofagasta (0.70) son del mismo orden, validando externamente
-la magnitud del canal de demanda/ingreso. El signo negativo del DXY y la relación
-cobre↔moneda son coherentes con la literatura de *commodity currencies* (Chen-Rogoff;
-BCCh). La disociación corto/largo plazo por liquidez es consistente con Amihud (2002)
-y la teoría de microestructura.
+la magnitud del canal de demanda/ingreso. Este orden de magnitud —una relación
+positiva pero por debajo de la unidad en el corto plazo— coincide con la evidencia de
+Mendiola, Chávez-Bedoya y Wallenstein (2022), quienes documentan una reacción
+positiva e inelástica de las acciones mineras de cobre ante cambios en el precio del
+metal. El signo negativo del dólar y la relación cobre↔moneda son coherentes con la
+literatura de *commodity currencies* (Chen y Rogoff, 2003) y con la evidencia
+nacional del Banco Central de Chile. La advertencia de Kilian y Park (2009) —según la
+cual el efecto de un shock de *commodity* sobre las acciones depende de su naturaleza
+de oferta o de demanda— invita a no sobreinterpretar la elasticidad estimada como un
+parámetro estructural único, sino como un promedio sobre regímenes; de ahí la
+relevancia del análisis de quiebres y submuestras. La asimetría de largo plazo hallada
+para Antofagasta dialoga con la evidencia de Cashin, McDermott y Scott (2002) sobre la
+naturaleza asimétrica de los ciclos de *commodities*. Finalmente, la disociación
+corto/largo plazo gobernada por la liquidez es plenamente consistente con Amihud
+(2002), Bekaert, Harvey y Lundblad (2007) y Amihud, Hameed, Kang y Zhang (2015),
+quienes sitúan a la liquidez —y en particular a la de las firmas pequeñas de mercados
+emergentes— como un determinante de primer orden del comportamiento de los retornos.
 
 ### 7.4 Validez interna y externa
 
 **Interna.** La identificación del canal cobre→acción se apoya en (i) la exogeneidad
 del cobre respecto de una minera pequeña (confirmada por Toda-Yamamoto
-unidireccional) y (ii) el control por factores globales y de moneda. **Externa.** El
-núcleo del resultado (heterogeneidad por liquidez) es específico al contraste
-líquido/ilíquido y debería replicarse en otros *small-caps* de *commodities* en
-mercados emergentes; la generalización a todo el sector chileno está limitada por el
-N reducido.
+unidireccional) y (ii) el control por factores globales y de moneda. La principal
+amenaza a la validez interna sería un factor omitido que moviera simultáneamente al
+cobre y a la acción sin pasar por el canal postulado; los controles de dólar, tasas,
+mercado y energía mitigan esta posibilidad, y el contraste líquido/ilíquido la acota
+aún más, pues un confusor de ese tipo debería afectar de manera idéntica a dos
+*pure-plays* con la misma exposición fundamental, lo que no explicaría la diferencia
+sistemática en la *velocidad* de transmisión. El placebo con SQM —un activo de litio,
+ajeno al cobre, que no muestra predictibilidad por cobre rezagado— refuerza que el
+efecto detectado no es un artefacto estadístico general.
+
+**Externa.** El núcleo del resultado (heterogeneidad por liquidez) es específico al
+contraste líquido/ilíquido y debería replicarse en otros *small-caps* de *commodities*
+en mercados emergentes; la generalización a todo el sector chileno está limitada por el
+N reducido. No obstante, la coherencia de las magnitudes con las referencias
+internacionales y con la teoría de microestructura sugiere que el mecanismo —y no
+necesariamente los coeficientes puntuales— es trasladable a contextos análogos: títulos
+de baja liquidez con una exposición fundamental clara a un factor observable. Establecer
+esa generalidad de forma rigurosa requeriría un panel internacional de *small-caps* de
+recursos naturales, lo que se propone como extensión.
 
 ### 7.5 Implicancias
 
@@ -1072,17 +1377,65 @@ estudio de eventos sin componente de sorpresa de TPM (expectativas no observadas
 
 ### 8.1 Contribuciones
 
-Metodológica (batería integrada y reproducible sobre un universo difícil), empírica
-(cuantificación del canal cobre→valoración para los *pure-plays* chilenos) y
-conceptual (prueba formal del descubrimiento de precios diferido por iliquidez).
+El aporte de esta tesis es triple. En lo **metodológico**, integra una batería amplia
+y reproducible de técnicas —de la cointegración a la microestructura— sobre un
+universo notoriamente difícil por su escaso número de emisores, mostrando que el
+diseño cuidadoso permite extraer conclusiones robustas pese a la restricción de datos.
+En lo **empírico**, cuantifica por primera vez, con este nivel de detalle, el canal
+cobre→valoración para los *pure-plays* chilenos, entregando elasticidades por
+horizonte que pueden servir de referencia a inversionistas y analistas. En lo
+**conceptual**, documenta y prueba formalmente —por seis vías independientes y un
+contraste cuasi-experimental— un mecanismo de descubrimiento de precios diferido
+atribuible a la iliquidez, contribuyendo a la comprensión de la eficiencia
+informacional en mercados emergentes pequeños.
+
+### 8.1.1 Implicancias y recomendaciones
+
+Para la **gestión de inversiones**, el resultado central tiene una consecuencia
+operativa directa: la exposición al cobre de un activo ilíquido debe medirse y
+gestionarse a horizontes intermedios o largos, no diarios; las betas diarias
+subestiman sistemáticamente el riesgo-cobre de los emisores de baja liquidez y, por
+tanto, sesgan tanto la valoración como las decisiones de cobertura. Para la **política
+de mercado de capitales**, la evidencia cuantifica un costo concreto de la baja
+liquidez del segmento local —incorporación tardía de la información fundamental— y
+respalda iniciativas orientadas a profundizar la liquidez (incentivos a la creación de
+mercado, programas de *market making*, mejoras de difusión de información) como vía
+para acercar los precios locales a su valor fundamental con mayor celeridad. Para la
+**gestión corporativa**, el hallazgo sugiere que, para un emisor pequeño, las mejoras
+de sus fundamentos pueden tardar en reflejarse en el precio, con implicancias para el
+costo de capital y para la oportunidad de operaciones de mercado.
 
 ### 8.2 Líneas futuras
 
-Incorporar EMBI Chile y tasas locales del Banco Central; NARDL dinámico con
-multiplicadores acumulados asimétricos; estudio de eventos con sorpresa de TPM
-(expectativas de encuestas); medidas de iliquidez intradía y de Amihud por régimen;
-GARCH con saltos para Pucobre; extensión a un panel internacional de *small-caps*
-de *commodities* para testear la generalidad del mecanismo de liquidez.
+Varias extensiones se desprenden naturalmente de este trabajo. En el plano de los
+**datos**, incorporar el EMBI Chile y las tasas largas locales del Banco Central
+permitiría cerrar el canal de riesgo soberano y de descuento doméstico que aquí quedó
+pendiente por restricciones de acceso, y disponer de datos intradía habilitaría
+medidas de iliquidez más finas (profundidad del libro, *spread* efectivo) y un estudio
+del descubrimiento de precios a escala de minutos. En el plano **metodológico**, un
+NARDL dinámico con multiplicadores acumulados asimétricos precisaría la forma de la
+respuesta diferencial a alzas y caídas del cobre; un estudio de eventos basado en el
+componente de **sorpresa** de la política monetaria —construido a partir de encuestas
+de expectativas— aislaría el efecto no anticipado de la TPM; un modelo GARCH con saltos
+o de volatilidad estocástica trataría adecuadamente la dinámica de Pucobre, hoy
+inabordable con GARCH estándar; y un esquema de volatilidad multivariada (DCC-GARCH)
+permitiría estudiar la correlación condicional dinámica cobre–acción y su variación en
+episodios de tensión. En el plano de la **validez externa**, la prioridad es construir
+un panel internacional de *small-caps* de recursos naturales que permita contrastar,
+con mayor potencia, si la pendiente de la curva de transmisión por horizonte se explica
+sistemáticamente por la liquidez, convirtiendo el hallazgo de caso en una regularidad
+empírica generalizable.
+
+### 8.3 Reflexión final
+
+El cobre y la bolsa chilena están unidos por un vínculo fundamental sólido; lo que esta
+tesis muestra es que la *forma* en que ese vínculo se expresa en los precios depende,
+de manera medible, de la microestructura del mercado. En el activo profundo, el cobre
+se incorpora de inmediato; en el activo delgado, lo hace con rezago, pero llega. Esa
+distinción —entre la existencia de una relación y la velocidad con que el mercado la
+reconoce— es, a la vez, el principal resultado del trabajo y un recordatorio de que la
+eficiencia informacional no es una propiedad binaria del mercado, sino una cuestión de
+grado que la liquidez modula.
 
 ---
 
@@ -1152,17 +1505,49 @@ No se emplearon datos propietarios ni restringidos.
 > la entrega final. Estas referencias fueron contrastadas con repositorios del
 > editor; el formato APA definitivo es responsabilidad del autor.
 
-**Anexos (reproducibilidad).**
-- Anexo A — Figuras del análisis (series, ACF, IRF, volatilidad condicional, heatmap, iliquidez).
-- Anexo B — Código fuente: `src/` (verificación de universo, ingesta, preparación, EDA, 13 módulos de modelos y exportadores).
-- Anexo C — Tablas de salida: `outputs/tables/` (33 archivos CSV).
-- Anexo D — Desarrollo matemático de los modelos (a continuación).
-- Diccionario de datos: `docs/diccionario_datos.md`; decisiones fundacionales: `docs/00_decisiones_fundacionales.md`.
-- Entorno: `requirements.txt` (Python 3.13; statsmodels 0.14.6, arch 8.0, linearmodels 7.0, reportlab).
+**Anexos.**
+- Anexo B — Tablas detalladas de resultados (a continuación).
+- Anexo C — Desarrollo matemático de los modelos.
+- Anexo D — Figuras complementarias del análisis.
+- Repositorio: código fuente (`src/`), datos procesados, 35+ tablas de salida
+  (`outputs/tables/`), diccionario de datos (`docs/diccionario_datos.md`) y
+  decisiones fundacionales (`docs/00_decisiones_fundacionales.md`).
+- Entorno: `requirements.txt` (Python 3.13; statsmodels 0.14, arch 8.0, linearmodels 7.0, reportlab).
 
 ---
 
-## Anexo D — Desarrollo matemático de los modelos
+## Anexo B — Tablas detalladas de resultados
+
+Este anexo reúne las salidas econométricas completas que sustentan el Capítulo 6.
+Todas las cifras provienen de las estimaciones propias documentadas en el repositorio.
+
+[[CSV: var_resumen.csv | VAR: descomposición de varianza (FEVD) del cobre a 1 y 20 días, respuesta acumulada e impulso, y causalidad de Granger por activo del núcleo.]]
+
+[[CSV: vecm_resumen.csv | VECM: elasticidades de largo plazo (cobre, USDCLP, DXY) y velocidad de ajuste, con rango de cointegración r=1 (Johansen).]]
+
+[[CSV: nardl_resumen.csv | NARDL: prueba de límites (bounds), elasticidades de largo plazo positiva y negativa del cobre, y test de Wald de asimetría.]]
+
+[[CSV: garch_resumen.csv | Familia GARCH: comparación de GARCH(1,1), GJR-GARCH y EGARCH por activo (AIC, BIC, parámetros y persistencia).]]
+
+[[CSV: panel_resultados.csv | Panel: coeficientes Pooled, efectos fijos y efectos aleatorios, con sus p-valores.]]
+
+[[CSV: mensual_resumen.csv | Modelo mensual con macro nacional: elasticidad-cobre, IMACEC y cambio de TPM por activo.]]
+
+[[CSV: event_study_tpm.csv | Estudio de eventos: retorno anormal acumulado promedio (CAAR) en torno a alzas y bajas de la TPM.]]
+
+[[CSV: toda_yamamoto.csv | Causalidad de Toda-Yamamoto (robusta a integración): estadístico, p-valor y veredicto por relación.]]
+
+[[CSV: quiebres_estructurales.csv | Quiebre estructural endógeno (Quandt-Andrews): sup-F, fecha de quiebre y elasticidad-cobre antes y después.]]
+
+[[CSV: iliquidez_robustez_corr.csv | Robustez de la iliquidez: correlación de Spearman de cuatro medidas de iliquidez con la elasticidad-cobre contemporánea.]]
+
+[[CSV: out_of_sample.csv | Validación fuera de muestra (Clark-West): R² OOS, RMSE y estadístico de Clark-West por activo.]]
+
+[[CSV: predictor_metrics.csv | Predictor (backtest del retorno t+1): RMSE, mejora vs benchmark ingenuo, R² OOS y precisión direccional.]]
+
+---
+
+## Anexo C — Desarrollo matemático de los modelos
 
 Este anexo formaliza las técnicas empleadas. La notación sigue el cuerpo principal.
 

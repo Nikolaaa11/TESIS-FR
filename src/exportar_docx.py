@@ -12,6 +12,7 @@ Parser markdown ligero sobre docs/tesis.md. Si docs/ está bloqueado (Word abier
 guarda igualmente la copia en web/assets/docs/.
 """
 import os, sys, re, glob
+import pandas as pd
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
@@ -173,11 +174,40 @@ def _tabla(doc, lineas, ntab=0, titulo=""):
     doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
 
+def _fig(doc, archivo, nfig, leyenda):
+    p = C.FIG / archivo
+    if not p.exists(): return
+    try:
+        pimg = doc.add_paragraph(); pimg.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        pimg.paragraph_format.first_line_indent = Cm(0)
+        pimg.add_run().add_picture(str(p), width=Cm(14.0))
+        cap = doc.add_paragraph(); cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cap.paragraph_format.first_line_indent = Cm(0); cap.paragraph_format.space_after = Pt(10)
+        r = cap.add_run(f"Figura {nfig}. {_clean(leyenda)}"); r.italic = True; r.font.size = Pt(9); r.font.color.rgb = GRAY
+    except Exception:
+        pass
+
+
+def _tabla_csv(doc, nombre, ntab, leyenda, maxrows=14):
+    p = C.TAB / nombre
+    if not p.exists(): return
+    df = pd.read_csv(p).head(maxrows)
+    filas = [list(df.columns)] + df.astype(str).values.tolist()
+    lineas = ["| " + " | ".join(str(c) for c in f) + " |" for f in filas]
+    _tabla(doc, lineas, ntab, leyenda)
+
+
 def convertir(doc, md):
-    lineas = md.split("\n"); i = 0; titulo_omitido = False; ntab = 0; ultimo_tit = "Resultados"
+    lineas = md.split("\n"); i = 0; titulo_omitido = False; ntab = 0; nfig = 0; ultimo_tit = "Resultados"
     while i < len(lineas):
         s = lineas[i].strip()
         if not s: i += 1; continue
+        mf = re.match(r"^\[\[FIG:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
+        if mf:
+            nfig += 1; _fig(doc, mf.group(1).strip(), nfig, mf.group(2).strip()); i += 1; continue
+        mc = re.match(r"^\[\[CSV:\s*([^|\]]+?)\s*\|\s*(.+?)\s*\]\]$", s)
+        if mc:
+            ntab += 1; _tabla_csv(doc, mc.group(1).strip(), ntab, mc.group(2).strip()); i += 1; continue
         if s.startswith("# ") and not titulo_omitido:
             titulo_omitido = True; i += 1; continue  # título ya está en la portada
         if s.startswith("|"):
