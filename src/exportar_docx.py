@@ -26,8 +26,8 @@ import config as C
 NAVY = RGBColor(0x1B, 0x2A, 0x41)
 COPPER = RGBColor(0xC2, 0x70, 0x3D)
 GRAY = RGBColor(0x55, 0x55, 0x55)
-BODY_FONT = "Palatino Linotype"
-HEAD_FONT = "Calibri"
+BODY_FONT = "Times New Roman"
+HEAD_FONT = "Times New Roman"   # APA: misma fuente en negrita para títulos
 
 
 # ----------------------- helpers de bajo nivel -----------------------
@@ -63,10 +63,10 @@ def _estilos(doc):
     st.font.name = BODY_FONT; st.font.size = Pt(11.5)
     pf = st.paragraph_format
     pf.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
-    pf.alignment = WD_ALIGN_PARAGRAPH.LEFT   # alineado a la izquierda (no justificado)
+    pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY   # justificado (norma USS/APA chilena)
     pf.space_after = Pt(5)
-    pf.first_line_indent = Cm(0.85)  # sangría de primera línea (estándar de tesis)
-    for i, sz in [(1, 19), (2, 14.5), (3, 12)]:
+    pf.first_line_indent = Cm(1.27)  # sangría de primera línea (APA)
+    for i, sz in [(1, 15), (2, 13), (3, 12)]:
         h = doc.styles[f"Heading {i}"]
         h.font.name = HEAD_FONT; h.font.size = Pt(sz); h.font.color.rgb = NAVY; h.font.bold = True
         h.paragraph_format.space_before = Pt(14 if i == 1 else 10); h.paragraph_format.space_after = Pt(6)
@@ -258,6 +258,14 @@ def anexo_figuras(doc):
 def construir():
     md = (C.ROOT / "docs" / "tesis.md").read_text(encoding="utf-8")
     doc = Document(); _estilos(doc)
+    # guionado automático (para que el texto justificado no deje "ríos")
+    try:
+        sett = doc.settings.element
+        if sett.find(qn("w:autoHyphenation")) is None:
+            ah = OxmlElement("w:autoHyphenation"); ah.set(qn("w:val"), "true"); sett.append(ah)
+            hz = OxmlElement("w:hyphenationZone"); hz.set(qn("w:val"), "357"); sett.append(hz)
+    except Exception:
+        pass
     portada(doc); indice(doc); convertir(doc, md); anexo_figuras(doc)
     _header_footer(doc)
     # guardar (web siempre; docs si no está bloqueado)

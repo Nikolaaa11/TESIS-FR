@@ -33,22 +33,23 @@ WF = r"C:\Windows\Fonts"
 
 
 def _reg():
-    """Tipografía de tesis: cuerpo en Palatino Linotype (serif de libro), títulos en
-    Calibri (sans moderno). Fallback a Times/Helvetica si no están disponibles."""
+    """Tipografía norma APA / USS: Times New Roman en todo el documento (cuerpo y
+    títulos), con títulos en negrita. Fallback a las Times base de reportlab."""
     fam = {"body": "Times-Roman", "bold": "Times-Bold", "it": "Times-Italic",
-           "head": "Helvetica-Bold", "head_light": "Helvetica"}
+           "bolditalic": "Times-BoldItalic"}
     try:
-        reg = {("Body", "pala.ttf"), ("Body-Bold", "palab.ttf"), ("Body-It", "palai.ttf"),
-               ("Head", "calibrib.ttf"), ("Head-Light", "calibril.ttf"), ("Head-Reg", "calibri.ttf")}
+        reg = {("Body", "times.ttf"), ("Body-Bold", "timesbd.ttf"),
+               ("Body-It", "timesi.ttf"), ("Body-BI", "timesbi.ttf")}
         for name, f in reg:
             pdfmetrics.registerFont(TTFont(name, os.path.join(WF, f)))
         from reportlab.pdfbase.pdfmetrics import registerFontFamily
-        registerFontFamily("Body", normal="Body", bold="Body-Bold", italic="Body-It", boldItalic="Body-Bold")
-        fam = {"body": "Body", "bold": "Body-Bold", "it": "Body-It", "head": "Head", "head_light": "Head-Light"}
+        registerFontFamily("Body", normal="Body", bold="Body-Bold", italic="Body-It", boldItalic="Body-BI")
+        fam = {"body": "Body", "bold": "Body-Bold", "it": "Body-It", "bolditalic": "Body-BI"}
     except Exception:
         pass
     return fam
-FAM = _reg(); BODY, BOLD, IT, HEAD, HEADL = FAM["body"], FAM["bold"], FAM["it"], FAM["head"], FAM["head_light"]
+FAM = _reg(); BODY, BOLD, IT, BI = FAM["body"], FAM["bold"], FAM["it"], FAM["bolditalic"]
+HEAD = BOLD; HEADL = BOLD  # APA usa la misma fuente (Times) en negrita para títulos
 
 
 def _clean(t):
@@ -65,21 +66,27 @@ def _clean(t):
 
 
 def estilos():
-    # Cuerpo: Palatino 11.5, ALINEADO A LA IZQUIERDA (no justificado), interlineado ~1.5
-    body = ParagraphStyle("body", fontName=BODY, fontSize=11.5, leading=18,
-                          alignment=TA_LEFT, spaceAfter=4, firstLineIndent=0.85*cm, textColor=INK)
+    # Norma APA/USS: Times New Roman 12, JUSTIFICADO con guionado español (elimina
+    # los "ríos"), interlineado 1.5, sangría de primera línea 1.27 cm.
+    HY = "es_ES"
+    body = ParagraphStyle("body", fontName=BODY, fontSize=12, leading=18,
+                          alignment=TA_JUSTIFY, spaceAfter=4, firstLineIndent=1.27*cm,
+                          textColor=INK, hyphenationLang=HY, spaceShrinkage=0.06)
     body0 = ParagraphStyle("body0", parent=body, firstLineIndent=0)
-    h1 = ParagraphStyle("h1", fontName=HEADL, fontSize=21, leading=25, textColor=NAVY,
-                        spaceBefore=20, spaceAfter=12, keepWithNext=True)
-    h2 = ParagraphStyle("h2", fontName=HEAD, fontSize=14.5, leading=19, textColor=NAVY,
-                        spaceBefore=15, spaceAfter=7, keepWithNext=True)
-    h3 = ParagraphStyle("h3", fontName=HEAD, fontSize=12, leading=16, textColor=COPPER,
-                        spaceBefore=11, spaceAfter=4, keepWithNext=True)
-    bullet = ParagraphStyle("bullet", parent=body, leftIndent=20, firstLineIndent=0, bulletIndent=8, spaceAfter=4)
-    quote = ParagraphStyle("quote", parent=body, leftIndent=18, rightIndent=14, firstLineIndent=0,
-                           fontName=IT, textColor=GRAY, fontSize=10.5, leading=15, spaceBefore=6, spaceAfter=8)
-    cap = ParagraphStyle("cap", fontName=HEAD, fontSize=9.5, leading=12.5, textColor=NAVY, spaceBefore=10, spaceAfter=4)
-    figcap = ParagraphStyle("figcap", fontName=IT, fontSize=9.5, leading=13, textColor=GRAY, alignment=TA_CENTER, spaceBefore=4, spaceAfter=13)
+    # Títulos APA: Nivel 1 centrado/negrita; Nivel 2 izq/negrita; Nivel 3 izq/negrita-cursiva
+    h1 = ParagraphStyle("h1", fontName=BOLD, fontSize=15, leading=20, textColor=NAVY,
+                        alignment=TA_CENTER, spaceBefore=22, spaceAfter=14, keepWithNext=True)
+    h2 = ParagraphStyle("h2", fontName=BOLD, fontSize=13, leading=17, textColor=INK,
+                        alignment=TA_LEFT, spaceBefore=14, spaceAfter=6, keepWithNext=True)
+    h3 = ParagraphStyle("h3", fontName=BI, fontSize=12, leading=16, textColor=INK,
+                        alignment=TA_LEFT, spaceBefore=11, spaceAfter=4, keepWithNext=True)
+    bullet = ParagraphStyle("bullet", parent=body, leftIndent=20, firstLineIndent=0, bulletIndent=8,
+                            spaceAfter=4, hyphenationLang=HY)
+    quote = ParagraphStyle("quote", parent=body, leftIndent=1.27*cm, rightIndent=0, firstLineIndent=0,
+                           fontName=BODY, textColor=INK, fontSize=11, leading=16, spaceBefore=4, spaceAfter=8,
+                           alignment=TA_LEFT, hyphenationLang=HY)
+    cap = ParagraphStyle("cap", fontName=BOLD, fontSize=10, leading=13, textColor=INK, spaceBefore=10, spaceAfter=4)
+    figcap = ParagraphStyle("figcap", fontName=IT, fontSize=10, leading=13, textColor=INK, alignment=TA_CENTER, spaceBefore=4, spaceAfter=13)
     return dict(body=body, body0=body0, h1=h1, h2=h2, h3=h3, bullet=bullet, quote=quote, cap=cap, figcap=figcap)
 
 
@@ -265,7 +272,7 @@ def construir():
     md = (C.ROOT / "docs" / "tesis.md").read_text(encoding="utf-8")
     S = estilos()
     out = C.ROOT / "docs" / "Tesis_USS.pdf"
-    doc = TesisDoc(str(out), pagesize=A4, leftMargin=3*cm, rightMargin=2.5*cm, topMargin=2.2*cm, bottomMargin=2*cm,
+    doc = TesisDoc(str(out), pagesize=A4, leftMargin=3*cm, rightMargin=2.5*cm, topMargin=2.5*cm, bottomMargin=2.5*cm,
                    title="Impacto macro-financiero en la valoración del cobre en Chile", author="Universidad San Sebastián")
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
     doc.addPageTemplates([PageTemplate(id="cover", frames=[frame], onPage=_cover),
