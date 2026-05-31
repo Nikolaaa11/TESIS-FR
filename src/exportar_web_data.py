@@ -86,6 +86,19 @@ def main():
     data["iliquidez_robustez_corr"] = _opt("iliquidez_robustez_corr.csv")
     data["out_of_sample"] = _opt("out_of_sample.csv")
 
+    # predictor: metricas, escenario y series de backtest
+    data["predictor_metrics"] = _opt("predictor_metrics.csv")
+    data["predictor_scenario"] = _opt("predictor_scenario.csv")
+    bt = {}
+    for tk in ["ANTO.L", "PUCOBRE.SN"]:
+        p = C.TAB / f"predictor_backtest_{tk.replace('.','_')}.csv"
+        if p.exists():
+            b = pd.read_csv(p)
+            bt[tk] = {"fechas": [str(x)[:10] for x in b["fecha"]],
+                      "real": [round(float(v), 2) for v in b["precio_real"]],
+                      "pred": [round(float(v), 2) for v in b["precio_pred"]]}
+    data["predictor_backtest"] = bt
+
     # Universo
     data["universo"] = t("universo_verificacion.csv")[["ticker", "desc", "ok", "n", "inicio", "fin", "moneda"]].to_dict("records")
 

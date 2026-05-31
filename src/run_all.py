@@ -25,7 +25,14 @@ PASOS = [
     ("Iliquidez de Amihud (prueba formal)", "modelo_iliquidez.py"),
     ("Modelo mensual (macro nacional)", "modelo_mensual.py"),
     ("Robustez (quiebres/submuestras)", "robustez.py"),
+    ("Quiebres estructurales (Quandt-Andrews)", "quiebres.py"),
+    ("Iliquidez: robustez multi-proxy", "iliquidez_robustez.py"),
+    ("Validación fuera de muestra (Clark-West)", "out_of_sample.py"),
+    ("Predictor / backtest (plataforma)", "predictor.py"),
+    ("Exportar datos web (data.js)", "exportar_web_data.py"),
     ("Exportar tesis a Word",     "exportar_docx.py"),
+    ("Exportar tesis a PDF",      "exportar_pdf.py"),
+    ("Exportar PPT de defensa",   "exportar_ppt.py"),
 ]
 
 AQUI = os.path.dirname(__file__)

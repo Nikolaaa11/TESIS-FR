@@ -211,6 +211,57 @@ function heatmap(){
   html+='</div>'; el.innerHTML=html;
 }
 
+/* ---------- PREDICTOR / SIMULADOR ---------- */
+let _predChart=null;
+function initPredictor(){
+  const esc=(D.predictor_scenario||[]); if(!esc.length) return;
+  const escByA={}; esc.forEach(e=>escByA[e.activo]=e);
+  const met=(D.predictor_metrics||[]); const metByA={}; met.forEach(m=>metByA[m.activo]=m);
+  const bt=D.predictor_backtest||{};
+  const state={asset:'ANTO.L',cu:10,dx:0,h:'mensual'};
+  const $=id=>document.getElementById(id);
+  const horizLbl={dia0:'1 día',acum5:'1 semana',mensual:'1 mes',largo_plazo:'largo plazo'};
+
+  function basePrice(a){ const b=bt[a]; return b&&b.real&&b.real.length?b.real[b.real.length-1]:null; }
+  function moneda(a){ return a==='PUCOBRE.SN'?'CLP':'GBp'; }
+
+  function render(){
+    const e=escByA[state.asset]; if(!e) return;
+    const beta=e[state.h]; const move=beta*state.cu + (e.elast_dxy||0)*state.dx;
+    $('simMove').textContent=(move>=0?'+':'')+move.toFixed(1)+'%';
+    const bp=basePrice(state.asset);
+    if(bp){ const np=bp*(1+move/100);
+      $('simPrice').textContent=`Precio ${moneda(state.asset)} ${bp.toLocaleString('es-CL',{maximumFractionDigits:0})} → ${np.toLocaleString('es-CL',{maximumFractionDigits:0})}`; }
+    else $('simPrice').textContent='';
+    $('simNote').innerHTML=`Con elasticidad-cobre <b>${beta}</b> a horizonte <b>${horizLbl[state.h]}</b>: un ${state.cu>=0?'alza':'baja'} de `+
+      `<b>${Math.abs(state.cu)}%</b> del cobre implica ≈ <b>${(move>=0?'+':'')+move.toFixed(1)}%</b> en `+
+      `${state.asset==='ANTO.L'?'Antofagasta':'Pucobre'}. La elasticidad crece con el horizonte por la transmisión diferida.`;
+  }
+  function drawBacktest(){
+    const b=bt[state.asset]; if(!b) return; const c=themeColors();
+    if(_predChart) _predChart.destroy();
+    _predChart=new Chart($('chPredict'),{type:'line',data:{labels:b.fechas,datasets:[
+      {label:'Precio real',data:b.real,borderColor:PAL.navy,borderWidth:2,pointRadius:0,tension:.2},
+      {label:'Predicho (t+1, OOS)',data:b.pred,borderColor:PAL.copper,borderWidth:1.8,borderDash:[4,3],pointRadius:0,tension:.2}]},
+      options:{...baseOpts(`precio (${moneda(state.asset)})`),scales:{...baseOpts().scales,x:{grid:{display:false},ticks:{color:c.ink2,maxTicksLimit:7}}}}});
+    const m=metByA[state.asset]; if(m) $('predMetrics').innerHTML=
+      `<div class="metric"><div class="n">${m.precision_direccional_pct}%</div><div class="l">precisión direccional</div></div>`+
+      `<div class="metric"><div class="n">${m.mejora_vs_naive_pct}%</div><div class="l">mejora vs naive (RMSE)</div></div>`+
+      `<div class="metric"><div class="n">${m.R2_oos_pct}%</div><div class="l">R² fuera de muestra</div></div>`;
+  }
+  $('simAsset').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    $('simAsset').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); state.asset=b.dataset.a; render(); drawBacktest();
+  }));
+  $('cuRange').addEventListener('input',e=>{state.cu=+e.target.value;$('cuVal').textContent=(state.cu>=0?'+':'')+state.cu+'%';render();});
+  $('dxRange').addEventListener('input',e=>{state.dx=+e.target.value;$('dxVal').textContent=(state.dx>=0?'+':'')+state.dx+'%';render();});
+  $('simHoriz').querySelectorAll('.chip-h').forEach(c=>c.addEventListener('click',()=>{
+    $('simHoriz').querySelectorAll('.chip-h').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on'); state.h=c.dataset.h; render();
+  }));
+  render(); drawBacktest();
+}
+
 /* ---------- TABLES ---------- */
 function tabla(el,cols,rows){ const t=document.getElementById(el); if(!t) return;
   let h='<table class="tbl"><thead><tr>'+cols.map(c=>`<th>${c.h}</th>`).join('')+'</tr></thead><tbody>';
@@ -275,5 +326,5 @@ function vgrad(ctx,area,hex,a1=0.22,a2=0.0){
 document.addEventListener('DOMContentLoaded',()=>{
   initTheme(); initScroll(); initCounters(); initMenu();
   try{ buildCharts(); }catch(e){ console.error('charts',e); }
-  heatmap(); tablas(); galeria(); reveal();
+  heatmap(); tablas(); galeria(); try{ initPredictor(); }catch(e){ console.error('predictor',e); } reveal();
 });

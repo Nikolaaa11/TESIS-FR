@@ -910,7 +910,40 @@ SQM (litio, no cobre) no muestra predictibilidad por cobre rezagado (p=0.68),
 descartando que el resultado sea espurio. Esta es una confirmación de H5 por una vía
 metodológicamente distinta a todo el resto del análisis.
 
-### 6.16 Síntesis de verificación de hipótesis
+### 6.16 Aplicación predictiva (validación complementaria)
+
+Aunque el enfoque de la tesis es **explicativo**, no predictivo, una validación
+predictiva fuera de muestra ofrece un contraste adicional del mecanismo y una
+aplicación práctica. Se estima un modelo lineal transparente que predice el retorno
+del día siguiente con información disponible hoy —retorno propio rezagado, cobre
+contemporáneo y rezagado, dólar y mercado— en una ventana **expansiva** (estimación
+recursiva), y se compara contra un *benchmark* ingenuo (predecir retorno nulo, esto
+es, caminata aleatoria del precio):
+
+| Activo | R² fuera de muestra | Mejora RMSE vs naive | Precisión direccional* |
+|---|---|---|---|
+| ANTO.L | −0.7% | −0.3% | 54.2% |
+| PUCOBRE.SN | +1.2% | +0.6% | 56.6% |
+
+(*) Precisión direccional calculada **sólo sobre días de retorno no nulo**, para
+evitar el sesgo que introducen los numerosos días sin transacción de Pucobre
+(donde el signo del retorno observado es cero).
+
+Dos lecturas honestas: (i) el retorno **diario** es esencialmente **impredecible**
+—coherente con eficiencia de mercado en forma débil—, con R² fuera de muestra ínfimo
+y precisión direccional apenas sobre el 50%; (ii) sin embargo, **Pucobre es
+sistemáticamente más predecible que Antofagasta** (mayor precisión direccional,
+única con R² fuera de muestra y RMSE mejores que el *benchmark*). Esta mayor
+predictibilidad del activo ilíquido es precisamente lo que implica el descubrimiento
+de precios diferido: la incorporación tardía de la información genera
+**autocorrelación** explotable. Así, la dimensión predictiva **refuerza** el hallazgo
+explicativo central por una vía independiente. La plataforma asociada incluye un
+**simulador de escenarios** que traduce las elasticidades estimadas en impactos por
+horizonte; su utilidad no radica en el pronóstico puntual —imposible para retornos
+diarios— sino en cuantificar, de forma trazable, el rango de impacto de un escenario
+de cobre.
+
+### 6.17 Síntesis de verificación de hipótesis
 
 | Hipótesis | Enunciado | Evidencia | Veredicto |
 |---|---|---|---|

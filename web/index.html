@@ -45,7 +45,7 @@
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#iliquidez">Iliquidez</a></li>
       <li><a href="#robustez">Robustez</a></li>
-      <li><a href="#literatura">Literatura</a></li>
+      <li><a href="#predictor">Predictor</a></li>
       <li><a href="#conclusiones">Conclusiones</a></li>
       <li><button id="themeBtn" class="keep" title="Cambiar tema" aria-label="Cambiar tema">◐</button></li>
       <li><button id="menuBtn" class="keep" title="Menú" aria-label="Abrir menú">☰</button></li>
@@ -62,6 +62,7 @@
   <a href="#resultados">Resultados</a>
   <a href="#iliquidez">Iliquidez</a>
   <a href="#robustez">Robustez</a>
+  <a href="#predictor">Predictor</a>
   <a href="#literatura">Literatura</a>
   <a href="#conclusiones">Conclusiones</a>
 </div>
@@ -316,11 +317,77 @@
   </div>
 </section>
 
+<!-- PREDICTOR -->
+<section id="predictor">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">08</div><div class="eyebrow">Herramienta aplicada</div>
+      <h2>Predictor y simulador de escenarios</h2>
+      <p>Una aplicación de los coeficientes estimados: simula el efecto de un movimiento del cobre sobre el precio de la acción a distintos horizontes, y evalúa un modelo predictivo con backtest honesto. <b>La tesis es explicativa; este predictor es una extensión aplicada de la plataforma.</b></p>
+    </div>
+    <div class="card reveal">
+      <h3>Simulador "what-if": ¿cuánto se movería la acción?</h3>
+      <div class="tech">Elasticidades-cobre estimadas por horizonte (HAC, rezagos, mensual, VECM)</div>
+      <div class="sim">
+        <div class="sim-ctrl">
+          <div class="seg" id="simAsset">
+            <button data-a="ANTO.L" class="on">Antofagasta</button>
+            <button data-a="PUCOBRE.SN">Pucobre</button>
+          </div>
+          <div class="ctl-row">
+            <label>Variación del precio del cobre: <span class="ctl-val" id="cuVal">+10%</span></label>
+            <input type="range" id="cuRange" min="-20" max="20" step="1" value="10">
+          </div>
+          <div class="ctl-row">
+            <label>Variación del dólar (DXY): <span class="ctl-val" id="dxVal">0%</span></label>
+            <input type="range" id="dxRange" min="-10" max="10" step="1" value="0">
+          </div>
+          <div class="ctl-row">
+            <label>Horizonte temporal</label>
+            <div class="chips" id="simHoriz">
+              <span class="chip-h" data-h="dia0">1 día</span>
+              <span class="chip-h" data-h="acum5">1 semana</span>
+              <span class="chip-h on" data-h="mensual">1 mes</span>
+              <span class="chip-h" data-h="largo_plazo">Largo plazo</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sim-out">
+            <div class="big" id="simMove">+6.0%</div>
+            <div class="lbl">variación esperada del precio de la acción</div>
+            <div class="price" id="simPrice"></div>
+          </div>
+          <div class="note" id="simNote"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:24px">
+      <div class="card reveal">
+        <h3>Backtest del predictor (precio real vs predicho)</h3>
+        <div class="tech">Modelo lineal · retorno t+1 · ventana expansiva fuera de muestra · últimos 180 días</div>
+        <div class="chart-box"><canvas id="chPredict"></canvas></div>
+        <div class="metric-row" id="predMetrics"></div>
+      </div>
+      <div class="card reveal">
+        <h3>Lectura honesta del predictor</h3>
+        <div class="tech">Qué se puede y qué no se puede predecir</div>
+        <ul style="font-size:14.5px;line-height:1.85;color:var(--ink-2);padding-left:18px">
+          <li>El retorno diario es <b>casi impredecible</b> (mercados eficientes): el R² fuera de muestra es ínfimo y la precisión direccional roza el 54%.</li>
+          <li><b>Pucobre es algo más predecible</b> que Antofagasta (mayor precisión direccional y mejora vs un *benchmark* ingenuo) — coherente con la autocorrelación que genera su <b>descubrimiento de precios diferido</b>.</li>
+          <li>El valor real no está en el pronóstico puntual, sino en la <b>elasticidad estimada</b>: el simulador traduce un escenario de cobre en un rango de impacto creíble por horizonte.</li>
+          <li>No constituye recomendación de inversión.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- LITERATURA -->
 <section id="literatura">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-num">08</div><div class="eyebrow">Marco de literatura</div>
+      <div class="sec-num">09</div><div class="eyebrow">Marco de literatura</div>
       <h2>Sobre hombros de gigantes</h2>
       <p>Cuatro pilares teóricos sustentan el diseño. Todas las referencias fueron verificadas en fuentes primarias (editor / repositorios académicos).</p>
     </div>
@@ -352,7 +419,7 @@
 <!-- FIGURAS -->
 <section id="figuras">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="sec-num">09</div><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
+    <div class="sec-head reveal"><div class="sec-num">10</div><div class="eyebrow">Anexo visual</div><h2>Figuras del análisis</h2><p>Generadas con Matplotlib sobre los datos reales. Clic para ampliar.</p></div>
     <div class="gallery reveal" id="gallery"></div>
   </div>
 </section>
@@ -360,7 +427,7 @@
 <!-- CONCLUSIONES -->
 <section id="conclusiones">
   <div class="wrap">
-    <div class="sec-head reveal"><div class="sec-num">10</div><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
+    <div class="sec-head reveal"><div class="sec-num">11</div><div class="eyebrow">Conclusiones</div><h2>Qué aprendimos</h2></div>
     <div class="grid g2">
       <div class="card reveal"><h3>Hallazgos</h3><ol style="font-size:15px;line-height:1.9;padding-left:18px">
         <li>El cobre es un determinante <b>positivo y significativo</b> de los retornos mineros, con magnitud creciente en la liquidez del activo.</li>
