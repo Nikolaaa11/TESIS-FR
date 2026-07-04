@@ -256,6 +256,12 @@
       <div class="card reveal"><h3>Beta-cobre contemporánea por activo</h3><div class="tech">+1% en el cobre sobre el retorno diario · OLS-HAC</div><div class="chart-box"><canvas id="chBeta"></canvas></div><p class="cap">Antofagasta (0.70) lidera entre las chilenas; Pucobre (0.09) es la excepción ilíquida. Las referencias globales confirman la magnitud.</p></div>
       <div class="card reveal"><h3>Descomposición de varianza (FEVD)</h3><div class="tech">% de varianza del retorno explicado por el cobre · VAR/Cholesky</div><div class="chart-box"><canvas id="chFevd"></canvas></div><p class="cap">El cobre explica ~<b>28%</b> de la varianza de Antofagasta vs ~<b>2–4%</b> de Pucobre.</p></div>
     </div>
+    <div class="card reveal" style="margin-top:22px">
+      <h3>La transmisión diferida, cuadro a cuadro (FEVD por horizonte)</h3>
+      <div class="tech">% de la varianza del retorno explicado por el cobre, del día 0 al 19 · VAR/Cholesky</div>
+      <div class="chart-box tall"><canvas id="chFevdHoriz"></canvas></div>
+      <p class="cap">La firma dinámica del hallazgo: en <b>Pucobre</b> la varianza explicada por el cobre <b>crece +113%</b> (2.0%→4.3%) a medida que avanza el horizonte — el cobre sigue «entrando» al precio los días siguientes. En <b>Antofagasta</b> es prácticamente plana (~28%): el cobre ya está incorporado el mismo día 0.</p>
+    </div>
     <div class="grid g2" style="margin-top:22px">
       <div class="card reveal"><h3>Impulso-respuesta al shock de cobre</h3><div class="tech">IRF a 20 días · identificación de Cholesky</div><div class="chart-box"><canvas id="chIrf"></canvas></div><p class="cap">En Antofagasta la respuesta es inmediata; en Pucobre se <b>acumula</b> durante los días siguientes — la firma de la transmisión diferida.</p></div>
       <div class="card reveal"><h3>Elasticidades de largo plazo (VECM)</h3><div class="tech">Vector de cointegración (Johansen, r=1)</div><div class="chart-box"><canvas id="chVecm"></canvas></div><p class="cap">En equilibrio, +1% de cobre se asocia a +0.75–0.86% en el precio de la acción.</p></div>

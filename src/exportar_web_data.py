@@ -41,6 +41,21 @@ def main():
     var = t("var_resumen.csv")
     data["var"] = var.to_dict("records")
 
+    # FEVD del cobre por horizonte (curva completa 0-19 dias) - muestra la
+    # transmision diferida: en Pucobre la varianza explicada por el cobre CRECE
+    # con el horizonte; en Antofagasta es plana (ya incorporada el dia 0).
+    fevd_h = {}
+    for tk, col in [("ANTO.L", "dl_cobre_comex"), ("PUCOBRE.SN", "dl_cobre_comex")]:
+        p = C.TAB / f"var_fevd_{tk.replace('.', '_')}.csv"
+        if p.exists():
+            fh = pd.read_csv(p)
+            fevd_h[tk] = [round(float(v), 2) for v in fh[col]]
+    if fevd_h:
+        horiz = list(range(len(next(iter(fevd_h.values())))))
+        data["fevd_horizonte"] = {"dias": horiz,
+                                  "anto": fevd_h.get("ANTO.L", []),
+                                  "pucobre": fevd_h.get("PUCOBRE.SN", [])}
+
     # VECM largo plazo
     data["vecm"] = t("vecm_resumen.csv").to_dict("records")
 

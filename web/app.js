@@ -138,6 +138,21 @@ function buildCharts(){
     {label:'20 días',data:v.map(x=>x.fevd_cobre_h20),backgroundColor:PAL.navy,borderRadius:6}]},
     options:baseOpts('% varianza explicada por cobre')});
 
+  // FEVD por horizonte (curva completa) — la firma dinámica de la transmisión diferida
+  const fh=D.fevd_horizonte;
+  if(fh) mk('chFevdHoriz',{type:'line',data:{labels:fh.dias,datasets:[
+    {label:'Antofagasta (líquido)',data:fh.anto,borderColor:c.navy,backgroundColor:c.navy,borderWidth:3,pointRadius:0,tension:.3},
+    {label:'Pucobre (ilíquido)',data:fh.pucobre,borderColor:PAL.copper,backgroundColor:ctx=>vgrad(ctx.chart.ctx,ctx.chart.chartArea,PAL.copper,0.16),borderWidth:3,pointRadius:0,tension:.3,fill:true}]},
+    options:{...baseOpts('% de varianza explicada por el cobre'),
+      interaction:{mode:'index',intersect:false},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'% de varianza explicada por el cobre',color:c.ink2},grid:{color:c.grid},border:{display:false},ticks:{color:c.ink2,callback:v=>v+'%'}},
+        x:{title:{display:true,text:'días tras el shock (horizonte de pronóstico)',color:c.ink2},grid:{display:false},border:{display:false},ticks:{color:c.ink2}}},
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,color:c.ink2}},
+        tooltip:{backgroundColor:c.tip,padding:12,cornerRadius:8,callbacks:{
+          title:it=>`Horizonte: día ${it[0].label}`,
+          label:ctx=>`${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`,
+          afterBody:it=>{const p=fh.pucobre[it[0].dataIndex],p0=fh.pucobre[0];return `Pucobre acumula ${((p/p0-1)*100).toFixed(0)}% más que el día 0`;}}}}}});
+
   // IRF
   const irf=D.irf;
   if(irf) mk('chIrf',{type:'line',data:{labels:irf.dias,datasets:[
