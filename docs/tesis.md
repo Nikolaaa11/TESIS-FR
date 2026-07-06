@@ -927,10 +927,29 @@ activos— y H2 se sostiene con fuerza: la sensibilidad contemporánea es de 0.7
 Clave: en Pucobre la respuesta acumulada a 5 días (0.196) es ~4× la del primer día
 (0.043), y la FEVD del cobre crece de 2% a 4.3% entre 1 y 20 días. El cobre **causa**
 los retornos de Pucobre (Granger p<0.001), pero el efecto se **difiere** en lugar de
-impactar contemporáneamente — consistente con descubrimiento de precios lento. Las
-funciones impulso-respuesta de ambos activos ilustran el contraste: la de Antofagasta
-se concentra en el primer día, mientras que la de Pucobre se acumula durante las
-jornadas siguientes.
+impactar contemporáneamente — consistente con descubrimiento de precios lento.
+
+El **perfil de la FEVD por horizonte** es, en sí mismo, diagnóstico del mecanismo y no
+sólo su nivel. En Pucobre la fracción de la varianza del error de pronóstico atribuible
+al cobre **más que se duplica** al ampliar el horizonte (2.03% a 1 día → 4.32% a 20
+días, un incremento relativo de +113%), y no se estabiliza sino hacia el día ~12. En
+Antofagasta, en cambio, esa fracción es **prácticamente plana** —de hecho marginalmente
+decreciente— (28.68% → 27.79%): el cobre ya explica su cuota de varianza desde el primer
+paso y no gana peso con el horizonte. Este contraste —una FEVD **creciente** frente a
+una FEVD **plana**— es la contraparte, en el dominio de la descomposición de varianza,
+del mismo fenómeno que capturan las betas por horizonte: una participación del cobre que
+sube con el horizonte es la firma econométrica de información que se incorpora con
+rezago, mientras que una participación plana desde el impacto es la de información ya
+descontada contemporáneamente. Que en Pucobre el nivel absoluto de la FEVD sea bajo
+(4.3% frente al ~28% de Antofagasta) no contradice el hallazgo: a frecuencia diaria la
+varianza de un activo tan ilíquido está dominada por su propio ruido de microestructura
+—los saltos discretos entre transacciones explican ~94% de su varianza—, de modo que el
+canal fundamental sólo se manifiesta plenamente al agregar el tiempo, como confirman los
+modelos mensual y de largo plazo (§6.5, §6.12).
+
+Las funciones impulso-respuesta de ambos activos ilustran el mismo contraste: la de
+Antofagasta se concentra en el primer día, mientras que la de Pucobre se acumula durante
+las jornadas siguientes.
 
 [[FIG: irf_ANTO_L.png | Función impulso-respuesta del retorno de Antofagasta ante un shock de una desviación estándar en el cobre (identificación de Cholesky). Respuesta concentrada en el impacto contemporáneo.]]
 
